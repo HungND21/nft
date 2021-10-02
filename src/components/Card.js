@@ -2,7 +2,7 @@ import { Box, Image, Text } from '@chakra-ui/react';
 import React from 'react';
 
 function DisplayOpenedCards({ info, text = false }) {
-  console.log('info, ', info);
+  console.log('info, ', info['teamId']);
 
   return (
     <>
@@ -45,8 +45,8 @@ function DisplayOpenedCards({ info, text = false }) {
               color="white"
               align="center"
             >
-              <Text>NFT {info['tokenId']}</Text>
-              <Text>{info && info['rarity']}</Text>
+              {/* <Text>NFT {info['tokenId']}</Text>
+              <Text>{info && info['rarity']}</Text> */}
             </Box>
           )}
         </Box>

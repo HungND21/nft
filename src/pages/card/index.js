@@ -38,13 +38,53 @@ import UsdtJson from 'contracts/Usdt.json';
 
 import { useSelector } from 'react-redux';
 
-import CardItem from './CardItem';
-
+// import Card from 'components/Card';
+import DisplayOpenedCards from 'components/Card';
 // api
 import OrderApi from 'apis/OrderApi';
 import CharacterApi from 'apis/CharacterApi';
 import UserApi from 'apis/UserApi';
 import TeamApi from 'apis/TeamApi';
+const rarityDropdown = [
+  // { value: '', label: 'All' },
+  { value: '1', label: 'Junk' },
+  { value: '2', label: 'Normal' },
+  { value: '3', label: 'Rare' },
+  { value: '4', label: 'Epic' }
+  // { value: '5', label: 'Legend' }
+];
+
+const elementDropdown = [
+  // { value: '', label: 'All' },
+  { value: '1', label: 'Metal' },
+  { value: '2', label: 'Wood' },
+  { value: '3', label: 'Water' },
+  { value: '4', label: 'Fire' },
+  { value: '5', label: 'Earth' }
+];
+// const teamDropdown = [
+//   // { value: '', label: 'All' },
+//   { value: '0', label: 'Banana' },
+//   { value: '1', label: 'Coconut' },
+//   { value: '2', label: 'Orange' },
+//   { value: '3', label: 'CustardApple' },
+//   { value: '4', label: 'Durian' },
+//   { value: '5', label: 'Grape' },
+//   { value: '6', label: 'PineApple' },
+//   { value: '7', label: 'Pomegranate' },
+//   { value: '8', label: 'Watermelon' },
+//   { value: '9', label: 'PassionFruit' },
+//   { value: '10', label: 'Barbariant' },
+//   { value: '11', label: 'Bommant' },
+//   { value: '12', label: 'Archeriant' },
+//   { value: '13', label: 'Cannonian' },
+//   { value: '14', label: 'Slinger' },
+//   { value: '15', label: 'HunterMant' },
+//   { value: '16', label: 'Magiciant' },
+//   { value: '17', label: 'Normal' },
+//   { value: '18', label: 'Swordmant' },
+//   { value: '19', label: 'Tank' }
+// ];
 
 function Card() {
   const Theme = useTheme();
@@ -57,27 +97,13 @@ function Card() {
     initialState: { currentPage: 1, pageSize: 5 }
   });
   //
-   const [rarityState, setrarityState] = React.useState(''); 
-   const [elementState, setelementState] = React.useState(''); 
-   const [teamIdState, setteamIdState] = React.useState(''); 
+  const [rarityState, setRarityState] = React.useState('');
+  const [elementState, setElementState] = React.useState('');
+  const [teamIdState, setTeamIdState] = React.useState('');
   //
-  const rarityDropdown = [
-    { value: '1', label: 'Junk' },
-    { value: '2', label: 'Normal' },
-    { value: '3', label: 'Rare' },
-    { value: '4', label: 'Epic' },
-    { value: '5', label: 'Lengend' }
-  ];
-  
-  const elementDropdown = [
-    { value: '1', label: 'Metal' },
-    { value: '2', label: 'Wood' },
-    { value: '3', label: 'Water' },
-    { value: '4', label: 'Fire' },
-    { value: '5', label: 'Earth' }
-  ];
-  
+
   const [teamDropdown, setTeamDropdown] = React.useState([]);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isApprove, setIsApprove] = React.useState(false);
 
@@ -86,7 +112,7 @@ function Card() {
   const [price, setPrice] = React.useState({});
   const [isLoading, setIsLoading] = React.useState(false);
   const [listMyOrder, setListMyOrder] = React.useState([]);
-  const [listInfo, setListInfo] = React.useState();
+
   const [pagesQuantity, setPagesQuantity] = React.useState(1);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -231,31 +257,41 @@ function Card() {
   };
   const getMyCard = async (rarity, element, teamId) => {
     if (user) {
-      const { data: listCard } = await CharacterApi.getMyList(user._id, currentPage);
+      const { data: listCard } = await CharacterApi.getMyList(
+        user._id,
+        currentPage,
+        rarity,
+        element,
+        teamId
+      );
       setListCardState(listCard.docs);
-      console.log('listCard', listCard.docs[0]);
+      console.log('listCard', listCard.docs);
       setPagesQuantity(listCard.totalPages);
     }
   };
 
   //Get Team Dropdown
   const getTeams = async () => {
-      const {data: listTeams } = await TeamApi.getALl();
-      setTeamDropdown(listTeams.map((i) => ({value : i.teamId, label : i.name})));
+    const { data: listTeams } = await TeamApi.getALl();
+    const teams = listTeams.map((i) => ({ value: i._id, label: i.name }));
+    // console.log('listTeams', listTeams);
+    setTeamDropdown(teams);
   };
 
+  const handleChangeRarity = (rarity) => {
+    console.log('rarity', rarity);
+    setRarityState(rarity);
+  };
+  const handleChangeElement = (element) => {
+    console.log('element', element);
 
-  const handleChangeRarity = (rarityState) => {
-      setrarityState(rarityState)
-  } 
+    setElementState(element);
+  };
+  const handleChangeTeamId = (teamId) => {
+    console.log('teamId', teamId);
 
-  const handleChangeElement = (elementState) => {
-    setelementState(elementState)
-  }
-  
-  const handleChangeTeamId = (teamIdState) => {
-    setteamIdState(teamIdState)
-  }
+    setTeamIdState(teamId);
+  };
 
   React.useEffect(() => {
     const listCartLocalStorageJson = localStorage.getItem('cardItem');
@@ -270,17 +306,17 @@ function Card() {
     }
 
     if (account) {
-        approveInit();
-        listMyOrderInit();
-        getMyCard();  
-        getTeams();
+      approveInit();
+      listMyOrderInit();
+      getMyCard(rarityState, elementState, teamIdState);
+      getTeams();
       return () => {
         setListCardStorage();
         setListMyOrder([]);
         setIsApprove();
       };
     }
-  }, [account, currentPage, user, setListCardStorage]);
+  }, [account, currentPage, user, setListCardStorage, rarityState, elementState, teamIdState]);
 
   const baseStyles = {
     w: 7,
@@ -314,10 +350,11 @@ function Card() {
             <Grid templateColumns="repeat(4, 1fr)" gap={4}>
               <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
                 <Select
-                  onChange = {handleChangeRarity}
-                  value = {rarityState}
+                  onChange={handleChangeRarity}
+                  value={rarityState}
                   options={rarityDropdown}
                   isClearable
+                  placeholder="Rarity"
                   theme={(theme) => ({
                     ...theme,
                     borderRadius: '4px',
@@ -331,10 +368,11 @@ function Card() {
               </GridItem>
               <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
                 <Select
-                  // onchange = {handleChangeElement}
-                  // value = {elementState}
+                  onChange={handleChangeElement}
+                  value={elementState}
                   options={elementDropdown}
                   isClearable
+                  placeholder="Element"
                   theme={(theme) => ({
                     ...theme,
                     borderRadius: '4px',
@@ -348,10 +386,11 @@ function Card() {
               </GridItem>
               <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
                 <Select
-                  // onchange = {handleChangeTeamId}
-                  // value = {teamIdState}
-                  options = {teamDropdown}
+                  onChange={handleChangeTeamId}
+                  value={teamIdState}
+                  options={teamDropdown}
                   isClearable
+                  placeholder="Team"
                   theme={(theme) => ({
                     ...theme,
                     borderRadius: '4px',
@@ -400,7 +439,7 @@ function Card() {
                 _hover={{ boxShadow: '0 4px 25px 0 rgba(34,41,47,.25)' }}
                 position="relative"
               >
-                <CardItem info={card} />
+                <DisplayOpenedCards info={card} />
                 <Stack
                   direction="column"
                   align="center"
@@ -511,7 +550,7 @@ function Card() {
                 listCardStorage.length > 0 &&
                 listCardStorage.map((card, index) => (
                   <Box key={card.nftId}>
-                    <CardItem info={card} />
+                    <DisplayOpenedCards info={card} />
                     <Stack spacing={4}>
                       <InputGroup>
                         <Input

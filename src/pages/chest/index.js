@@ -98,11 +98,22 @@ const ChestInit = () => {
   };
 
   const handleOpenChest = async (amount) => {
+    let gaslimitOpenItem = 0;
     if (amount < 1 || amount > 10) {
       toast.error('enter key 1 to 10');
     } else {
-      const gaslimitOpenItem = await fwarCharDelegate.estimateGas.OpenItems(account, amount);
-      console.log('gaslimitOpenItem', gaslimitOpenItem);
+      try {
+        gaslimitOpenItem = await fwarCharDelegate.estimateGas.OpenItems(account, amount);
+        console.log('gaslimitOpenItem', gaslimitOpenItem);
+      } catch (error) {
+        if (error.data) {
+          toast.error(error.data.message);
+        } else {
+          toast.error(error.message);
+        }
+        return;
+      }
+
       // if (account && teamList) {
       if (account) {
         try {
@@ -135,7 +146,7 @@ const ChestInit = () => {
           // console.log('eventMintNDT', eventMintNDT);
           toast.success('open  successfully!');
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           if (error.data) {
             toast.error(error.data.message);
           } else {
@@ -273,27 +284,29 @@ const ChestInit = () => {
           w="100%"
           bottom="5%"
           left="0"
+          zIndex="100"
         >
           {!isLoadingOpen && (
             <>
-              <InputGroup
-                width="14%"
-                bg="white"
-                borderRadius="1rem"
-                color={theme.colors.dark.light}
-                zIndex="100"
-              >
-                <InputLeftElement pointerEvents="none" children={<FiKey color="gray.300" />} />
-                <Input
-                  type="number"
-                  placeholder="0"
-                  textAlign="center"
-                  _placeholder={{ color: theme.colors.dark.light }}
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                />
-                <InputRightElement pointerEvents="none" children="Key" />
-              </InputGroup>
+              {isApprove && (
+                <InputGroup
+                  width="14%"
+                  bg="white"
+                  borderRadius="1rem"
+                  color={theme.colors.dark.light}
+                >
+                  <InputLeftElement pointerEvents="none" children={<FiKey color="gray.300" />} />
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    textAlign="center"
+                    _placeholder={{ color: theme.colors.dark.light }}
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                  />
+                  <InputRightElement pointerEvents="none" children="Key" />
+                </InputGroup>
+              )}
               <Button
                 leftIcon={<FiUnlock />}
                 size="sm"

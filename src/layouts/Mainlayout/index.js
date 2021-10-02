@@ -125,13 +125,13 @@ export default function MainLayout({ children }) {
             base: 'full',
             xl: 'calc(100% - 260px)'
           }}
-          minH="100vh"
+          // minH="100vh"
           ml={{
             base: '0px',
             xl: '260px'
           }}
           p="7rem 28px 0"
-          overflowY="scroll"
+          // overflowY="scroll"
         >
           <Box
             position="fixed"
