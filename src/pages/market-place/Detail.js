@@ -43,9 +43,9 @@ import toast from 'react-hot-toast';
 import { FiArrowUp, FiPlus } from 'react-icons/fi';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import ItemListComponent from './ItemListComponent';
-import Card from 'components/Card';
+import DisplayOpenedCards from 'components/Card';
 function Detail() {
-  const [infoNft, setInfoNft] = React.useState();
+  const [infoNft, setInfoNft] = React.useState(null);
   const [isMyNft, setIsMyNft] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [listSelectCard, setListSelectCard] = React.useState([]);
@@ -151,7 +151,7 @@ function Detail() {
       };
       init();
       return () => {
-        setInfoNft([]); // This worked for me
+        setInfoNft(null); // This worked for me
         setListSelectCard([]); // This worked for me
         setListSelectCardId([]); // This worked for me
       };
@@ -214,7 +214,7 @@ function Detail() {
           >
             Back
           </Button>
-          <Card info={infoNft} text={true} />
+          {infoNft && <DisplayOpenedCards info={infoNft} text={true} />}
         </GridItem>
         <GridItem colSpan={{ base: 3, md: 2 }}>
           <Tabs>
@@ -230,23 +230,29 @@ function Detail() {
                 boxShadow="content"
                 borderRadius="6px"
               >
-                <Box>Panda</Box>
+                <Box>{infoNft && infoNft['teamId'].cardName}</Box>
                 <Grid templateColumns="repeat(12, 1fr)" gap={4} mt={10}>
                   <GridItem colSpan={{ base: 12, lg: 5 }}>
                     <List spacing={3} paddingBottom={5}>
                       <ItemListComponent name="NFT Token ID" value={id} />
                       {infoNft && (
                         <>
-                          <ItemListComponent name="Attack" value={Number(infoNft['attack'])} />
-                          <ItemListComponent name="Defend" value={Number(infoNft['defend'])} />
                           <ItemListComponent
-                            name="Element Type"
-                            value={Number(infoNft['elementType'])}
+                            name="Attack"
+                            value={Number(infoNft['baseAttack']) / 1000}
                           />
-                          <ItemListComponent name="Health" value={Number(infoNft['health'])} />
-                          <ItemListComponent name="Level" value={Number(infoNft['level'])} />
-                          <ItemListComponent name="Rarity" value={Number(infoNft['rarity'])} />
-                          <ItemListComponent name="Team Id" value={Number(infoNft['teamId'])} />
+                          <ItemListComponent
+                            name="Defend"
+                            value={Number(infoNft['baseDefense']) / 1000}
+                          />
+                          <ItemListComponent
+                            name="Health"
+                            value={Number(infoNft['baseHeath']) / 1000}
+                          />
+                          <ItemListComponent name="Element Type" value={infoNft['element']} />
+                          <ItemListComponent name="Level" value={infoNft['level']} />
+                          <ItemListComponent name="Rarity" value={infoNft['rarity']} />
+                          <ItemListComponent name="Team Id" value={infoNft['teamId'].teamId} />
                         </>
                       )}
                       {/* <ItemListComponent name="Level" value={id} /> */}
@@ -345,8 +351,8 @@ function Detail() {
                               align="center"
                               fontSize={10}
                             >
-                              <Text lineHeight="10px">NFT {1}</Text>
-                              <Text lineHeight="10px">Panda</Text>
+                              {/* <Text lineHeight="10px">NFT {1}</Text> */}
+                              <Text lineHeight="10px">{card['teamId'].cardName}</Text>
                             </Box>
                           </Box>
                         </Link>
