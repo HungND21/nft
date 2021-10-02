@@ -62,29 +62,6 @@ const elementDropdown = [
   { value: '4', label: 'Fire' },
   { value: '5', label: 'Earth' }
 ];
-// const teamDropdown = [
-//   // { value: '', label: 'All' },
-//   { value: '0', label: 'Banana' },
-//   { value: '1', label: 'Coconut' },
-//   { value: '2', label: 'Orange' },
-//   { value: '3', label: 'CustardApple' },
-//   { value: '4', label: 'Durian' },
-//   { value: '5', label: 'Grape' },
-//   { value: '6', label: 'PineApple' },
-//   { value: '7', label: 'Pomegranate' },
-//   { value: '8', label: 'Watermelon' },
-//   { value: '9', label: 'PassionFruit' },
-//   { value: '10', label: 'Barbariant' },
-//   { value: '11', label: 'Bommant' },
-//   { value: '12', label: 'Archeriant' },
-//   { value: '13', label: 'Cannonian' },
-//   { value: '14', label: 'Slinger' },
-//   { value: '15', label: 'HunterMant' },
-//   { value: '16', label: 'Magiciant' },
-//   { value: '17', label: 'Normal' },
-//   { value: '18', label: 'Swordmant' },
-//   { value: '19', label: 'Tank' }
-// ];
 
 function Card() {
   const Theme = useTheme();
@@ -281,19 +258,21 @@ function Card() {
   const handleChangeRarity = (rarity) => {
     console.log('rarity', rarity);
     setRarityState(rarity);
+    setCurrentPage(1);
   };
   const handleChangeElement = (element) => {
     console.log('element', element);
-
     setElementState(element);
+    setCurrentPage(1);
   };
   const handleChangeTeamId = (teamId) => {
     console.log('teamId', teamId);
-
     setTeamIdState(teamId);
+    setCurrentPage(1);
   };
 
   React.useEffect(() => {
+    document.title = "FWAR - MY CARDS";
     const listCartLocalStorageJson = localStorage.getItem('cardItem');
     const priceLocal = JSON.parse(localStorage.getItem('price'));
     if (priceLocal) setPrice(priceLocal);
