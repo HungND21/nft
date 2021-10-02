@@ -56,3 +56,13 @@ export function useTotalStakedAndPendingKey(fwarPool, listPool, namePool) {
   }, [account, fwarPool, listPool, namePool]);
   return [pendingKeyState, totalStake];
 }
+
+export function useTitle(title) {
+  useEffect(() => {
+    const prevTitle = document.title;
+    document.title = title;
+    return () => {
+      document.title = prevTitle;
+    };
+  });
+}

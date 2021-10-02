@@ -10,7 +10,7 @@ import FwarKeyContract from 'contracts/FwarKey/FWarKey.json';
 import { ethers } from 'ethers';
 import { useEthers } from '@usedapp/core';
 import LPFBNBUSD from './pool/FBNB-Usdt';
-import { useAllMyKey, useDailyRewards, useTotalStakedAndPendingKey } from 'dapp/hook';
+import { useAllMyKey, useDailyRewards, useTitle, useTotalStakedAndPendingKey } from 'dapp/hook';
 
 // fake data
 const news = [
@@ -20,6 +20,8 @@ const news = [
 const listPool = [{ id: '0', address: LPFBNBUSD.address, abi: LPFBNBUSD.abi }];
 
 const Farm = () => {
+  useTitle('FWAR - FARM');
+
   const [newState, setNewSate] = React.useState([]);
   const { colorMode } = useColorMode();
   const theme = useTheme();

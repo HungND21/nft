@@ -45,13 +45,15 @@ import OrderApi from 'apis/OrderApi';
 import CharacterApi from 'apis/CharacterApi';
 import UserApi from 'apis/UserApi';
 import TeamApi from 'apis/TeamApi';
+import { useTitle } from 'dapp/hook';
+import FilterComponent from 'components/FilterComponent';
 const rarityDropdown = [
   // { value: '', label: 'All' },
   { value: '1', label: 'Junk' },
   { value: '2', label: 'Normal' },
   { value: '3', label: 'Rare' },
-  { value: '4', label: 'Epic' }
-  // { value: '5', label: 'Legend' }
+  { value: '4', label: 'Epic' },
+  { value: '5', label: 'Legend' }
 ];
 
 const elementDropdown = [
@@ -64,6 +66,8 @@ const elementDropdown = [
 ];
 
 function Card() {
+  useTitle('FWAR - MY CARDS');
+
   const Theme = useTheme();
   const { colorMode } = useColorMode();
   const { account } = useEthers();
@@ -328,57 +332,27 @@ function Card() {
           <GridItem colSpan={{ base: 6, md: 5 }}>
             <Grid templateColumns="repeat(4, 1fr)" gap={4}>
               <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-                <Select
-                  onChange={handleChangeRarity}
-                  value={rarityState}
-                  options={rarityDropdown}
-                  isClearable
+                <FilterComponent
                   placeholder="Rarity"
-                  theme={(theme) => ({
-                    ...theme,
-                    borderRadius: '4px',
-                    colors: {
-                      ...theme.colors,
-                      primary25: '#d6d3ff',
-                      primary: Theme.colors.primary.base
-                    }
-                  })}
+                  handleChange={handleChangeRarity}
+                  valueState={rarityState}
+                  optionDropdown={rarityDropdown}
                 />
               </GridItem>
               <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-                <Select
-                  onChange={handleChangeElement}
-                  value={elementState}
-                  options={elementDropdown}
-                  isClearable
+                <FilterComponent
                   placeholder="Element"
-                  theme={(theme) => ({
-                    ...theme,
-                    borderRadius: '4px',
-                    colors: {
-                      ...theme.colors,
-                      primary25: '#d6d3ff',
-                      primary: Theme.colors.primary.base
-                    }
-                  })}
+                  handleChange={handleChangeElement}
+                  valueState={elementState}
+                  optionDropdown={elementDropdown}
                 />
               </GridItem>
               <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-                <Select
-                  onChange={handleChangeTeamId}
-                  value={teamIdState}
-                  options={teamDropdown}
-                  isClearable
+                <FilterComponent
                   placeholder="Team"
-                  theme={(theme) => ({
-                    ...theme,
-                    borderRadius: '4px',
-                    colors: {
-                      ...theme.colors,
-                      primary25: '#d6d3ff',
-                      primary: Theme.colors.primary.base
-                    }
-                  })}
+                  handleChange={handleChangeTeamId}
+                  valueState={teamIdState}
+                  optionDropdown={teamDropdown}
                 />
               </GridItem>
             </Grid>
@@ -505,7 +479,7 @@ function Card() {
           top="0"
           width="100%"
           height="100%"
-          zIndex="10"
+          zIndex="50"
         >
           <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
         </Stack>
