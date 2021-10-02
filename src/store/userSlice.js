@@ -4,7 +4,7 @@ import UserApi from 'apis/UserApi';
 export const existUser = createAsyncThunk('user/existUser', async (account, thunkAPI) => {
   const { data: dataUser } = await UserApi.find(account);
   let user;
-  console.log('dataUser', dataUser);
+  // console.log('dataUser', dataUser);
   if (!dataUser) {
     const { data: newUser } = await UserApi.signup({ address: account });
     user = newUser;

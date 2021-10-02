@@ -68,13 +68,14 @@ function Detail() {
   );
 
   const handleUpgrade = async () => {
-    const result = await FwarCharDelegate.getBurnInfo(4, 1);
-
     // listSelectCardId.
     // console.log('burnedNfts', burnedNfts);
-    console.log('selected', result);
-    const burnedNfts = selected.map((i) => listSelectCardId[i]);
-    const upgraded = await FwarCharDelegate.upgrade(id, burnedNfts);
+    // console.log('result', baseAmount, junkAmount, normalAmount, rareAmount);
+    console.log('rarity', infoNft.rarity);
+    console.log('level', infoNft.level);
+
+    // const burnedNfts = selected.map((i) => listSelectCardId[i]);
+    const upgraded = await FwarCharDelegate.upgrade('2238', ['887']);
     console.log('upgraded', upgraded);
   };
 
@@ -103,50 +104,44 @@ function Detail() {
   React.useEffect(() => {
     if (account) {
       const init = async () => {
-        const { data } = await CharacterApi.getOne(id);
-        console.log('data', data);
-        const info = await FwarChar.getCharInfo(id);
-        setInfoNft(data);
+        const { data: nft } = await CharacterApi.getOne(id);
+        setInfoNft(nft);
 
-        const myBalance = await FwarChar.balanceOf(account);
-        let listCard = [];
-        let listCardIds = [];
-        let listSelectIdIndex = [];
+        // const burnInfo = await FwarCharDelegate.getBurnInfo(infoNft.rarity, infoNft.level);
+        // const baseAmount = burnInfo['baseAmount'];
+        // const junkAmount = burnInfo['junkAmount'];
+        // const normalAmount = burnInfo['normalAmount'];
+        // const rareAmount = burnInfo['rareAmount'];
+        // const listCardSelec = await CharacterApi.getMyList(
+        //   infoNft.level,
+        //   baseAmount,
+        //   junkAmount,
+        //   normalAmount,
+        //   rareAmount
+        // );
+        // const listSelect = listCard.filter((card, index) => {
+        //   if (
+        //     Number(card['level']) === 1 &&
+        //     Number(card['rarity']) === 1 &&
+        //     Number(card['teamId']) === Number(info['teamId']) &&
+        //     Number(card['elementType']) === Number(info['elementType'])
+        //   ) {
+        //     listSelectIdIndex.push(index);
+        //   }
 
-        if (Number(myBalance) > 0) {
-          for (let i = 0; i < Number(myBalance); i++) {
-            const cardById = await FwarChar.tokenOfOwnerByIndex(account, i);
-            const infoCard = await FwarChar.getCharInfo(Number(cardById));
-            listCardIds[i] = Number(cardById);
-            listCard[i] = infoCard;
-            // console.log('infoCard', infoCard);
-          }
-          // console.log('cardById', listCardIds);
-          // console.log('infoCard', listCard);
-        }
-        const listSelect = listCard.filter((card, index) => {
-          if (
-            Number(card['level']) === 1 &&
-            Number(card['rarity']) === 1 &&
-            Number(card['teamId']) === Number(info['teamId']) &&
-            Number(card['elementType']) === Number(info['elementType'])
-          ) {
-            listSelectIdIndex.push(index);
-          }
-
-          return (
-            Number(card['level']) === 1 &&
-            Number(card['rarity']) === 1 &&
-            Number(card['teamId']) === Number(info['teamId']) &&
-            Number(card['elementType']) === Number(info['elementType']) &&
-            true
-          );
-        });
-        let listSelectId = listSelectIdIndex.map((i) => listCardIds[i]);
-        setListSelectCard(listSelect);
-        setListSelectCardId(listSelectId);
+        //   return (
+        //     Number(card['level']) === 1 &&
+        //     Number(card['rarity']) === 1 &&
+        //     Number(card['teamId']) === Number(info['teamId']) &&
+        //     Number(card['elementType']) === Number(info['elementType']) &&
+        //     true
+        //   );
+        // });
+        // let listSelectId = listSelectIdIndex.map((i) => listCardIds[i]);
+        // setListSelectCard(listSelect);
+        // setListSelectCardId(listSelectId);
         // console.log('list select card', listSelectCard);
-        console.log('listSelectId', listSelectId);
+        // console.log('listSelectId', listSelectId);
         // console.log('listCardIds', listCardIds);
       };
       init();
@@ -157,6 +152,7 @@ function Detail() {
       };
     }
   }, [setInfoNft, account]);
+
   React.useEffect(() => {
     if (account) {
       (async function () {
@@ -164,14 +160,14 @@ function Detail() {
           // console.log('cardByIndex');
           const ownerOf = await FwarChar.ownerOf(+id);
           if (ownerOf === account) setIsMyNft(true);
-          // console.log('cardByIndex', cardByIndex);
+          console.log('cardByIndex', ownerOf);
         } catch (error) {
           setIsMyNft(false);
         }
       })();
     }
     // console.log(FwarChar);
-  }, [account]);
+  }, [account, setIsMyNft]);
   return (
     <>
       {/* bread crumb */}
@@ -220,7 +216,7 @@ function Detail() {
           <Tabs>
             <TabList>
               <Tab>Details</Tab>
-              {isMyNft && infoNft && Number(infoNft['rarity']) >= 3 && <Tab>Upgrade</Tab>}
+              {isMyNft && infoNft && Number(infoNft['rarity']) >= 4 && <Tab>Upgrade</Tab>}
             </TabList>
 
             <TabPanels>

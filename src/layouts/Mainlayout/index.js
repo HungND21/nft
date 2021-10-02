@@ -96,7 +96,7 @@ export default function MainLayout({ children }) {
   };
   return (
     <React.Fragment>
-      <Box bg="#f8f8f8" color={color} h="100%">
+      <Box bg="#f8f8f8" color={color} h="calc(100vh)">
         <Box
           w="16.25rem"
           // h="100%"

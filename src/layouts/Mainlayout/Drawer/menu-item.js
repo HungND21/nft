@@ -1,6 +1,6 @@
 import { CgLockUnlock, CgShoppingBag, CgShoppingCart } from 'react-icons/cg';
 import { FiBarChart, FiBell, FiBox, FiList, FiTrendingUp } from 'react-icons/fi';
-
+import ChestIcon from 'components/icon/ChestIcon';
 export const menuItems = [
   {
     id: 'farm',
@@ -13,7 +13,7 @@ export const menuItems = [
     id: 'chest',
     title: 'chest',
     type: 'item',
-    icon: CgLockUnlock,
+    icon: ChestIcon,
     url: '/chest'
   },
   {

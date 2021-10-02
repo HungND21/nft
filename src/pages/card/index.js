@@ -46,6 +46,7 @@ import CharacterApi from 'apis/CharacterApi';
 import UserApi from 'apis/UserApi';
 import TeamApi from 'apis/TeamApi';
 import { useTitle } from 'dapp/hook';
+
 import FilterComponent from 'components/FilterComponent';
 const rarityDropdown = [
   // { value: '', label: 'All' },
