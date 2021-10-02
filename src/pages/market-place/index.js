@@ -66,9 +66,11 @@ function MarketPlace() {
     toast.success('approve for all successfully!');
   };
   const handleBuy = async (FwarMarketDelegate, index) => {
+    console.log(index);
     const getOrderId = await marketDelegate.getOrderId(FwarMarketDelegate);
-    const result = await FwarMarketDelegate.buyOrder(getOrderId[index]['orderId']);
-    console.log(result);
+    console.log(getOrderId[index]);
+    // const result = await FwarMarketDelegate.buyOrder(getOrderId[index]['orderId']);
+    // console.log(result);
   };
 
   const handleUnList = async (FwarMarketDelegate, FwarCharAddress, nftIds, tokenUsdt = '') => {

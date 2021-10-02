@@ -2,7 +2,7 @@ import { Box, Image, Text } from '@chakra-ui/react';
 import React from 'react';
 
 function DisplayOpenedCards({ info, text = false }) {
-  console.log('info, ', info);
+  // console.log('info, ', info);
 
   return (
     <>
