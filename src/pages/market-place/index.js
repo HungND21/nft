@@ -36,8 +36,11 @@ import marketDelegate from 'utils/marketdelegate';
 import Sidebar from './Sidebar';
 import OrderApi from 'apis/OrderApi';
 import { useSelector } from 'react-redux';
+import { useTitle } from 'dapp/hook';
 
 function MarketPlace() {
+  useTitle('FWAR - MARTKET PLACE');
+
   const [isApprove, setIsApprove] = React.useState(false);
   const [listOrder, setListOrder] = React.useState([]);
   const { account } = useEthers();

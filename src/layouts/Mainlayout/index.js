@@ -96,10 +96,10 @@ export default function MainLayout({ children }) {
   };
   return (
     <React.Fragment>
-      <Box bg="#f8f8f8" color={color}>
+      <Box bg="#f8f8f8" color={color} h="100%">
         <Box
           w="16.25rem"
-          // h="100vh"
+          // h="100%"
           bg={bg}
           boxShadow="drawer"
           display={{
@@ -108,8 +108,7 @@ export default function MainLayout({ children }) {
           }}
           position="fixed"
           zIndex="10"
-          maxH="100vh"
-          minH="100vh"
+          h="100%"
         >
           <DrawerMain />
         </Box>
@@ -125,7 +124,7 @@ export default function MainLayout({ children }) {
             base: 'full',
             xl: 'calc(100% - 260px)'
           }}
-          // minH="100vh"
+          h="100%"
           ml={{
             base: '0px',
             xl: '260px'

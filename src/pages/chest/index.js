@@ -34,7 +34,7 @@ import FwarChar from 'contracts/FwarChar/FWarChar.json';
 import FwarCharDelegate from 'contracts/FwarChar/FwarCharDelegate.json';
 
 import { default as FwarKey, default as FwarKeyContract } from 'contracts/FwarKey/FWarKey.json';
-import { useAllMyKey } from 'dapp/hook';
+import { useAllMyKey, useTitle } from 'dapp/hook';
 import toast from 'react-hot-toast';
 import { FiKey, FiRefreshCcw, FiUnlock, FiEye } from 'react-icons/fi';
 // api
@@ -47,6 +47,8 @@ import DisplayOpenedCards from 'components/Card';
 import { formatDate } from 'utils/formatDate';
 
 const ChestInit = () => {
+  useTitle('FWAR - OPEN CHEST');
+
   const [amount, setAmount] = React.useState('');
   const [isApprove, setIsApprove] = React.useState(false);
   const [openedCard, setOpenedCards] = React.useState([]);
@@ -233,7 +235,7 @@ const ChestInit = () => {
             top="0"
             w="100%"
             h="100%"
-            zIndex="10"
+            zIndex="20"
             bg={theme.colors.primary.light}
           >
             <Spinner
