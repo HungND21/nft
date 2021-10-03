@@ -3,6 +3,8 @@ import React from 'react';
 import { MinusIcon } from '@chakra-ui/icons';
 
 function DisplayOpenedCards({ info, text = false, isCart = false, onremove }) {
+  console.log('info', info);
+
   return (
     <>
       <Box>
@@ -45,18 +47,22 @@ function DisplayOpenedCards({ info, text = false, isCart = false, onremove }) {
 
           {text && (
             <Box
-              bgRepeat="no-repeat"
-              bgSize="100% 100%"
+              // bgRepeat="no-repeat"
+              // bgSize="100% 100%"
               position="absolute"
-              width="80%"
-              bottom="2%"
-              left="10%"
-              p="14% 8% 3%"
-              color="white"
+              width="100%"
+              bottom="12.5%"
+              left="0%"
+              p="0"
+              // color="white"
               align="center"
+              color="#283046"
+              fontSize={24}
+              fontWeight="bold"
             >
-              {/* <Text>NFT {info['tokenId']}</Text>
-              <Text>{info && info['rarity']}</Text> */}
+              {/* <Text>NFT {info['tokenId']}</Text> */}
+              <Text>NFT {info && info['nftId']}</Text>
+              <Text> {info && info['rarity']}</Text>
             </Box>
           )}
         </Box>

@@ -181,7 +181,6 @@ function Detail() {
           const ownerOf = await FwarChar.ownerOf(+id);
           if (ownerOf === account) {
             setIsMyNft(true);
-            console.log('user', user);
             const { data: listCardChoose } = await CharacterApi.getMyList({ userId: user._id });
             console.log('listCardChoose', listCardChoose.docs);
           }
