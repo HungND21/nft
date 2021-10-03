@@ -7,7 +7,7 @@ function ItemListComponent({ name, value }) {
     <>
       <ListItem>
         <ListIcon as={FiDisc} />
-        {name} = {Intl.NumberFormat().format(value)}
+        {name} = {+value ? Intl.NumberFormat().format(value) : value}
       </ListItem>
     </>
   );

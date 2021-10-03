@@ -12,7 +12,7 @@ const UserApi = {
     teamId = teamId && teamId.value ? teamId.value : '';
     typeCard = typeCard && typeCard.value ? typeCard.value : '';
     console.log(typeCard);
-    const url = `/character?_userId=${userId}&_page=${page}&_rarity=${rarity}&_element=${element}&_teamId=${teamId}&_typeCard=${typeCard}`;
+    const url = `/character?_userId=${userId}&_page=${page}&_rarity=${rarity}&_element=${element}&_teamId=${teamId}&_cardType=${typeCard}`;
     return axiosClient.get(url);
   },
   getOne(nftId) {

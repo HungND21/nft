@@ -28,7 +28,6 @@ import {
 import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
 import { CgShoppingCart } from 'react-icons/cg';
 import toast from 'react-hot-toast';
-import Select from 'react-select';
 
 import { ethers } from 'ethers';
 import { useEthers } from '@usedapp/core';
@@ -46,6 +45,7 @@ import CharacterApi from 'apis/CharacterApi';
 import UserApi from 'apis/UserApi';
 import TeamApi from 'apis/TeamApi';
 import { useTitle } from 'dapp/hook';
+
 import FilterComponent from 'components/FilterComponent';
 
 const cardTypeDropdown = [
@@ -148,6 +148,7 @@ function Card() {
     const listCardFilter = listCardStorage.filter((i) => i.nftId !== card.nftId);
     localStorage.setItem('cardItem', JSON.stringify(listCardFilter));
     setListCardStorage(listCardFilter);
+    setPrice({ ...price, [card['nftId']]: 0 });
     toast.success('remove card');
   };
   const handleOnchangePrice = (e, nftId) => {
@@ -525,7 +526,7 @@ function Card() {
                 listCardStorage.length > 0 &&
                 listCardStorage.map((card, index) => (
                   <Box key={card.nftId}>
-                    <DisplayOpenedCards info={card} />
+                    <DisplayOpenedCards info={card} isCart={true} onremove={()=>{handleRemoveSell(card)}}/>
                     <Stack spacing={4}>
                       <InputGroup>
                         <Input
@@ -555,7 +556,7 @@ function Card() {
                   : 0}
               </Text>
             </Flex>
-            <Button variant="ghost" onClick={handleCreateOrder}>
+            <Button variant="solid" colorScheme="red" left="1" onClick={handleCreateOrder}>
               Submit
             </Button>
           </ModalFooter>
