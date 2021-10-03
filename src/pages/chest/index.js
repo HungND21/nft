@@ -226,6 +226,9 @@ const ChestInit = () => {
         {/* <Header /> */}
       </Box>
       <Box marginBottom="26px" position="relative">
+        <Image src="/assets/chest-bg.png" top="0" h="100%" w="100%" />
+        <Image src="/assets/chest.png" position="absolute" width="52%" top="3px" left="25%" />
+
         {isLoadingOpen && (
           <Stack
             direction="row"
@@ -247,26 +250,27 @@ const ChestInit = () => {
             />
           </Stack>
         )}
-        {openedCard.length > 0 && (
-          <Box
-            w="100%"
-            h="100%"
-            p={20}
-            position="absolute"
-            top="0"
-            left="0"
-            zIndex="10"
-            bg={theme.colors.primary.light}
-          >
-            <Grid templateColumns="repeat(5 , 1fr)" gap={6}>
+        <Box
+          w="100%"
+          h="100%"
+          p={10}
+          // position="absolute"
+          // top="0"
+          // left="0"
+          zIndex="10"
+          bg={theme.colors.primary.light}
+          // overflow="hidden"
+        >
+          {openedCard.length > 0 && (
+            <Grid templateColumns="repeat(5 , 1fr)" gap={1} w="100%" h="100%">
               {openedCard.map((cardInfo) => (
-                <DisplayOpenedCards key={cardInfo.nftIf} info={cardInfo} />
+                <Box key={cardInfo.nftIf}>
+                  <DisplayOpenedCards info={cardInfo} />
+                </Box>
               ))}
             </Grid>
-          </Box>
-        )}
-        <Image src="/assets/chest-bg.png" />
-        <Image src="/assets/chest.png" position="absolute" width="52%" top="3px" left="25%" />
+          )}
+        </Box>
         <Box
           position="absolute"
           w="100%"
@@ -284,7 +288,7 @@ const ChestInit = () => {
           align="center"
           position="absolute"
           w="100%"
-          bottom="5%"
+          bottom="2%"
           left="0"
           zIndex="100"
         >

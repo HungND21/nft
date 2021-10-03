@@ -54,27 +54,27 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"feeRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"feeTo\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"maxExpirationTime\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"minExpirationTime\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/FwarMarketStorage.sol\":\"FwarMarketStorage\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/math/SafeMath.sol\":{\"keccak256\":\"0xcc78a17dd88fa5a2edc60c8489e2f405c0913b377216a5b26b35656b2d0dab52\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://526dc85e1f9b9b45830e202568d267d93dde7a4fcccf4ad7798dadcd92304d3c\",\"dweb:/ipfs/QmaoXMB972J3cSDLtBq3xBo4jLwqD2uzXTwujtSPqkYVhR\"]},\"@openzeppelin/contracts/utils/EnumerableSet.sol\":{\"keccak256\":\"0x1562cd9922fbf739edfb979f506809e2743789cbde3177515542161c3d04b164\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4580d57781513d98870d9738c7d39094336e0a70cdb90d68dad549c6ced466ec\",\"dweb:/ipfs/Qmf9YZzzRFuvMnav9dgmeRUpdYMMECiZX8w25sHWVbA18V\"]},\"project:/contracts/FwarMarketStorage.sol\":{\"keccak256\":\"0xa7489ba860e0b12686cdb3fdceecfd7b8fbc9f38819800dc9df6e75670568039\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e8d6be29d4b7d09353d3c37ea2c6b51f140c2b74308c2d5018af8d22524ef431\",\"dweb:/ipfs/Qmf65HP5Khzohh3weShWySUyYbNCcnTh1yepYxB2yFdDCU\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b5061014d806100206000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c8063017e7e581461005157806331b412d714610085578063978bbdb9146100a3578063f541b382146100c1575b600080fd5b6100596100df565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61008d610105565b6040518082815260200191505060405180910390f35b6100ab61010b565b6040518082815260200191505060405180910390f35b6100c9610111565b6040518082815260200191505060405180910390f35b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60015481565b60075481565b6000548156fea26469706673582212208f2ab516257813d3e6fd8dff10674c9b588b581a40cafccf6f5929967b5917ba64736f6c634300060c0033",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061004c5760003560e01c8063017e7e581461005157806331b412d714610085578063978bbdb9146100a3578063f541b382146100c1575b600080fd5b6100596100df565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61008d610105565b6040518082815260200191505060405180910390f35b6100ab61010b565b6040518082815260200191505060405180910390f35b6100c9610111565b6040518082815260200191505060405180910390f35b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60015481565b60075481565b6000548156fea26469706673582212208f2ab516257813d3e6fd8dff10674c9b588b581a40cafccf6f5929967b5917ba64736f6c634300060c0033",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"feeRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"feeTo\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"maxExpirationTime\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"minExpirationTime\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/FwarMarketStorage.sol\":\"FwarMarketStorage\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/math/SafeMath.sol\":{\"keccak256\":\"0xcc78a17dd88fa5a2edc60c8489e2f405c0913b377216a5b26b35656b2d0dab52\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://526dc85e1f9b9b45830e202568d267d93dde7a4fcccf4ad7798dadcd92304d3c\",\"dweb:/ipfs/QmaoXMB972J3cSDLtBq3xBo4jLwqD2uzXTwujtSPqkYVhR\"]},\"@openzeppelin/contracts/utils/EnumerableSet.sol\":{\"keccak256\":\"0x1562cd9922fbf739edfb979f506809e2743789cbde3177515542161c3d04b164\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4580d57781513d98870d9738c7d39094336e0a70cdb90d68dad549c6ced466ec\",\"dweb:/ipfs/Qmf9YZzzRFuvMnav9dgmeRUpdYMMECiZX8w25sHWVbA18V\"]},\"project:/contracts/FwarMarketStorage.sol\":{\"keccak256\":\"0xf3c36123eff715004c921e4a81cf42bd10c9ef0e3045e3c2312d471d0bce4487\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7b54afc35fe4840f7e2421be93436f2485032cc532e93333c0353711d7680723\",\"dweb:/ipfs/QmRAs6khZnuhc1HGcRuXevkrjX9m8Uhh6pTeyi1gGLjvvL\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5061014d806100206000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c8063017e7e581461005157806331b412d714610085578063978bbdb9146100a3578063f541b382146100c1575b600080fd5b6100596100df565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61008d610105565b6040518082815260200191505060405180910390f35b6100ab61010b565b6040518082815260200191505060405180910390f35b6100c9610111565b6040518082815260200191505060405180910390f35b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60015481565b60075481565b6000548156fea264697066735822122039608b8e8b75c4311a4d454da382adad1e3a9dacad6f9cd6fb9face90583f22b64736f6c634300060c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061004c5760003560e01c8063017e7e581461005157806331b412d714610085578063978bbdb9146100a3578063f541b382146100c1575b600080fd5b6100596100df565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61008d610105565b6040518082815260200191505060405180910390f35b6100ab61010b565b6040518082815260200191505060405180910390f35b6100c9610111565b6040518082815260200191505060405180910390f35b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60015481565b60075481565b6000548156fea264697066735822122039608b8e8b75c4311a4d454da382adad1e3a9dacad6f9cd6fb9face90583f22b64736f6c634300060c0033",
   "immutableReferences": {},
-  "sourceMap": "168:799:11:-:0;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "168:799:11:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;886:20;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;702:29;;;:::i;:::-;;;;;;;;;;;;;;;;;;;944:19;;;:::i;:::-;;;;;;;;;;;;;;;;;;;666:29;;;:::i;:::-;;;;;;;;;;;;;;;;;;;886:20;;;;;;;;;;;;;:::o;702:29::-;;;;:::o;944:19::-;;;;:::o;666:29::-;;;;:::o",
-  "source": "// SPDX-License-Identifier: MIT\npragma solidity 0.6.12;\n\nimport \"@openzeppelin/contracts/math/SafeMath.sol\";\nimport \"@openzeppelin/contracts/utils/EnumerableSet.sol\";\n\ncontract FwarMarketStorage {\n    using SafeMath for uint256;\n    using EnumerableSet for EnumerableSet.UintSet;\n\n    struct OrderInfo {\n        // NFT owner\n        address owner;\n        // NFT contract address\n        address nftContract;\n        // NFT Ids\n        uint[] nftIds;\n        // pay token;\n        address token;\n        // pay amount;\n        uint price;\n        // order expiration time\n        uint expiration;\n        // order expiration time\n        uint createTime;\n    }\n\n    uint public maxExpirationTime;\n\n    uint public minExpirationTime;\n\n\n    EnumerableSet.UintSet internal orderIds;\n\n    mapping(uint => OrderInfo) orders;\n\n    mapping(uint => uint) sellingNFT;\n\n    // version 2 add\n\n    address public feeTo;\n\n    // fee rate scaled by 1e12\n    uint public feeRate; \n}",
-  "sourcePath": "/Users/badung1870/Working/Node/Fwar/FwarMarket/contracts/FwarMarketStorage.sol",
+  "sourceMap": "168:819:11:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "168:819:11:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;906:20;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;702:29;;;:::i;:::-;;;;;;;;;;;;;;;;;;;964:19;;;:::i;:::-;;;;;;;;;;;;;;;;;;;666:29;;;:::i;:::-;;;;;;;;;;;;;;;;;;;906:20;;;;;;;;;;;;;:::o;702:29::-;;;;:::o;964:19::-;;;;:::o;666:29::-;;;;:::o",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity 0.6.12;\n\nimport \"@openzeppelin/contracts/math/SafeMath.sol\";\nimport \"@openzeppelin/contracts/utils/EnumerableSet.sol\";\n\ncontract FwarMarketStorage {\n    using SafeMath for uint256;\n    using EnumerableSet for EnumerableSet.UintSet;\n\n    struct OrderInfo {\n        // NFT owner\n        address owner;\n        // NFT contract address\n        address nftContract;\n        // NFT Ids\n        uint[] nftIds;\n        // pay token;\n        address token;\n        // pay amount;\n        uint price;\n        // order expiration time\n        uint expiration;\n        // order expiration time\n        uint createTime;\n    }\n\n    uint public maxExpirationTime;\n\n    uint public minExpirationTime;\n\n\n    EnumerableSet.UintSet internal orderIds;\n\n    mapping(uint => OrderInfo) orders;\n\n    mapping(uint => mapping(address => uint)) sellingNFT;\n\n    // version 2 add\n\n    address public feeTo;\n\n    // fee rate scaled by 1e12\n    uint public feeRate; \n}",
+  "sourcePath": "/Users/badung1870/Working/Node/FwarProject/SourceCode/SmartContracts/Fwar/FwarMarket/contracts/FwarMarketStorage.sol",
   "ast": {
     "absolutePath": "project:/contracts/FwarMarketStorage.sol",
     "exportedSymbols": {
       "FwarMarketStorage": [
-        2832
+        2879
       ]
     },
-    "id": 2833,
+    "id": 2880,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2789,
+        "id": 2834,
         "literals": [
           "solidity",
           "0.6",
@@ -86,9 +86,9 @@
       {
         "absolutePath": "@openzeppelin/contracts/math/SafeMath.sol",
         "file": "@openzeppelin/contracts/math/SafeMath.sol",
-        "id": 2790,
+        "id": 2835,
         "nodeType": "ImportDirective",
-        "scope": 2833,
+        "scope": 2880,
         "sourceUnit": 650,
         "src": "57:51:11",
         "symbolAliases": [],
@@ -97,9 +97,9 @@
       {
         "absolutePath": "@openzeppelin/contracts/utils/EnumerableSet.sol",
         "file": "@openzeppelin/contracts/utils/EnumerableSet.sol",
-        "id": 2791,
+        "id": 2836,
         "nodeType": "ImportDirective",
-        "scope": 2833,
+        "scope": 2880,
         "sourceUnit": 1934,
         "src": "109:57:11",
         "symbolAliases": [],
@@ -112,18 +112,18 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 2832,
+        "id": 2879,
         "linearizedBaseContracts": [
-          2832
+          2879
         ],
         "name": "FwarMarketStorage",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 2794,
+            "id": 2839,
             "libraryName": {
               "contractScope": null,
-              "id": 2792,
+              "id": 2837,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 649,
@@ -136,7 +136,7 @@
             "nodeType": "UsingForDirective",
             "src": "201:27:11",
             "typeName": {
-              "id": 2793,
+              "id": 2838,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "220:7:11",
@@ -147,10 +147,10 @@
             }
           },
           {
-            "id": 2797,
+            "id": 2842,
             "libraryName": {
               "contractScope": null,
-              "id": 2795,
+              "id": 2840,
               "name": "EnumerableSet",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 1933,
@@ -164,7 +164,7 @@
             "src": "233:46:11",
             "typeName": {
               "contractScope": null,
-              "id": 2796,
+              "id": 2841,
               "name": "EnumerableSet.UintSet",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 1838,
@@ -177,16 +177,16 @@
           },
           {
             "canonicalName": "FwarMarketStorage.OrderInfo",
-            "id": 2813,
+            "id": 2858,
             "members": [
               {
                 "constant": false,
-                "id": 2799,
+                "id": 2844,
                 "mutability": "mutable",
                 "name": "owner",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 2813,
+                "scope": 2858,
                 "src": "333:13:11",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -195,7 +195,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 2798,
+                  "id": 2843,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "333:7:11",
@@ -210,12 +210,12 @@
               },
               {
                 "constant": false,
-                "id": 2801,
+                "id": 2846,
                 "mutability": "mutable",
                 "name": "nftContract",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 2813,
+                "scope": 2858,
                 "src": "388:19:11",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -224,7 +224,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 2800,
+                  "id": 2845,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "388:7:11",
@@ -239,12 +239,12 @@
               },
               {
                 "constant": false,
-                "id": 2804,
+                "id": 2849,
                 "mutability": "mutable",
                 "name": "nftIds",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 2813,
+                "scope": 2858,
                 "src": "436:13:11",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -254,7 +254,7 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 2802,
+                    "id": 2847,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "436:4:11",
@@ -263,7 +263,7 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 2803,
+                  "id": 2848,
                   "length": null,
                   "nodeType": "ArrayTypeName",
                   "src": "436:6:11",
@@ -277,12 +277,12 @@
               },
               {
                 "constant": false,
-                "id": 2806,
+                "id": 2851,
                 "mutability": "mutable",
                 "name": "token",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 2813,
+                "scope": 2858,
                 "src": "481:13:11",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -291,7 +291,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 2805,
+                  "id": 2850,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "481:7:11",
@@ -306,12 +306,12 @@
               },
               {
                 "constant": false,
-                "id": 2808,
+                "id": 2853,
                 "mutability": "mutable",
                 "name": "price",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 2813,
+                "scope": 2858,
                 "src": "527:10:11",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -320,7 +320,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2807,
+                  "id": 2852,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
                   "src": "527:4:11",
@@ -334,12 +334,12 @@
               },
               {
                 "constant": false,
-                "id": 2810,
+                "id": 2855,
                 "mutability": "mutable",
                 "name": "expiration",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 2813,
+                "scope": 2858,
                 "src": "580:15:11",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -348,7 +348,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2809,
+                  "id": 2854,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
                   "src": "580:4:11",
@@ -362,12 +362,12 @@
               },
               {
                 "constant": false,
-                "id": 2812,
+                "id": 2857,
                 "mutability": "mutable",
                 "name": "createTime",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 2813,
+                "scope": 2858,
                 "src": "638:15:11",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -376,7 +376,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2811,
+                  "id": 2856,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
                   "src": "638:4:11",
@@ -391,19 +391,19 @@
             ],
             "name": "OrderInfo",
             "nodeType": "StructDefinition",
-            "scope": 2832,
+            "scope": 2879,
             "src": "285:375:11",
             "visibility": "public"
           },
           {
             "constant": false,
             "functionSelector": "f541b382",
-            "id": 2815,
+            "id": 2860,
             "mutability": "mutable",
             "name": "maxExpirationTime",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 2832,
+            "scope": 2879,
             "src": "666:29:11",
             "stateVariable": true,
             "storageLocation": "default",
@@ -412,7 +412,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 2814,
+              "id": 2859,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "666:4:11",
@@ -427,12 +427,12 @@
           {
             "constant": false,
             "functionSelector": "31b412d7",
-            "id": 2817,
+            "id": 2862,
             "mutability": "mutable",
             "name": "minExpirationTime",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 2832,
+            "scope": 2879,
             "src": "702:29:11",
             "stateVariable": true,
             "storageLocation": "default",
@@ -441,7 +441,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 2816,
+              "id": 2861,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "702:4:11",
@@ -455,12 +455,12 @@
           },
           {
             "constant": false,
-            "id": 2819,
+            "id": 2864,
             "mutability": "mutable",
             "name": "orderIds",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 2832,
+            "scope": 2879,
             "src": "739:39:11",
             "stateVariable": true,
             "storageLocation": "default",
@@ -470,7 +470,7 @@
             },
             "typeName": {
               "contractScope": null,
-              "id": 2818,
+              "id": 2863,
               "name": "EnumerableSet.UintSet",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 1838,
@@ -485,23 +485,23 @@
           },
           {
             "constant": false,
-            "id": 2823,
+            "id": 2868,
             "mutability": "mutable",
             "name": "orders",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 2832,
+            "scope": 2879,
             "src": "785:33:11",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_OrderInfo_$2813_storage_$",
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_OrderInfo_$2858_storage_$",
               "typeString": "mapping(uint256 => struct FwarMarketStorage.OrderInfo)"
             },
             "typeName": {
-              "id": 2822,
+              "id": 2867,
               "keyType": {
-                "id": 2820,
+                "id": 2865,
                 "name": "uint",
                 "nodeType": "ElementaryTypeName",
                 "src": "793:4:11",
@@ -513,18 +513,18 @@
               "nodeType": "Mapping",
               "src": "785:26:11",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_OrderInfo_$2813_storage_$",
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_OrderInfo_$2858_storage_$",
                 "typeString": "mapping(uint256 => struct FwarMarketStorage.OrderInfo)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 2821,
+                "id": 2866,
                 "name": "OrderInfo",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 2813,
+                "referencedDeclaration": 2858,
                 "src": "801:9:11",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_OrderInfo_$2813_storage_ptr",
+                  "typeIdentifier": "t_struct$_OrderInfo_$2858_storage_ptr",
                   "typeString": "struct FwarMarketStorage.OrderInfo"
                 }
               }
@@ -534,23 +534,23 @@
           },
           {
             "constant": false,
-            "id": 2827,
+            "id": 2874,
             "mutability": "mutable",
             "name": "sellingNFT",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 2832,
-            "src": "825:32:11",
+            "scope": 2879,
+            "src": "825:52:11",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_uint256_$_t_uint256_$",
-              "typeString": "mapping(uint256 => uint256)"
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_mapping$_t_address_$_t_uint256_$_$",
+              "typeString": "mapping(uint256 => mapping(address => uint256))"
             },
             "typeName": {
-              "id": 2826,
+              "id": 2873,
               "keyType": {
-                "id": 2824,
+                "id": 2869,
                 "name": "uint",
                 "nodeType": "ElementaryTypeName",
                 "src": "833:4:11",
@@ -560,19 +560,38 @@
                 }
               },
               "nodeType": "Mapping",
-              "src": "825:21:11",
+              "src": "825:41:11",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_uint256_$_t_uint256_$",
-                "typeString": "mapping(uint256 => uint256)"
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_mapping$_t_address_$_t_uint256_$_$",
+                "typeString": "mapping(uint256 => mapping(address => uint256))"
               },
               "valueType": {
-                "id": 2825,
-                "name": "uint",
-                "nodeType": "ElementaryTypeName",
-                "src": "841:4:11",
+                "id": 2872,
+                "keyType": {
+                  "id": 2870,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "849:7:11",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "nodeType": "Mapping",
+                "src": "841:24:11",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                  "typeString": "mapping(address => uint256)"
+                },
+                "valueType": {
+                  "id": 2871,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "860:4:11",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
                 }
               }
             },
@@ -582,13 +601,13 @@
           {
             "constant": false,
             "functionSelector": "017e7e58",
-            "id": 2829,
+            "id": 2876,
             "mutability": "mutable",
             "name": "feeTo",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 2832,
-            "src": "886:20:11",
+            "scope": 2879,
+            "src": "906:20:11",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -596,10 +615,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 2828,
+              "id": 2875,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "886:7:11",
+              "src": "906:7:11",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -612,13 +631,13 @@
           {
             "constant": false,
             "functionSelector": "978bbdb9",
-            "id": 2831,
+            "id": 2878,
             "mutability": "mutable",
             "name": "feeRate",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 2832,
-            "src": "944:19:11",
+            "scope": 2879,
+            "src": "964:19:11",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -626,10 +645,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 2830,
+              "id": 2877,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "944:4:11",
+              "src": "964:4:11",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -639,18 +658,18 @@
             "visibility": "public"
           }
         ],
-        "scope": 2833,
-        "src": "168:799:11"
+        "scope": 2880,
+        "src": "168:819:11"
       }
     ],
-    "src": "32:935:11"
+    "src": "32:955:11"
   },
   "legacyAST": {
     "attributes": {
       "absolutePath": "project:/contracts/FwarMarketStorage.sol",
       "exportedSymbols": {
         "FwarMarketStorage": [
-          2832
+          2879
         ]
       },
       "license": "MIT"
@@ -664,7 +683,7 @@
             ".12"
           ]
         },
-        "id": 2789,
+        "id": 2834,
         "name": "PragmaDirective",
         "src": "32:23:11"
       },
@@ -673,13 +692,13 @@
           "SourceUnit": 650,
           "absolutePath": "@openzeppelin/contracts/math/SafeMath.sol",
           "file": "@openzeppelin/contracts/math/SafeMath.sol",
-          "scope": 2833,
+          "scope": 2880,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 2790,
+        "id": 2835,
         "name": "ImportDirective",
         "src": "57:51:11"
       },
@@ -688,13 +707,13 @@
           "SourceUnit": 1934,
           "absolutePath": "@openzeppelin/contracts/utils/EnumerableSet.sol",
           "file": "@openzeppelin/contracts/utils/EnumerableSet.sol",
-          "scope": 2833,
+          "scope": 2880,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 2791,
+        "id": 2836,
         "name": "ImportDirective",
         "src": "109:57:11"
       },
@@ -711,10 +730,10 @@
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
-            2832
+            2879
           ],
           "name": "FwarMarketStorage",
-          "scope": 2833
+          "scope": 2880
         },
         "children": [
           {
@@ -726,7 +745,7 @@
                   "referencedDeclaration": 649,
                   "type": "library SafeMath"
                 },
-                "id": 2792,
+                "id": 2837,
                 "name": "UserDefinedTypeName",
                 "src": "207:8:11"
               },
@@ -735,12 +754,12 @@
                   "name": "uint256",
                   "type": "uint256"
                 },
-                "id": 2793,
+                "id": 2838,
                 "name": "ElementaryTypeName",
                 "src": "220:7:11"
               }
             ],
-            "id": 2794,
+            "id": 2839,
             "name": "UsingForDirective",
             "src": "201:27:11"
           },
@@ -753,7 +772,7 @@
                   "referencedDeclaration": 1933,
                   "type": "library EnumerableSet"
                 },
-                "id": 2795,
+                "id": 2840,
                 "name": "UserDefinedTypeName",
                 "src": "239:13:11"
               },
@@ -764,12 +783,12 @@
                   "referencedDeclaration": 1838,
                   "type": "struct EnumerableSet.UintSet"
                 },
-                "id": 2796,
+                "id": 2841,
                 "name": "UserDefinedTypeName",
                 "src": "257:21:11"
               }
             ],
-            "id": 2797,
+            "id": 2842,
             "name": "UsingForDirective",
             "src": "233:46:11"
           },
@@ -777,7 +796,7 @@
             "attributes": {
               "canonicalName": "FwarMarketStorage.OrderInfo",
               "name": "OrderInfo",
-              "scope": 2832,
+              "scope": 2879,
               "visibility": "public"
             },
             "children": [
@@ -787,7 +806,7 @@
                   "mutability": "mutable",
                   "name": "owner",
                   "overrides": null,
-                  "scope": 2813,
+                  "scope": 2858,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "address",
@@ -801,12 +820,12 @@
                       "stateMutability": "nonpayable",
                       "type": "address"
                     },
-                    "id": 2798,
+                    "id": 2843,
                     "name": "ElementaryTypeName",
                     "src": "333:7:11"
                   }
                 ],
-                "id": 2799,
+                "id": 2844,
                 "name": "VariableDeclaration",
                 "src": "333:13:11"
               },
@@ -816,7 +835,7 @@
                   "mutability": "mutable",
                   "name": "nftContract",
                   "overrides": null,
-                  "scope": 2813,
+                  "scope": 2858,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "address",
@@ -830,12 +849,12 @@
                       "stateMutability": "nonpayable",
                       "type": "address"
                     },
-                    "id": 2800,
+                    "id": 2845,
                     "name": "ElementaryTypeName",
                     "src": "388:7:11"
                   }
                 ],
-                "id": 2801,
+                "id": 2846,
                 "name": "VariableDeclaration",
                 "src": "388:19:11"
               },
@@ -845,7 +864,7 @@
                   "mutability": "mutable",
                   "name": "nftIds",
                   "overrides": null,
-                  "scope": 2813,
+                  "scope": 2858,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256[]",
@@ -864,17 +883,17 @@
                           "name": "uint",
                           "type": "uint256"
                         },
-                        "id": 2802,
+                        "id": 2847,
                         "name": "ElementaryTypeName",
                         "src": "436:4:11"
                       }
                     ],
-                    "id": 2803,
+                    "id": 2848,
                     "name": "ArrayTypeName",
                     "src": "436:6:11"
                   }
                 ],
-                "id": 2804,
+                "id": 2849,
                 "name": "VariableDeclaration",
                 "src": "436:13:11"
               },
@@ -884,7 +903,7 @@
                   "mutability": "mutable",
                   "name": "token",
                   "overrides": null,
-                  "scope": 2813,
+                  "scope": 2858,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "address",
@@ -898,12 +917,12 @@
                       "stateMutability": "nonpayable",
                       "type": "address"
                     },
-                    "id": 2805,
+                    "id": 2850,
                     "name": "ElementaryTypeName",
                     "src": "481:7:11"
                   }
                 ],
-                "id": 2806,
+                "id": 2851,
                 "name": "VariableDeclaration",
                 "src": "481:13:11"
               },
@@ -913,7 +932,7 @@
                   "mutability": "mutable",
                   "name": "price",
                   "overrides": null,
-                  "scope": 2813,
+                  "scope": 2858,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -926,12 +945,12 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 2807,
+                    "id": 2852,
                     "name": "ElementaryTypeName",
                     "src": "527:4:11"
                   }
                 ],
-                "id": 2808,
+                "id": 2853,
                 "name": "VariableDeclaration",
                 "src": "527:10:11"
               },
@@ -941,7 +960,7 @@
                   "mutability": "mutable",
                   "name": "expiration",
                   "overrides": null,
-                  "scope": 2813,
+                  "scope": 2858,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -954,12 +973,12 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 2809,
+                    "id": 2854,
                     "name": "ElementaryTypeName",
                     "src": "580:4:11"
                   }
                 ],
-                "id": 2810,
+                "id": 2855,
                 "name": "VariableDeclaration",
                 "src": "580:15:11"
               },
@@ -969,7 +988,7 @@
                   "mutability": "mutable",
                   "name": "createTime",
                   "overrides": null,
-                  "scope": 2813,
+                  "scope": 2858,
                   "stateVariable": false,
                   "storageLocation": "default",
                   "type": "uint256",
@@ -982,17 +1001,17 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 2811,
+                    "id": 2856,
                     "name": "ElementaryTypeName",
                     "src": "638:4:11"
                   }
                 ],
-                "id": 2812,
+                "id": 2857,
                 "name": "VariableDeclaration",
                 "src": "638:15:11"
               }
             ],
-            "id": 2813,
+            "id": 2858,
             "name": "StructDefinition",
             "src": "285:375:11"
           },
@@ -1003,7 +1022,7 @@
               "mutability": "mutable",
               "name": "maxExpirationTime",
               "overrides": null,
-              "scope": 2832,
+              "scope": 2879,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "uint256",
@@ -1016,12 +1035,12 @@
                   "name": "uint",
                   "type": "uint256"
                 },
-                "id": 2814,
+                "id": 2859,
                 "name": "ElementaryTypeName",
                 "src": "666:4:11"
               }
             ],
-            "id": 2815,
+            "id": 2860,
             "name": "VariableDeclaration",
             "src": "666:29:11"
           },
@@ -1032,7 +1051,7 @@
               "mutability": "mutable",
               "name": "minExpirationTime",
               "overrides": null,
-              "scope": 2832,
+              "scope": 2879,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "uint256",
@@ -1045,12 +1064,12 @@
                   "name": "uint",
                   "type": "uint256"
                 },
-                "id": 2816,
+                "id": 2861,
                 "name": "ElementaryTypeName",
                 "src": "702:4:11"
               }
             ],
-            "id": 2817,
+            "id": 2862,
             "name": "VariableDeclaration",
             "src": "702:29:11"
           },
@@ -1060,7 +1079,7 @@
               "mutability": "mutable",
               "name": "orderIds",
               "overrides": null,
-              "scope": 2832,
+              "scope": 2879,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "struct EnumerableSet.UintSet",
@@ -1075,12 +1094,12 @@
                   "referencedDeclaration": 1838,
                   "type": "struct EnumerableSet.UintSet"
                 },
-                "id": 2818,
+                "id": 2863,
                 "name": "UserDefinedTypeName",
                 "src": "739:21:11"
               }
             ],
-            "id": 2819,
+            "id": 2864,
             "name": "VariableDeclaration",
             "src": "739:39:11"
           },
@@ -1090,7 +1109,7 @@
               "mutability": "mutable",
               "name": "orders",
               "overrides": null,
-              "scope": 2832,
+              "scope": 2879,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "mapping(uint256 => struct FwarMarketStorage.OrderInfo)",
@@ -1108,7 +1127,7 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 2820,
+                    "id": 2865,
                     "name": "ElementaryTypeName",
                     "src": "793:4:11"
                   },
@@ -1116,20 +1135,20 @@
                     "attributes": {
                       "contractScope": null,
                       "name": "OrderInfo",
-                      "referencedDeclaration": 2813,
+                      "referencedDeclaration": 2858,
                       "type": "struct FwarMarketStorage.OrderInfo"
                     },
-                    "id": 2821,
+                    "id": 2866,
                     "name": "UserDefinedTypeName",
                     "src": "801:9:11"
                   }
                 ],
-                "id": 2822,
+                "id": 2867,
                 "name": "Mapping",
                 "src": "785:26:11"
               }
             ],
-            "id": 2823,
+            "id": 2868,
             "name": "VariableDeclaration",
             "src": "785:33:11"
           },
@@ -1139,17 +1158,17 @@
               "mutability": "mutable",
               "name": "sellingNFT",
               "overrides": null,
-              "scope": 2832,
+              "scope": 2879,
               "stateVariable": true,
               "storageLocation": "default",
-              "type": "mapping(uint256 => uint256)",
+              "type": "mapping(uint256 => mapping(address => uint256))",
               "value": null,
               "visibility": "internal"
             },
             "children": [
               {
                 "attributes": {
-                  "type": "mapping(uint256 => uint256)"
+                  "type": "mapping(uint256 => mapping(address => uint256))"
                 },
                 "children": [
                   {
@@ -1157,28 +1176,47 @@
                       "name": "uint",
                       "type": "uint256"
                     },
-                    "id": 2824,
+                    "id": 2869,
                     "name": "ElementaryTypeName",
                     "src": "833:4:11"
                   },
                   {
                     "attributes": {
-                      "name": "uint",
-                      "type": "uint256"
+                      "type": "mapping(address => uint256)"
                     },
-                    "id": 2825,
-                    "name": "ElementaryTypeName",
-                    "src": "841:4:11"
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 2870,
+                        "name": "ElementaryTypeName",
+                        "src": "849:7:11"
+                      },
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2871,
+                        "name": "ElementaryTypeName",
+                        "src": "860:4:11"
+                      }
+                    ],
+                    "id": 2872,
+                    "name": "Mapping",
+                    "src": "841:24:11"
                   }
                 ],
-                "id": 2826,
+                "id": 2873,
                 "name": "Mapping",
-                "src": "825:21:11"
+                "src": "825:41:11"
               }
             ],
-            "id": 2827,
+            "id": 2874,
             "name": "VariableDeclaration",
-            "src": "825:32:11"
+            "src": "825:52:11"
           },
           {
             "attributes": {
@@ -1187,7 +1225,7 @@
               "mutability": "mutable",
               "name": "feeTo",
               "overrides": null,
-              "scope": 2832,
+              "scope": 2879,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "address",
@@ -1201,14 +1239,14 @@
                   "stateMutability": "nonpayable",
                   "type": "address"
                 },
-                "id": 2828,
+                "id": 2875,
                 "name": "ElementaryTypeName",
-                "src": "886:7:11"
+                "src": "906:7:11"
               }
             ],
-            "id": 2829,
+            "id": 2876,
             "name": "VariableDeclaration",
-            "src": "886:20:11"
+            "src": "906:20:11"
           },
           {
             "attributes": {
@@ -1217,7 +1255,7 @@
               "mutability": "mutable",
               "name": "feeRate",
               "overrides": null,
-              "scope": 2832,
+              "scope": 2879,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "uint256",
@@ -1230,24 +1268,24 @@
                   "name": "uint",
                   "type": "uint256"
                 },
-                "id": 2830,
+                "id": 2877,
                 "name": "ElementaryTypeName",
-                "src": "944:4:11"
+                "src": "964:4:11"
               }
             ],
-            "id": 2831,
+            "id": 2878,
             "name": "VariableDeclaration",
-            "src": "944:19:11"
+            "src": "964:19:11"
           }
         ],
-        "id": 2832,
+        "id": 2879,
         "name": "ContractDefinition",
-        "src": "168:799:11"
+        "src": "168:819:11"
       }
     ],
-    "id": 2833,
+    "id": 2880,
     "name": "SourceUnit",
-    "src": "32:935:11"
+    "src": "32:955:11"
   },
   "compiler": {
     "name": "solc",
@@ -1255,7 +1293,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-23T10:45:14.640Z",
+  "updatedAt": "2021-09-28T18:45:45.080Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

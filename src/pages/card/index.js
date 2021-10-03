@@ -42,7 +42,6 @@ import DisplayOpenedCards from 'components/DisplayCard';
 // api
 import OrderApi from 'apis/OrderApi';
 import CharacterApi from 'apis/CharacterApi';
-import UserApi from 'apis/UserApi';
 import TeamApi from 'apis/TeamApi';
 import { useTitle } from 'dapp/hook';
 
@@ -206,16 +205,14 @@ function Card() {
   };
   const getMyCard = async (rarity, element, teamId, typeCard) => {
     if (user) {
-      const { data: listCard } = await CharacterApi.getMyList(
-        {
-          userId: user._id,
-          page: currentPage,
-          rarity: rarity,
-          element: element,
-          teamId: teamId,
-          typeCard: typeCard
-        }
-      );
+      const { data: listCard } = await CharacterApi.getMyList({
+        userId: user._id,
+        currentPage,
+        rarity,
+        element,
+        teamId,
+        typeCard
+      });
       setListCardState(listCard.docs);
       console.log('listCard', listCard.docs);
       setPagesQuantity(listCard.totalPages);
@@ -384,7 +381,7 @@ function Card() {
                 _hover={{ boxShadow: '0 4px 25px 0 rgba(34,41,47,.25)' }}
                 position="relative"
               >
-                <DisplayOpenedCards info={card} />
+                <DisplayOpenedCards info={card} text={true} />
                 <Stack
                   direction="column"
                   align="stretch"
@@ -496,6 +493,7 @@ function Card() {
                   <Box key={card.nftId}>
                     <DisplayOpenedCards
                       info={card}
+                      text={true}
                       isCart={true}
                       onremove={() => {
                         handleRemoveSell(card);
