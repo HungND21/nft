@@ -28,7 +28,6 @@ import {
 import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
 import { CgShoppingCart } from 'react-icons/cg';
 import toast from 'react-hot-toast';
-import Select from 'react-select';
 
 import { ethers } from 'ethers';
 import { useEthers } from '@usedapp/core';
@@ -48,8 +47,35 @@ import TeamApi from 'apis/TeamApi';
 import { useTitle } from 'dapp/hook';
 
 import FilterComponent from 'components/FilterComponent';
+<<<<<<< HEAD
 import { elementDropdown, rarityDropdown } from 'utils/dataFilter';
 
+=======
+
+const cardTypeDropdown = [
+  { value: 'attacker', label: 'Attacker' },
+  { value: 'defender', label: 'Defender' }
+];
+
+const rarityDropdown = [
+  // { value: '', label: 'All' },
+  { value: '1', label: 'Junk' },
+  { value: '2', label: 'Normal' },
+  { value: '3', label: 'Rare' },
+  { value: '4', label: 'Epic' },
+  { value: '5', label: 'Legend' }
+];
+
+const elementDropdown = [
+  // { value: '', label: 'All' },
+  { value: '1', label: 'Metal' },
+  { value: '2', label: 'Wood' },
+  { value: '3', label: 'Water' },
+  { value: '4', label: 'Fire' },
+  { value: '5', label: 'Earth' }
+];
+
+>>>>>>> HungND
 function Card() {
   useTitle('FWAR - MY CARDS');
 
@@ -66,6 +92,7 @@ function Card() {
   const [rarityState, setRarityState] = React.useState('');
   const [elementState, setElementState] = React.useState('');
   const [teamIdState, setTeamIdState] = React.useState('');
+  const [typeCardState, setTypeCardState] = React.useState('');
   //
 
   const [teamDropdown, setTeamDropdown] = React.useState([]);
@@ -126,6 +153,7 @@ function Card() {
     const listCardFilter = listCardStorage.filter((i) => i.nftId !== card.nftId);
     localStorage.setItem('cardItem', JSON.stringify(listCardFilter));
     setListCardStorage(listCardFilter);
+    setPrice({ ...price, [card['nftId']]: 0 });
     toast.success('remove card');
   };
   const handleOnchangePrice = (e, nftId) => {
@@ -221,14 +249,15 @@ function Card() {
     );
     if (isApproveForAll) setIsApprove(true);
   };
-  const getMyCard = async (rarity, element, teamId) => {
+  const getMyCard = async (rarity, element, teamId, typeCard) => {
     if (user) {
       const { data: listCard } = await CharacterApi.getMyList(
         user._id,
         currentPage,
         rarity,
         element,
-        teamId
+        teamId,
+        typeCard
       );
       setListCardState(listCard.docs);
       console.log('listCard', listCard.docs);
@@ -247,19 +276,27 @@ function Card() {
   const handleChangeRarity = (rarity) => {
     console.log('rarity', rarity);
     setRarityState(rarity);
+    setCurrentPage(1);
   };
   const handleChangeElement = (element) => {
     console.log('element', element);
-
     setElementState(element);
+    setCurrentPage(1);
   };
   const handleChangeTeamId = (teamId) => {
     console.log('teamId', teamId);
-
     setTeamIdState(teamId);
+    setCurrentPage(1);
+  };
+
+  const handleChangeCardType = (typeCard) => {
+    console.log('typeCard', typeCard);
+    setTypeCardState(typeCard);
+    setCurrentPage(1);
   };
 
   React.useEffect(() => {
+    document.title = "FWAR - MY CARDS";
     const listCartLocalStorageJson = localStorage.getItem('cardItem');
     const priceLocal = JSON.parse(localStorage.getItem('price'));
     if (priceLocal) setPrice(priceLocal);
@@ -274,7 +311,7 @@ function Card() {
     if (account) {
       approveInit();
       listMyOrderInit();
-      getMyCard(rarityState, elementState, teamIdState);
+      getMyCard(rarityState, elementState, teamIdState, typeCardState);
       getTeams();
       return () => {
         setListCardStorage();
@@ -282,7 +319,7 @@ function Card() {
         setIsApprove();
       };
     }
-  }, [account, currentPage, user, setListCardStorage, rarityState, elementState, teamIdState]);
+  }, [account, currentPage, user, setListCardStorage, rarityState, elementState, teamIdState, typeCardState]);
 
   const baseStyles = {
     w: 7,
@@ -314,6 +351,14 @@ function Card() {
         <Grid templateColumns="repeat(6, 1fr)" gap={4}>
           <GridItem colSpan={{ base: 6, md: 5 }}>
             <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+              <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <FilterComponent
+                  placeholder="CardType"
+                  handleChange={handleChangeCardType}
+                  valueState={typeCardState}
+                  optionDropdown={cardTypeDropdown}
+                />
+              </GridItem>
               <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
                 <FilterComponent
                   placeholder="Rarity"
@@ -470,23 +515,23 @@ function Card() {
       <Modal isOpen={isOpen} onClose={onClose} size="6xl">
         <ModalOverlay />
         <ModalContent w="1000px">
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Package for sale</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Grid
               templateColumns={{
                 base: 'repeat(2, 1fr)',
                 md: 'repeat(4, 1fr)',
-                lg: 'repeat(6, 1fr)'
+                lg: 'repeat(4, 1fr)'
               }}
-              gap={6}
-              mt={6}
+              gap={4}
+              mt={4}
             >
               {listCardStorage &&
                 listCardStorage.length > 0 &&
                 listCardStorage.map((card, index) => (
                   <Box key={card.nftId}>
-                    <DisplayOpenedCards info={card} />
+                    <DisplayOpenedCards info={card} isCart={true} onremove={()=>{handleRemoveSell(card)}}/>
                     <Stack spacing={4}>
                       <InputGroup>
                         <Input
@@ -499,7 +544,7 @@ function Card() {
                           }
                           onChange={(e) => handleOnchangePrice(e, card.nftId)}
                         />
-                        <InputRightAddon children="Usdt" />
+                        <InputRightAddon backgroundColor= "orange.200" children="Usdt" />
                       </InputGroup>
                     </Stack>
                   </Box>
@@ -516,7 +561,7 @@ function Card() {
                   : 0}
               </Text>
             </Flex>
-            <Button variant="ghost" onClick={handleCreateOrder}>
+            <Button variant="solid" colorScheme="red" left="1" onClick={handleCreateOrder}>
               Submit
             </Button>
           </ModalFooter>

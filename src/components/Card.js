@@ -1,13 +1,16 @@
-import { Box, Image, Text } from '@chakra-ui/react';
+import { Box, Image, Text , IconButton, Stack} from '@chakra-ui/react';
 import React from 'react';
+import { MinusIcon} from '@chakra-ui/icons'
 
-function DisplayOpenedCards({ info, text = false }) {
-  // console.log('info, ', info['teamId']);
-
+function DisplayOpenedCards({ info, text = false, isCart = false, onremove }) {
   return (
     <>
       <Box>
         <Box position="relative">
+          <Stack position="absolute" top="0" right="0" zIndex="1">
+          {isCart && (
+              <IconButton position="relative" icon={<MinusIcon />} colorScheme="red" onClick={onremove} ></IconButton>)}
+          </Stack>
           {info && (
             <Image src={`/assets/card/rarity/${info['rarity']}.png`} width="100%" height="100%" />
           )}
@@ -33,6 +36,7 @@ function DisplayOpenedCards({ info, text = false }) {
               transform="translateX(-11.25%)"
             />
           )}
+          
           {text && (
             <Box
               bgRepeat="no-repeat"
@@ -49,6 +53,7 @@ function DisplayOpenedCards({ info, text = false }) {
               <Text>{info && info['rarity']}</Text> */}
             </Box>
           )}
+
         </Box>
       </Box>
     </>

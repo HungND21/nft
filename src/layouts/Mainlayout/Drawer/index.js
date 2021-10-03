@@ -35,8 +35,13 @@ export default function DrawerMain() {
     <>
       <Box>
         <Box>
-          <Flex justifyContent="space-between" alignItems="center">
+          <Flex justifyContent="center" alignItems="center">
             <Box></Box>
+            <Link to="/">
+              <Stack direction="row" justify="center" align="center">
+                <Image h="36px" src="/assets/favicon.svg" alt="LOGO" />
+              </Stack>
+            </Link>
             <Link to="/">
               <Stack direction="row" justify="center" align="center">
                 <Image h="100px" src="/assets/logo.png" alt="LOGO" />
