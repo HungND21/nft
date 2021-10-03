@@ -47,6 +47,12 @@ import UserApi from 'apis/UserApi';
 import TeamApi from 'apis/TeamApi';
 import { useTitle } from 'dapp/hook';
 import FilterComponent from 'components/FilterComponent';
+
+const cardTypeDropdown = [
+  { value: 'attacker', label: 'Attacker' },
+  { value: 'defender', label: 'Defender' }
+];
+
 const rarityDropdown = [
   // { value: '', label: 'All' },
   { value: '1', label: 'Junk' },
@@ -81,6 +87,7 @@ function Card() {
   const [rarityState, setRarityState] = React.useState('');
   const [elementState, setElementState] = React.useState('');
   const [teamIdState, setTeamIdState] = React.useState('');
+  const [typeCardState, setTypeCardState] = React.useState('');
   //
 
   const [teamDropdown, setTeamDropdown] = React.useState([]);
@@ -236,14 +243,15 @@ function Card() {
     );
     if (isApproveForAll) setIsApprove(true);
   };
-  const getMyCard = async (rarity, element, teamId) => {
+  const getMyCard = async (rarity, element, teamId, typeCard) => {
     if (user) {
       const { data: listCard } = await CharacterApi.getMyList(
         user._id,
         currentPage,
         rarity,
         element,
-        teamId
+        teamId,
+        typeCard
       );
       setListCardState(listCard.docs);
       console.log('listCard', listCard.docs);
@@ -275,6 +283,12 @@ function Card() {
     setCurrentPage(1);
   };
 
+  const handleChangeCardType = (typeCard) => {
+    console.log('typeCard', typeCard);
+    setTypeCardState(typeCard);
+    setCurrentPage(1);
+  };
+
   React.useEffect(() => {
     document.title = "FWAR - MY CARDS";
     const listCartLocalStorageJson = localStorage.getItem('cardItem');
@@ -291,7 +305,7 @@ function Card() {
     if (account) {
       approveInit();
       listMyOrderInit();
-      getMyCard(rarityState, elementState, teamIdState);
+      getMyCard(rarityState, elementState, teamIdState, typeCardState);
       getTeams();
       return () => {
         setListCardStorage();
@@ -299,7 +313,7 @@ function Card() {
         setIsApprove();
       };
     }
-  }, [account, currentPage, user, setListCardStorage, rarityState, elementState, teamIdState]);
+  }, [account, currentPage, user, setListCardStorage, rarityState, elementState, teamIdState, typeCardState]);
 
   const baseStyles = {
     w: 7,
@@ -331,6 +345,14 @@ function Card() {
         <Grid templateColumns="repeat(6, 1fr)" gap={4}>
           <GridItem colSpan={{ base: 6, md: 5 }}>
             <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+              <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <FilterComponent
+                  placeholder="CardType"
+                  handleChange={handleChangeCardType}
+                  valueState={typeCardState}
+                  optionDropdown={cardTypeDropdown}
+                />
+              </GridItem>
               <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
                 <FilterComponent
                   placeholder="Rarity"
@@ -487,17 +509,17 @@ function Card() {
       <Modal isOpen={isOpen} onClose={onClose} size="6xl">
         <ModalOverlay />
         <ModalContent w="1000px">
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Package for sale</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Grid
               templateColumns={{
                 base: 'repeat(2, 1fr)',
                 md: 'repeat(4, 1fr)',
-                lg: 'repeat(6, 1fr)'
+                lg: 'repeat(4, 1fr)'
               }}
-              gap={6}
-              mt={6}
+              gap={4}
+              mt={4}
             >
               {listCardStorage &&
                 listCardStorage.length > 0 &&

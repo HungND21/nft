@@ -2,12 +2,12 @@ import { Box, Text, useColorMode, useTheme, Stack, RadioGroup, Radio } from '@ch
 import React from 'react';
 
 const dataRarity = [
-  { id: '1', name: 'All' },
-  { id: '2', name: 'Junk' },
-  { id: '3', name: 'Normal' },
-  { id: '4', name: 'Rare' },
-  { id: '5', name: 'Epic' },
-  { id: '6', name: 'Legendary' }
+  { id: '0', name: 'All' },
+  { id: '1', name: 'Junk' },
+  { id: '2', name: 'Normal' },
+  { id: '3', name: 'Rare' },
+  { id: '4', name: 'Epic' },
+  { id: '5', name: 'Legendary' }
 ];
 const dataTeaming = [
   { id: '1', name: 'All' },
@@ -41,8 +41,9 @@ function Sidebar() {
   const { colorMode } = useColorMode();
   const theme = useTheme();
 
-  const [valueRarity, setValueRarity] = React.useState('1');
+  const [valueRarity, setValueRarity] = React.useState('0');
   const [valueTeaming, setValueTeaming] = React.useState('1');
+
   return (
     <>
       <Text fontSize="0.9rem" fontWeight="medium" marginBottom="1rem">
