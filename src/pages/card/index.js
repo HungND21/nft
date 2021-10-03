@@ -400,7 +400,7 @@ function Card() {
                 <DisplayOpenedCards info={card} />
                 <Stack
                   direction="column"
-                  align="center"
+                  align="stretch"
                   justify="center"
                   bg="rgba(240, 232, 251, 0.8)"
                   w="100%"
@@ -412,23 +412,22 @@ function Card() {
                   _groupHover={{ visibility: 'visible', color: 'orange' }}
                 >
                   <Link to={`/market-place/detail/${card.nftId}`}>
-                    <Button>Detail</Button>
+                    <Button size="lg" >Detail</Button>
                   </Link>
                   {isApprove ? (
-                    // ------ isApprove = true
-
                     (!listMyOrder.length ||
                       !listMyOrder.find((i) => i.nftIds.find((id) => id === card._id))) &&
                     (listCardStorage &&
                       listCardStorage.length &&
                       listCardStorage.find((i) => i.nftId === card.nftId) ? (
-                      <Button onClick={() => handleRemoveSell(card)}>remove sell</Button>
+                      <Button onClick={() => handleRemoveSell(card)}>Remove Sell</Button>
                     ) : (
-                      <Button onClick={() => handleSell({ ...card, price: '' })}>sell</Button>
+                      <Button size="lg" onClick={() => handleSell({ ...card, price: '' })}>Sell</Button>
                     ))
                   ) : (
                     // ------- isApprove = false
                     <Button
+                      size="lg"
                       onClick={() =>
                         handleApprove(
                           FwarChar,
