@@ -538,7 +538,7 @@ function Card() {
                           }
                           onChange={(e) => handleOnchangePrice(e, card.nftId)}
                         />
-                        <InputRightAddon children="Usdt" />
+                        <InputRightAddon backgroundColor= "orange.200" children="Usdt" />
                       </InputGroup>
                     </Stack>
                   </Box>
