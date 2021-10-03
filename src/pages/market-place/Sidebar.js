@@ -1,49 +1,9 @@
 import { Box, Text, useColorMode, useTheme, Stack, RadioGroup, Radio } from '@chakra-ui/react';
 import React from 'react';
 
-const dataRarity = [
-  { id: '0', name: 'All' },
-  { id: '1', name: 'Junk' },
-  { id: '2', name: 'Normal' },
-  { id: '3', name: 'Rare' },
-  { id: '4', name: 'Epic' },
-  { id: '5', name: 'Legendary' }
-];
-const dataTeaming = [
-  { id: '1', name: 'All' },
-  { id: '2', name: 'Pelicans' },
-  { id: '3', name: 'DogeArmy' },
-  { id: '4', name: 'Nuggets' },
-  { id: '5', name: 'Chow Chow' },
-  { id: '6', name: 'Bobcats' },
-  { id: '7', name: 'Uni' },
-  { id: '8', name: 'The Cat & The Mouse' },
-  { id: '9', name: 'Hyena' },
-  { id: '10', name: 'King' },
-  { id: '11', name: 'Kung Fu Bunny' },
-  { id: '12', name: 'Monkey' },
-  { id: '13', name: 'Alligator' },
-  { id: '14', name: 'King Kong' },
-  { id: '15', name: 'ShibaArmy' },
-  { id: '16', name: 'Doggy' },
-  { id: '17', name: 'Giraffe' },
-  { id: '18', name: 'Heavy Weight' },
-  { id: '19', name: 'C&D' },
-  { id: '20', name: 'Akita' },
-  { id: '21', name: 'Bulls' },
-  { id: '22', name: 'Ice Age' },
-  { id: '23', name: 'Wakanda' },
-  { id: '24', name: 'Wakawaka' },
-  { id: '25', name: 'Silance Alan' }
-];
-
-function Sidebar() {
+function Sidebar({handleRarity, valueRarity,rarityList, handleTeam, valueTeam, teamList}) {
   const { colorMode } = useColorMode();
   const theme = useTheme();
-
-  const [valueRarity, setValueRarity] = React.useState('0');
-  const [valueTeaming, setValueTeaming] = React.useState('1');
-
   return (
     <>
       <Text fontSize="0.9rem" fontWeight="medium" marginBottom="1rem">
@@ -60,11 +20,11 @@ function Sidebar() {
           <Text marginTop={10} marginBottom={3}>
             Rarity
           </Text>
-          <RadioGroup onChange={setValueRarity} value={valueRarity}>
+          <RadioGroup onChange={handleRarity} value={valueRarity}>
             <Stack>
-              {dataRarity.map((item) => (
-                <Radio key={item.id} value={item.id}>
-                  {item.name}
+              {rarityList.map((item) => (
+                <Radio key={item.value} value={item.value}>
+                  {item.label}
                 </Radio>
               ))}
             </Stack>
@@ -73,11 +33,11 @@ function Sidebar() {
           <Text marginTop={10} marginBottom={3}>
             Teaming
           </Text>
-          <RadioGroup onChange={setValueTeaming} value={valueTeaming}>
+          <RadioGroup onChange={handleTeam} value={valueTeam}>
             <Stack>
-              {dataTeaming.map((item) => (
-                <Radio key={item.id} value={item.id}>
-                  {item.name}
+              {teamList.map((item) => (
+                <Radio key={item.value} value={item.value}>
+                  {item.label}
                 </Radio>
               ))}
             </Stack>

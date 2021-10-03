@@ -21,6 +21,7 @@ import {
   DrawerBody,
   Button
 } from '@chakra-ui/react';
+import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
 import { ChevronRightIcon, SearchIcon, HamburgerIcon } from '@chakra-ui/icons';
 import toast from 'react-hot-toast';
 import { ethers } from 'ethers';
@@ -29,12 +30,16 @@ import FwarCharJson from 'contracts/FwarChar/FWarChar.json';
 import FwarMarketDelegateJson from 'contracts/FwarMarket/FwarMarketDelegate.json';
 
 import Usdt from 'contracts/Usdt.json';
-
+import { elementDropdown, rarityDropdown, cardTypeDropdown } from 'utils/dataFilter';
 import Web3 from 'web3';
 // import marketDelegate from 'utils/dataFilter';
 
+// import Card from 'components/Card';
+import DisplayOpenedCards from 'components/DisplayCard';
+
 import Sidebar from './Sidebar';
 import OrderApi from 'apis/OrderApi';
+import TeamApi from 'apis/TeamApi';
 import { useSelector } from 'react-redux';
 import { useTitle } from 'dapp/hook';
 
@@ -45,10 +50,19 @@ function MarketPlace() {
   const [listOrder, setListOrder] = React.useState([]);
   const { account } = useEthers();
   const { user } = useSelector((state) => state.user);
-
   const theme = useTheme();
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [rarityState, setRarityState] = React.useState('');
+  const [elementState, setElementState] = React.useState('');
+  const [teamIdState, setTeamIdState] = React.useState('');
+  const [typeCardState, setTypeCardState] = React.useState('');
+  const [teamDropdown, setTeamDropdown] = React.useState([]);
+  // paginate
+  const { currentPage, setCurrentPage } = usePaginator({
+    initialState: { currentPage: 1, pageSize: 5 }
+  });
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -80,34 +94,50 @@ function MarketPlace() {
     tokenUsdt = '0xB3C3575552F6e250E2Ee7EeB94BB9BD91E57e51E';
     console.log(nftIds);
     const result = await FwarMarketDelegate.cancelOrder(FwarCharAddress, nftIds, tokenUsdt);
-    toast.success('cancel successfully!');
-    console.log(result);
+    // toast.success('cancel successfully!');
+    // console.log(result);
   };
 
+  const handleRarityChange = (rarity) => {
+    console.log('rarity', rarity);
+    setRarityState(rarity);
+    setCurrentPage(1);
+  };
+  const handleTeamChange = (teamId) => {
+    console.log('rarity', teamId);
+    setTeamIdState(teamId);
+    setCurrentPage(1);
+  };
+  //Get Team Dropdown
+  const getTeams = async () => {
+    const { data: listTeams } = await TeamApi.getALl();
+    const teams = listTeams.map((i) => ({ value: i._id, label: i.name }));
+    // console.log('listTeams', listTeams);
+    setTeamDropdown(teams);
+  };
+  const init = async () => {
+    const allowance = await USDT.allowance(
+      account,
+      FwarMarketDelegateJson.networks[97].address // address FwarMarketDelegate
+    );
+    if (allowance > 0) setIsApprove(true);
+    const { data: orders } = await OrderApi.getAll({
+      currentPage,
+      rarity: rarityState,
+      elementState, 
+      teamIdState, 
+      typeCardState
+    });
+    setListOrder(orders.docs);
+    console.log(orders.docs);
+  };
   React.useEffect(() => {
     if (account) {
-      const init = async () => {
-        const allowance = await USDT.allowance(
-          account,
-          FwarMarketDelegateJson.networks[97].address // address FwarMarketDelegate
-        );
-        if (allowance > 0) setIsApprove(true);
-
-        const { data: orders } = await OrderApi.getAll();
-        console.log('orders', orders.docs);
-
-        setListOrder(orders.docs);
-        // order by id
-
-        // setListOrder(arrayOrderById);
-        // const x = await FwarChar.getCharInfo(6);
-        // console.log('arrayOrderById', arrayOrderById[0]['nftIds'][]);
-        // console.log('arrayOrderById', arrayOrderById);
-        // console.log('getOrderId', getOrderId);
-      };
       init();
+      getTeams();
+      console.log('user',user);
     }
-  }, [account]);
+  }, [account, user, rarityState,elementState, teamIdState, typeCardState]);
   return (
     <>
       {/* bread crumb */}
@@ -148,7 +178,9 @@ function MarketPlace() {
             lg: 'block'
           }}
         >
-          <Sidebar />
+          <Sidebar 
+          handleRarity={handleRarityChange} valueRarity={rarityState} rarityList={rarityDropdown} 
+          handleTeam={handleTeamChange} valueTeam = {teamIdState} teamList={teamDropdown}/>
         </Box>
         <Box width="100%" marginLeft={6}>
           <Stack direction="row" justify="space-between">
@@ -201,7 +233,7 @@ function MarketPlace() {
             gap={6}
             mt={6}
           >
-            {listOrder.length &&
+            {listOrder&&listOrder.length > 0 &&
               listOrder.map((card) => (
                 <Box
                   key={card.orderId}
@@ -223,39 +255,12 @@ function MarketPlace() {
                       p={2}
                     >
                       {card.nftIds.map((item) => (
-                        <Link to={`/market-place/detail/${item}`} key={item}>
-                          <Box position="relative">
-                            <Image src={`/assets/card/${item}`} width="100%" />
-                            <Image
-                              src="/assets/char/T_1.png"
-                              width="100%"
-                              position="absolute"
-                              top="0"
-                            />
-                            <Image
-                              // src="https://zoogame.app/nfts/normal/9.png"
-                              position="absolute"
-                              width="100%"
-                              top="12%"
-                              left="5%"
-                            />
-                            <Box
-                              // bgImage="https://zoogame.app/nfts/name.png"
-                              bgRepeat="no-repeat"
-                              bgSize="100% 100%"
-                              position="absolute"
-                              width="80%"
-                              bottom="18%"
-                              left="10%"
-                              p="14% 8% 3%"
-                              color="white"
-                              align="center"
-                              fontSize={10}
-                            >
-                              <Text>NFT {item}</Text>
-                              <Text>Panda</Text>
-                            </Box>
-                          </Box>
+                        <Link to={`/market-place/detail/${item.nftId}`} key={item.nftId}>
+                          <DisplayOpenedCards 
+                          info = {item}
+                          text = {true}
+                          />
+
                         </Link>
                       ))}
                     </Grid>
@@ -270,13 +275,14 @@ function MarketPlace() {
                         fontSize={13}
                         onClick={() => {
                           isApprove
-                            ? card.userId === user._id
+                            ? card.userId._id === user._id
                               ? handleUnList(FwarMarketDelegate, FwarChar.address, card.nftIds)
                               : handleBuy(FwarMarketDelegate, card.orderId)
                             : handleApprove(USDT, FwarMarketDelegate.address);
                         }}
                       >
-                        {isApprove ? (card.userId === user._id ? `unList` : `Buy`) : `Approve`}
+                        {isApprove ? (card.userId._id === user._id ? `unList` : `Buy`) : `Approve`}
+
                       </Box>
                     </Box>
                   </Stack>
