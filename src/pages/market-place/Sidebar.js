@@ -1,58 +1,9 @@
 import { Box, Text, useColorMode, useTheme, Stack, RadioGroup, Radio } from '@chakra-ui/react';
 import React from 'react';
 
-<<<<<<< HEAD
 function Sidebar({handleRarity, valueRarity,rarityList, handleTeam, valueTeam, teamList}) {
   const { colorMode } = useColorMode();
   const theme = useTheme();
-=======
-const dataRarity = [
-  { id: '0', name: 'All' },
-  { id: '1', name: 'Junk' },
-  { id: '2', name: 'Normal' },
-  { id: '3', name: 'Rare' },
-  { id: '4', name: 'Epic' },
-  { id: '5', name: 'Legendary' }
-];
-const dataTeaming = [
-  { id: '1', name: 'All' },
-  { id: '2', name: 'Pelicans' },
-  { id: '3', name: 'DogeArmy' },
-  { id: '4', name: 'Nuggets' },
-  { id: '5', name: 'Chow Chow' },
-  { id: '6', name: 'Bobcats' },
-  { id: '7', name: 'Uni' },
-  { id: '8', name: 'The Cat & The Mouse' },
-  { id: '9', name: 'Hyena' },
-  { id: '10', name: 'King' },
-  { id: '11', name: 'Kung Fu Bunny' },
-  { id: '12', name: 'Monkey' },
-  { id: '13', name: 'Alligator' },
-  { id: '14', name: 'King Kong' },
-  { id: '15', name: 'ShibaArmy' },
-  { id: '16', name: 'Doggy' },
-  { id: '17', name: 'Giraffe' },
-  { id: '18', name: 'Heavy Weight' },
-  { id: '19', name: 'C&D' },
-  { id: '20', name: 'Akita' },
-  { id: '21', name: 'Bulls' },
-  { id: '22', name: 'Ice Age' },
-  { id: '23', name: 'Wakanda' },
-  { id: '24', name: 'Wakawaka' },
-  { id: '25', name: 'Silance Alan' }
-];
-
-function Sidebar({ handleChangeRarity }) {
-  const { colorMode } = useColorMode();
-  const theme = useTheme();
-
-  const [valueRarity, setValueRarity] = React.useState('0');
-  const [valueTeaming, setValueTeaming] = React.useState('1');
-  // const handleChang = (valueRarity) => {
-  //   handleChangeRarity(valueRarity)
-  // }
-  console.log('valueTeaming', valueTeaming);
->>>>>>> main
   return (
     <>
       <Text fontSize="0.9rem" fontWeight="medium" marginBottom="1rem">

@@ -133,28 +133,6 @@ function MarketPlace() {
   };
   React.useEffect(() => {
     if (account) {
-<<<<<<< HEAD
-=======
-      const init = async () => {
-        const allowance = await USDT.allowance(
-          account,
-          FwarMarketDelegateJson.networks[97].address // address FwarMarketDelegate
-        );
-        if (allowance > 0) setIsApprove(true);
-
-        // const { data: orders } = await OrderApi.getAll();
-        // console.log('orders', orders.docs);
-
-        // setListOrder(orders.docs);
-        // order by id
-
-        // setListOrder(arrayOrderById);
-        // const x = await FwarChar.getCharInfo(6);
-        // console.log('arrayOrderById', arrayOrderById[0]['nftIds'][]);
-        // console.log('arrayOrderById', arrayOrderById);
-        // console.log('getOrderId', getOrderId);
-      };
->>>>>>> main
       init();
       getTeams();
       console.log('user',user);
@@ -298,7 +276,7 @@ function MarketPlace() {
                         onClick={() => {
                           isApprove
                             ? card.userId._id === user._id
-                              ? handleUnList(FwarMarketDelegate, FwarChar.address, card.nftIds)
+                              ? handleUnList(FwarMarketDelegate, FwarChar.address, card.nftIds.map((i)=> i.nftId))
                               : handleBuy(FwarMarketDelegate, card.orderId)
                             : handleApprove(USDT, FwarMarketDelegate.address);
                         }}
