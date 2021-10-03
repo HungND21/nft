@@ -48,23 +48,8 @@ import TeamApi from 'apis/TeamApi';
 import { useTitle } from 'dapp/hook';
 
 import FilterComponent from 'components/FilterComponent';
-const rarityDropdown = [
-  // { value: '', label: 'All' },
-  { value: '1', label: 'Junk' },
-  { value: '2', label: 'Normal' },
-  { value: '3', label: 'Rare' },
-  { value: '4', label: 'Epic' }
-  // { value: '5', label: 'Legend' }
-];
+import { elementDropdown, rarityDropdown } from 'utils/dataFilter';
 
-const elementDropdown = [
-  // { value: '', label: 'All' },
-  { value: '1', label: 'Metal' },
-  { value: '2', label: 'Wood' },
-  { value: '3', label: 'Water' },
-  { value: '4', label: 'Fire' },
-  { value: '5', label: 'Earth' }
-];
 function Card() {
   useTitle('FWAR - MY CARDS');
 

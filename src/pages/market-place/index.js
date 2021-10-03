@@ -31,7 +31,7 @@ import FwarMarketDelegateJson from 'contracts/FwarMarket/FwarMarketDelegate.json
 import Usdt from 'contracts/Usdt.json';
 
 import Web3 from 'web3';
-import marketDelegate from 'utils/marketdelegate';
+// import marketDelegate from 'utils/dataFilter';
 
 import Sidebar from './Sidebar';
 import OrderApi from 'apis/OrderApi';
@@ -70,8 +70,8 @@ function MarketPlace() {
   };
   const handleBuy = async (FwarMarketDelegate, index) => {
     console.log(index);
-    const getOrderId = await marketDelegate.getOrderId(FwarMarketDelegate);
-    console.log(getOrderId[index]);
+    // const getOrderId = await marketDelegate.getOrderId(FwarMarketDelegate);
+    // console.log(getOrderId[index]);
     // const result = await FwarMarketDelegate.buyOrder(getOrderId[index]['orderId']);
     // console.log(result);
   };
@@ -98,8 +98,6 @@ function MarketPlace() {
 
         setListOrder(orders.docs);
         // order by id
-        const arrayOrderById = await marketDelegate.getOrderById(FwarMarketDelegate);
-        const getOrderId = await marketDelegate.getOrderId(FwarMarketDelegate);
 
         // setListOrder(arrayOrderById);
         // const x = await FwarChar.getCharInfo(6);

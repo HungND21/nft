@@ -31,10 +31,14 @@ import {
   Tr,
   useColorMode,
   useDisclosure,
-  useTheme
+  useTheme,
+  Spinner
 } from '@chakra-ui/react';
 import { useEthers } from '@usedapp/core';
 import CharacterApi from 'apis/CharacterApi';
+
+import { useSelector } from 'react-redux';
+
 import FwarCharJson from 'contracts/FwarChar/FWarChar.json';
 import FwarCharDelegateJson from 'contracts/FwarChar/FwarCharDelegate.json';
 import { ethers } from 'ethers';
@@ -44,13 +48,23 @@ import { FiArrowUp, FiPlus } from 'react-icons/fi';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import ItemListComponent from './ItemListComponent';
 import DisplayOpenedCards from 'components/Card';
+import { elementDropdown, rarityDropdown } from 'utils/dataFilter';
+
 function Detail() {
   const [infoNft, setInfoNft] = React.useState(null);
   const [isMyNft, setIsMyNft] = React.useState(false);
+
+  const [isApprove, setIsApprove] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [needUpgrade, setNeedUpgrade] = React.useState({});
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [listSelectCard, setListSelectCard] = React.useState([]);
   const [listSelectCardId, setListSelectCardId] = React.useState([]);
+
   const [selected, setSelected] = React.useState([]);
+
+  const { user } = useSelector((state) => state.user);
 
   const { account } = useEthers();
 
@@ -66,19 +80,23 @@ function Detail() {
     FwarCharDelegateJson.abi,
     signer
   );
-
   const handleUpgrade = async () => {
-    // listSelectCardId.
-    // console.log('burnedNfts', burnedNfts);
-    // console.log('result', baseAmount, junkAmount, normalAmount, rareAmount);
-    console.log('rarity', infoNft.rarity);
-    console.log('level', infoNft.level);
-
     // const burnedNfts = selected.map((i) => listSelectCardId[i]);
-    const upgraded = await FwarCharDelegate.upgrade('2238', ['887']);
+    const upgraded = await FwarCharDelegate.upgrade(2238, [1757]);
     console.log('upgraded', upgraded);
   };
-
+  const handleApproveForAll = async () => {
+    try {
+      setIsLoading(true);
+      const result = await FwarChar.setApprovalForAll(FwarCharDelegate.address, true);
+      const tx = await result.wait();
+      setIsLoading(false);
+      toast.success('Approve successfully');
+    } catch (error) {
+      setIsLoading(false);
+      toast.error(error.message);
+    }
+  };
   const handleClick = (event, index) => {
     const selectedIndex = selected.indexOf(index);
     let newSelected = [];
@@ -106,19 +124,16 @@ function Detail() {
       const init = async () => {
         const { data: nft } = await CharacterApi.getOne(id);
         setInfoNft(nft);
+        if (infoNft) {
+          const burnInfo = await FwarCharDelegate.getBurnInfo(infoNft.rarity, infoNft.level);
+          const baseAmount = burnInfo['baseAmount'];
+          const junkAmount = burnInfo['junkAmount'];
+          const normalAmount = burnInfo['normalAmount'];
+          const rareAmount = burnInfo['rareAmount'];
+          setNeedUpgrade({ baseAmount, junkAmount, normalAmount, rareAmount });
+          console.log('burnInfo', burnInfo);
+        }
 
-        // const burnInfo = await FwarCharDelegate.getBurnInfo(infoNft.rarity, infoNft.level);
-        // const baseAmount = burnInfo['baseAmount'];
-        // const junkAmount = burnInfo['junkAmount'];
-        // const normalAmount = burnInfo['normalAmount'];
-        // const rareAmount = burnInfo['rareAmount'];
-        // const listCardSelec = await CharacterApi.getMyList(
-        //   infoNft.level,
-        //   baseAmount,
-        //   junkAmount,
-        //   normalAmount,
-        //   rareAmount
-        // );
         // const listSelect = listCard.filter((card, index) => {
         //   if (
         //     Number(card['level']) === 1 &&
@@ -151,23 +166,30 @@ function Detail() {
         setListSelectCardId([]); // This worked for me
       };
     }
-  }, [setInfoNft, account]);
+  }, [setInfoNft, account, isApprove]);
 
   React.useEffect(() => {
     if (account) {
       (async function () {
         try {
-          // console.log('cardByIndex');
+          const isApproveForAll = await FwarChar.isApprovedForAll(
+            account,
+            FwarCharDelegate.address
+          );
+          setIsApprove(isApproveForAll);
           const ownerOf = await FwarChar.ownerOf(+id);
-          if (ownerOf === account) setIsMyNft(true);
-          console.log('cardByIndex', ownerOf);
+          if (ownerOf === account) {
+            setIsMyNft(true);
+            const { data: listCardChoose } = await CharacterApi.getMyList({ userId: user._id });
+            console.log('listCardChoose', listCardChoose.docs);
+          }
         } catch (error) {
           setIsMyNft(false);
         }
       })();
     }
     // console.log(FwarChar);
-  }, [account, setIsMyNft]);
+  }, [account, setIsMyNft, isApprove]);
   return (
     <>
       {/* bread crumb */}
@@ -204,7 +226,7 @@ function Detail() {
         <GridItem colSpan={{ base: 3, md: 1 }}>
           <Button
             leftIcon={<ArrowBackIcon />}
-            colorScheme="purple"
+            // colorScheme="purple"
             variant="solid"
             onClick={() => history.goBack()}
           >
@@ -245,10 +267,16 @@ function Detail() {
                             name="Health"
                             value={Number(infoNft['baseHeath']) / 1000}
                           />
-                          <ItemListComponent name="Element Type" value={infoNft['element']} />
+                          <ItemListComponent
+                            name="Element Type"
+                            value={rarityDropdown.find((i) => i.value === infoNft['element']).label}
+                          />
                           <ItemListComponent name="Level" value={infoNft['level']} />
-                          <ItemListComponent name="Rarity" value={infoNft['rarity']} />
-                          <ItemListComponent name="Team Id" value={infoNft['teamId'].teamId} />
+                          <ItemListComponent
+                            name="Rarity"
+                            value={rarityDropdown.find((i) => i.value === infoNft['rarity']).label}
+                          />
+                          <ItemListComponent name="Team Id" value={infoNft['teamId'].name} />
                         </>
                       )}
                       {/* <ItemListComponent name="Level" value={id} /> */}
@@ -264,7 +292,27 @@ function Detail() {
                 boxShadow="content"
                 borderRadius="6px"
               >
-                <Box>Upgrade to Level {infoNft && Number(infoNft['level']) + 1}</Box>
+                <Stack direction="row" align="center" justify="space-between">
+                  <Box>Upgrade to Level {infoNft && Number(infoNft['level']) + 1}</Box>
+                  <Grid templateColumns="repeat(4, 1fr)" gap={2} align="center">
+                    {Object.keys(needUpgrade).length && (
+                      <>
+                        <Box>
+                          Base Amount<Text>{needUpgrade['baseAmount']}</Text>
+                        </Box>
+                        <Box>
+                          Junk Amount<Text>{needUpgrade['junkAmount']}</Text>
+                        </Box>
+                        <Box>
+                          Normal Amount<Text>{needUpgrade['normalAmount']}</Text>
+                        </Box>
+                        <Box>
+                          Rare Amount<Text>{needUpgrade['rareAmount']}</Text>
+                        </Box>
+                      </>
+                    )}
+                  </Grid>
+                </Stack>
                 <Stack direction="row" align="center" justify="space-between">
                   <Stack direction="row">
                     <Image src="/assets/water.png" w="50px" />
@@ -276,15 +324,29 @@ function Detail() {
                 </Stack>
                 <Box pt={6}>
                   <Button
-                    leftIcon={<FiArrowUp />}
+                    // leftIcon={<FiArrowUp />}
+                    leftIcon={
+                      isLoading ? (
+                        <Spinner
+                          thickness="5px"
+                          speed="0.65s"
+                          emptyColor={theme.colors.primary.base}
+                          color="blue.500"
+                        />
+                      ) : (
+                        <FiArrowUp />
+                      )
+                    }
                     w="full"
                     bg={theme.colors.primary.base}
                     color="white"
                     _hover={{ bg: theme.colors.primary.light }}
-                    // isDisabled={selected.length === 1}
-                    onClick={() => handleUpgrade()}
+                    isDisabled={isLoading}
+                    onClick={() => {
+                      !isApprove ? handleUpgrade() : handleApproveForAll();
+                    }}
                   >
-                    Upgrade
+                    {isApprove ? `Upgrade` : `Approve`}
                   </Button>
                 </Box>
               </TabPanel>
