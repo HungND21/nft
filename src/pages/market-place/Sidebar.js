@@ -37,13 +37,16 @@ const dataTeaming = [
   { id: '25', name: 'Silance Alan' }
 ];
 
-function Sidebar() {
+function Sidebar({ handleChangeRarity }) {
   const { colorMode } = useColorMode();
   const theme = useTheme();
 
   const [valueRarity, setValueRarity] = React.useState('0');
   const [valueTeaming, setValueTeaming] = React.useState('1');
-
+  // const handleChang = (valueRarity) => {
+  //   handleChangeRarity(valueRarity)
+  // }
+  console.log('valueTeaming', valueTeaming);
   return (
     <>
       <Text fontSize="0.9rem" fontWeight="medium" marginBottom="1rem">

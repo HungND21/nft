@@ -93,10 +93,10 @@ function MarketPlace() {
         );
         if (allowance > 0) setIsApprove(true);
 
-        const { data: orders } = await OrderApi.getAll();
-        console.log('orders', orders.docs);
+        // const { data: orders } = await OrderApi.getAll();
+        // console.log('orders', orders.docs);
 
-        setListOrder(orders.docs);
+        // setListOrder(orders.docs);
         // order by id
 
         // setListOrder(arrayOrderById);
