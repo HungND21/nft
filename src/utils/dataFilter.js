@@ -15,7 +15,10 @@ export const elementDropdown = [
   { value: '4', label: 'Fire' },
   { value: '5', label: 'Earth' }
 ];
-
+export const cardTypeDropdown = [
+  { value: 'attacker', label: 'Attacker' },
+  { value: 'defender', label: 'Defender' }
+];
 // export const orderCount = async (FwarMarketDelegate) => {
 //   const count = await FwarMarketDelegate.orderCount();
 //   // console.log(count);
