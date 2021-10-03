@@ -207,12 +207,14 @@ function Card() {
   const getMyCard = async (rarity, element, teamId, typeCard) => {
     if (user) {
       const { data: listCard } = await CharacterApi.getMyList(
-        user._id,
-        currentPage,
-        rarity,
-        element,
-        teamId,
-        typeCard
+        {
+          userId: user._id,
+          page: currentPage,
+          rarity: rarity,
+          element: element,
+          teamId: teamId,
+          typeCard: typeCard
+        }
       );
       setListCardState(listCard.docs);
       console.log('listCard', listCard.docs);

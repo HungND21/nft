@@ -225,22 +225,22 @@ function MarketPlace() {
                       {card.nftIds.map((item) => (
                         <Link to={`/market-place/detail/${item}`} key={item}>
                           <Box position="relative">
-                            <Image src="https://zoogame.app/nfts/bg/1/border.png" width="100%" />
+                            <Image src={`/assets/card/${item}`} width="100%" />
                             <Image
-                              src="https://zoogame.app/nfts/bg/2/bg.png"
+                              src="/assets/char/T_1.png"
                               width="100%"
                               position="absolute"
                               top="0"
                             />
                             <Image
-                              src="https://zoogame.app/nfts/normal/9.png"
+                              // src="https://zoogame.app/nfts/normal/9.png"
                               position="absolute"
                               width="100%"
                               top="12%"
                               left="5%"
                             />
                             <Box
-                              bgImage="https://zoogame.app/nfts/name.png"
+                              // bgImage="https://zoogame.app/nfts/name.png"
                               bgRepeat="no-repeat"
                               bgSize="100% 100%"
                               position="absolute"
