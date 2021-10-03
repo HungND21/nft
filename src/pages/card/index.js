@@ -38,7 +38,7 @@ import UsdtJson from 'contracts/Usdt.json';
 import { useSelector } from 'react-redux';
 
 // import Card from 'components/Card';
-import DisplayOpenedCards from 'components/Card';
+import DisplayOpenedCards from 'components/DisplayCard';
 // api
 import OrderApi from 'apis/OrderApi';
 import CharacterApi from 'apis/CharacterApi';
@@ -47,33 +47,8 @@ import TeamApi from 'apis/TeamApi';
 import { useTitle } from 'dapp/hook';
 
 import FilterComponent from 'components/FilterComponent';
-
-const cardTypeDropdown = [
-  { value: 'attacker', label: 'Attacker' },
-  { value: 'defender', label: 'Defender' }
-];
-
-const rarityDropdown = [
-  // { value: '', label: 'All' },
-  { value: '1', label: 'Junk' },
-  { value: '2', label: 'Normal' },
-  { value: '3', label: 'Rare' },
-  { value: '4', label: 'Epic' },
-  { value: '5', label: 'Legend' }
-];
-
-const elementDropdown = [
-  // { value: '', label: 'All' },
-  { value: '1', label: 'Metal' },
-  { value: '2', label: 'Wood' },
-  { value: '3', label: 'Water' },
-  { value: '4', label: 'Fire' },
-  { value: '5', label: 'Earth' }
-];
-
+import { elementDropdown, rarityDropdown, cardTypeDropdown } from 'utils/dataFilter';
 function Card() {
-  useTitle('FWAR - MY CARDS');
-
   const Theme = useTheme();
   const { colorMode } = useColorMode();
   const { account } = useEthers();
@@ -151,14 +126,15 @@ function Card() {
     const currentCard = listCardStorage.map((i) => {
       if (i.nftId === card.nftId) {
         return { ...i, price: e.target.value };
-      } return i;
+      }
+      return i;
     });
     setListCardStorage(currentCard);
     localStorage.setItem('cardItem', JSON.stringify(currentCard));
   };
 
   const handleCreateOrder = async () => {
-    const notInputPrice = listCardStorage.every((i)=> i.price && i.price > 0 )
+    const notInputPrice = listCardStorage.every((i) => i.price && i.price > 0);
     if (notInputPrice) {
       try {
         setIsLoading(true);
@@ -178,7 +154,7 @@ function Card() {
         );
         const tx = await result.wait();
         console.log(tx);
-        toast.success("Sucess");
+        toast.success('Sucess');
         localStorage.removeItem('cardItem');
         setListCardStorage([]);
         setIsLoading(false);
@@ -275,7 +251,7 @@ function Card() {
   };
 
   React.useEffect(() => {
-    document.title = "FWAR - MY CARDS";
+    document.title = 'FWAR - MY CARDS';
     const listCartLocalStorageJson = localStorage.getItem('cardItem');
 
     if (listCartLocalStorageJson) {
@@ -296,7 +272,16 @@ function Card() {
         setIsApprove();
       };
     }
-  }, [account, currentPage, user, setListCardStorage, rarityState, elementState, teamIdState, typeCardState]);
+  }, [
+    account,
+    currentPage,
+    user,
+    setListCardStorage,
+    rarityState,
+    elementState,
+    teamIdState,
+    typeCardState
+  ]);
 
   const baseStyles = {
     w: 7,
@@ -507,15 +492,19 @@ function Card() {
                 listCardStorage.length > 0 &&
                 listCardStorage.map((card, index) => (
                   <Box key={card.nftId}>
-                    <DisplayOpenedCards info={card} isCart={true} onremove={() => { handleRemoveSell(card) }} />
+                    <DisplayOpenedCards
+                      info={card}
+                      isCart={true}
+                      onremove={() => {
+                        handleRemoveSell(card);
+                      }}
+                    />
                     <Stack spacing={4}>
                       <InputGroup>
                         <Input
                           type="number"
                           placeholder="price"
-                          value={
-                            card.price
-                          }
+                          value={card.price}
                           onChange={(e) => handleOnchangePrice(e, card)}
                         />
                         <InputRightAddon backgroundColor="orange.200" children="Usdt" />
@@ -530,13 +519,24 @@ function Card() {
             <Flex>
               <Text>Total: </Text>{' '}
               <Text color="red">
-                {listCardStorage &&
-                  listCardStorage.length
+                {listCardStorage && listCardStorage.length
                   ? listCardStorage.reduce((acc, cur) => +acc + +cur.price, 0)
                   : 0}
               </Text>
             </Flex>
-            <Button variant="solid" colorScheme="red" left="1" isDisabled = {!(listCardStorage && listCardStorage.length && listCardStorage.every((i)=> i.price && i.price > 0 ))} onClick={handleCreateOrder}>
+            <Button
+              variant="solid"
+              colorScheme="red"
+              left="1"
+              isDisabled={
+                !(
+                  listCardStorage &&
+                  listCardStorage.length &&
+                  listCardStorage.every((i) => i.price && i.price > 0)
+                )
+              }
+              onClick={handleCreateOrder}
+            >
               Submit
             </Button>
           </ModalFooter>

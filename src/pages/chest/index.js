@@ -43,7 +43,7 @@ import OpenChestHistoryApi from 'apis/OpenChestHistoryApi';
 // import TeamApi from 'apis/TeamApi';
 // file project
 import OpenedCards from './OpenedCards';
-import DisplayOpenedCards from 'components/Card';
+import DisplayOpenedCards from 'components/DisplayCard';
 import { formatDate } from 'utils/formatDate';
 
 const ChestInit = () => {

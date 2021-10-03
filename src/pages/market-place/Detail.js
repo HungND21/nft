@@ -47,7 +47,7 @@ import toast from 'react-hot-toast';
 import { FiArrowUp, FiPlus } from 'react-icons/fi';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import ItemListComponent from './ItemListComponent';
-import DisplayOpenedCards from 'components/Card';
+import DisplayOpenedCards from 'components/DisplayCard';
 import { elementDropdown, rarityDropdown } from 'utils/dataFilter';
 
 function Detail() {
@@ -123,6 +123,7 @@ function Detail() {
     if (account) {
       const init = async () => {
         const { data: nft } = await CharacterApi.getOne(id);
+        console.log('nft', nft);
         setInfoNft(nft);
         if (infoNft) {
           const burnInfo = await FwarCharDelegate.getBurnInfo(infoNft.rarity, infoNft.level);
@@ -180,6 +181,7 @@ function Detail() {
           const ownerOf = await FwarChar.ownerOf(+id);
           if (ownerOf === account) {
             setIsMyNft(true);
+            console.log('user', user);
             const { data: listCardChoose } = await CharacterApi.getMyList({ userId: user._id });
             console.log('listCardChoose', listCardChoose.docs);
           }
@@ -269,7 +271,9 @@ function Detail() {
                           />
                           <ItemListComponent
                             name="Element Type"
-                            value={rarityDropdown.find((i) => i.value === infoNft['element']).label}
+                            value={
+                              elementDropdown.find((i) => i.value === infoNft['element']).label
+                            }
                           />
                           <ItemListComponent name="Level" value={infoNft['level']} />
                           <ItemListComponent
