@@ -100,31 +100,18 @@ const ChestInit = () => {
   };
 
   const handleOpenChest = async (amount) => {
-    let gaslimitOpenItem = 0;
+    // let gas = 0;
     if (amount < 1 || amount > 10) {
       toast.error('enter key 1 to 10');
     } else {
-      try {
-        gaslimitOpenItem = await fwarCharDelegate.estimateGas.OpenItems(account, amount);
-        console.log('gaslimitOpenItem', gaslimitOpenItem);
-      } catch (error) {
-        if (error.data) {
-          toast.error(error.data.message);
-        } else {
-          toast.error(error.message);
-        }
-        return;
-      }
-
-      // if (account && teamList) {
       if (account) {
         try {
           setIsLoadingOpen(true);
-
+          const gaslimitOpenItem = await fwarCharDelegate.estimateGas.OpenItems(account, amount);
+          const gasLimit = ethers.utils.hexlify(Number(gaslimitOpenItem) * 2);
           const transactionOptions = {
-            gasLimit: ethers.utils.hexlify(Number(gaslimitOpenItem) + 3000)
+            gasLimit
           };
-
           const tx = await fwarCharDelegate.OpenItems(account, amount, transactionOptions);
           const resultWaitTransaction = await tx.wait();
           console.log('resultWaitTransaction', resultWaitTransaction);
@@ -250,15 +237,19 @@ const ChestInit = () => {
             />
           </Stack>
         )}
-        <Box
+        <Stack
+          direction="row"
+          align="center"
+          justify="center"
           w="100%"
-          h="100%"
-          p={10}
-          // position="absolute"
-          // top="0"
-          // left="0"
+          h="87%"
+          pt="2%"
+          position="absolute"
+          top="0"
+          left="0"
           zIndex="10"
-          bg={theme.colors.primary.light}
+
+          // bg={theme.colors.primary.light}
           // overflow="hidden"
         >
           {openedCard.length > 0 && (
@@ -270,11 +261,11 @@ const ChestInit = () => {
               ))}
             </Grid>
           )}
-        </Box>
+        </Stack>
         <Box
           position="absolute"
           w="100%"
-          top="5%"
+          top="2%"
           textAlign="center"
           color="white"
           fontSize="1.5rem"

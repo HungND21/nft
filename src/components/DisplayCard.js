@@ -3,7 +3,7 @@ import React from 'react';
 import { MinusIcon } from '@chakra-ui/icons';
 
 function DisplayOpenedCards({ info, text = false, isCart = false, onremove }) {
-  console.log('info', info);
+  // console.log('info', info);
 
   return (
     <>

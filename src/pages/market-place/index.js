@@ -108,6 +108,7 @@ function MarketPlace() {
       init();
     }
   }, [account]);
+  const handleChangeRarity = () => {};
   return (
     <>
       {/* bread crumb */}
@@ -148,7 +149,7 @@ function MarketPlace() {
             lg: 'block'
           }}
         >
-          <Sidebar />
+          <Sidebar handleChangeRarity={handleChangeRarity} />
         </Box>
         <Box width="100%" marginLeft={6}>
           <Stack direction="row" justify="space-between">
