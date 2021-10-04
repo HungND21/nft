@@ -207,7 +207,7 @@ function Card() {
     if (user) {
       const { data: listCard } = await CharacterApi.getMyList({
         userId: user._id,
-        currentPage,
+        page: currentPage,
         rarity,
         element,
         teamId,

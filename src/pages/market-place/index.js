@@ -137,7 +137,8 @@ function MarketPlace() {
       getTeams();
       console.log('user',user);
     }
-  }, [account, user, rarityState,elementState, teamIdState, typeCardState]);
+  }, [account]);
+  const handleChangeRarity = () => {};
   return (
     <>
       {/* bread crumb */}
@@ -178,9 +179,7 @@ function MarketPlace() {
             lg: 'block'
           }}
         >
-          <Sidebar 
-          handleRarity={handleRarityChange} valueRarity={rarityState} rarityList={rarityDropdown} 
-          handleTeam={handleTeamChange} valueTeam = {teamIdState} teamList={teamDropdown}/>
+          <Sidebar handleChangeRarity={handleChangeRarity} />
         </Box>
         <Box width="100%" marginLeft={6}>
           <Stack direction="row" justify="space-between">
