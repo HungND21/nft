@@ -313,7 +313,7 @@ const ChestInit = () => {
                   isApprove ? handleOpenChest(amount) : handleApprove();
                 }}
               >
-                {isApprove ? `Unlock` : `Approve`}
+                {isApprove ? `Open` : `Approve`}
               </Button>
             </>
           )}
