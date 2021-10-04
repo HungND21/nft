@@ -253,7 +253,7 @@ const ChestInit = () => {
           // overflow="hidden"
         >
           {openedCard.length > 0 && (
-            <Grid templateColumns="repeat(5 , 1fr)" gap={1} w="100%" h="100%">
+            <Grid templateColumns="repeat(5 , 1fr)" gap={1} w="68%">
               {openedCard.map((cardInfo) => (
                 <Box key={cardInfo.nftIf}>
                   <DisplayOpenedCards info={cardInfo} />
