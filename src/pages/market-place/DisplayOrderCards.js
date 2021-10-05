@@ -52,11 +52,6 @@ function DisplayOrderCards({ info, text = false, isOne = false}) {
                 <Text fontSize={isOne ? 15: 6}> ✭  {info && info.level}</Text>
                 <Text fontSize={isOne ? 15: 6}> 🏹  {info && info.attack}</Text>
               </HStack>
-              {/* <HStack spacing="24px">
-                <Box w="70px" h="10" bg="teal.500" />
-                <Box w="170px" h="10" bg="teal.500" />
-                <Box w="180px" h="10" bg="teal.500" />
-              </HStack> */}
             </Box>
           )}
         </Box>

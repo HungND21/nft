@@ -64,6 +64,8 @@ function MarketPlace() {
   const { currentPage, setCurrentPage } = usePaginator({
     initialState: { currentPage: 1, pageSize: 5 }
   });
+  const [pagesQuantity, setPagesQuantity] = React.useState(1);
+
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -102,23 +104,23 @@ function MarketPlace() {
   const handleChangeRarity = (rarity) => {
     console.log('rarity', rarity);
     setRarityState(rarity);
-    // setCurrentPage(1);
+    setCurrentPage(1);
   };
   const handleChangeElement = (element) => {
     console.log('element', element);
     setElementState(element);
-    // setCurrentPage(1);
+    setCurrentPage(1);
   };
   const handleChangeTeamId = (teamId) => {
     console.log('teamId', teamId);
     setTeamIdState(teamId);
-    // setCurrentPage(1);
+    setCurrentPage(1);
   };
 
   const handleChangeCardType = (typeCard) => {
     console.log('typeCard', typeCard);
     setTypeCardState(typeCard);
-    // setCurrentPage(1);
+    setCurrentPage(1);
   };
   //Get Team Dropdown
   const getTeams = async () => {
@@ -141,6 +143,7 @@ function MarketPlace() {
       typeCard: typeCardState
     });
     setListOrder(orders.docs);
+    setPagesQuantity(orders.totalPages);
     console.log(orders.docs);
   };
   React.useEffect(() => {
@@ -150,6 +153,19 @@ function MarketPlace() {
       console.log('user',user);
     }
   }, [account, rarityState, elementState, teamIdState, typeCardState]);
+  
+  const baseStyles = {
+    w: 7,
+    fontSize: 'sm'
+  };
+
+  const activeStyles = {
+    ...baseStyles,
+    _hover: {
+      bg: 'green.300'
+    },
+    bg: 'green.300'
+  };
   return (
     <>
       {/* bread crumb */}
@@ -248,10 +264,11 @@ function MarketPlace() {
                       ))}
                     </Grid>
                     <Box color="white" align="center" cursor="pointer">
-                      <Box bg="secondary.base" py={2} fontSize={13}>
-                        {card.price} USDT
-                      </Box>
-                      <Box
+                      <Grid gridTemplateColumns="repeat(2, 1fr)">
+                        <Box bg="secondary.base" py={2} fontSize={13}>
+                          {card.price} USDT
+                        </Box>
+                        <Box
                         bg="warning.base"
                         py={2}
                         fontSize={13}
@@ -266,11 +283,35 @@ function MarketPlace() {
                         {isApprove ? (card.userId._id === user._id ? `unList` : `Buy`) : `Approve`}
 
                       </Box>
+                      </Grid>
                     </Box>
                   </Stack>
                 </Box>
               ))} 
           </Grid>
+          <Box>
+            <Paginator
+              pagesQuantity={pagesQuantity > 0 && pagesQuantity}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+              activeStyles={activeStyles}
+              // normalStyles={normalStyles}
+              outerLimit={3}
+              innerLimit={3}
+            >
+              <Container align="center" justify="space-between" w="full" p={4}>
+                <Previous>
+                  Previous
+                  {/* Or an icon from `react-icons` */}
+                </Previous>
+                <PageGroup isInline align="center" />
+                <Next>
+                  Next
+                  {/* Or an icon from `react-icons` */}
+                </Next>
+              </Container>
+            </Paginator>
+          </Box>
         </Box>
       </Box>
     </>
