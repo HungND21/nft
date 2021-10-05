@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdAddShoppingCart, MdRemoveShoppingCart, MdInfoOutline} from "react-icons/md";
 import {FaRegCheckCircle} from "react-icons/fa"
+import { useHistory } from "react-router-dom";
 import {
   Box,
   Button,
@@ -272,7 +273,7 @@ function Card() {
     teamIdState,
     typeCardState
   ]);
-
+  let history = useHistory();
   const baseStyles = {
     w: 7,
     fontSize: 'sm'
@@ -291,10 +292,6 @@ function Card() {
     },
     bg: 'blue.300'
   };
-
-  const linkToDetail = (nftId) => {
-
-  }
 
   return (
     <>
@@ -398,7 +395,11 @@ function Card() {
                         :
                         { bg: Theme.colors.white.base, color: Theme.colors.primary.base, border: "2px" }}
                     backgroundColor={Theme.colors.primary.base}
-                    onClick={linkToDetail}
+                    onClick={()=>{
+                      let path = `./market-place/detail/${card.nftId}`
+
+                      history.push(path);
+                    }}
                     w="80%"
                     gap={2}
                   >
@@ -542,7 +543,7 @@ function Card() {
                           value={card.price}
                           onChange={(e) => handleOnchangePrice(e, card)}
                         />
-                        <InputRightAddon backgroundColor="orange.200" children="Usdt" />
+                        <InputRightAddon backgroundColor={Theme.colors.primary.base} children="USDT" />
                       </InputGroup>
                     </Stack>
                   </Box>

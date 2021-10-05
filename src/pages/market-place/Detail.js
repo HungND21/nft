@@ -233,7 +233,7 @@ function Detail() {
           >
             Back
           </Button>
-          {infoNft && <DisplayOpenedCards info={infoNft} text={true} />}
+          {infoNft && <DisplayOpenedCards info={infoNft} text={true} isDetail={true}/>}
         </GridItem>
         <GridItem colSpan={{ base: 3, md: 2 }}>
           <Tabs>
