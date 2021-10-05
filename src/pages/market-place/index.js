@@ -3,27 +3,11 @@ import { Link } from 'react-router-dom';
 import {
   Box,
   Stack,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Text,
   useTheme,
-  Input,
   Grid,
-  Icon,
   useColorMode,
-  Image,
-  IconButton,
-  useDisclosure,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerBody,
-  Button,
-  GridItem
-} from '@chakra-ui/react';
+  GridItem} from '@chakra-ui/react';
 import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
-import { ChevronRightIcon, SearchIcon, HamburgerIcon } from '@chakra-ui/icons';
 import toast from 'react-hot-toast';
 import { ethers } from 'ethers';
 import { useEthers } from '@usedapp/core';
@@ -31,8 +15,7 @@ import FwarCharJson from 'contracts/FwarChar/FWarChar.json';
 import FwarMarketDelegateJson from 'contracts/FwarMarket/FwarMarketDelegate.json';
 
 import Usdt from 'contracts/Usdt.json';
-import { elementDropdown, rarityDropdown, cardTypeDropdown } from 'utils/dataFilter';
-import Web3 from 'web3';
+import { elementDropdown, rarityDropdown, cardTypeDropdown , sortDropdown} from 'utils/dataFilter';
 // import marketDelegate from 'utils/dataFilter';
 
 // import Card from 'components/Card';
@@ -44,6 +27,7 @@ import { useSelector } from 'react-redux';
 import { useTitle } from 'dapp/hook';
 
 import FilterComponent from 'components/FilterComponent';
+import Web3 from 'web3';
 
 function MarketPlace() {
   useTitle('FWAR - MARTKET PLACE');
@@ -60,6 +44,7 @@ function MarketPlace() {
   const [teamIdState, setTeamIdState] = React.useState('');
   const [typeCardState, setTypeCardState] = React.useState('');
   const [teamDropdown, setTeamDropdown] = React.useState([]);
+  const [sortState, setSortState] = React.useState('');
   // paginate
   const { currentPage, setCurrentPage } = usePaginator({
     initialState: { currentPage: 1, pageSize: 5 }
@@ -85,12 +70,10 @@ function MarketPlace() {
     console.log(result);
     toast.success('approve for all successfully!');
   };
-  const handleBuy = async (FwarMarketDelegate, index) => {
-    console.log(index);
-    // const getOrderId = await marketDelegate.getOrderId(FwarMarketDelegate);
-    // console.log(getOrderId[index]);
-    // const result = await FwarMarketDelegate.buyOrder(getOrderId[index]['orderId']);
-    // console.log(result);
+  const handleBuy = async (FwarMarketDelegate, orderId) => {
+    console.log(orderId);
+    const result = await FwarMarketDelegate.buyOrder(orderId);
+    console.log(result);
   };
 
   const handleUnList = async (FwarMarketDelegate, FwarCharAddress, nftIds, tokenUsdt = '') => {
@@ -116,7 +99,11 @@ function MarketPlace() {
     setTeamIdState(teamId);
     setCurrentPage(1);
   };
-
+  const handleChangeSort = (sort) => {
+    console.log('sort', sort);
+    setSortState(sort);
+    setCurrentPage(1);
+  };
   const handleChangeCardType = (typeCard) => {
     console.log('typeCard', typeCard);
     setTypeCardState(typeCard);
@@ -140,7 +127,8 @@ function MarketPlace() {
       rarity: rarityState,
       element: elementState, 
       teamId: teamIdState, 
-      typeCard: typeCardState
+      typeCard: typeCardState,
+      sort: sortState
     });
     setListOrder(orders.docs);
     setPagesQuantity(orders.totalPages);
@@ -152,7 +140,7 @@ function MarketPlace() {
       getTeams();
       console.log('user',user);
     }
-  }, [account, rarityState, elementState, teamIdState, typeCardState]);
+  }, [account, rarityState, elementState, teamIdState, typeCardState, sortState]);
   
   const baseStyles = {
     w: 7,
@@ -177,9 +165,9 @@ function MarketPlace() {
         borderRadius={8}
         position="relative"
       >
-        <Grid templateColumns="repeat(6, 1fr)" gap={4}>
+        <Grid templateColumns="repeat(5, 1fr)" gap={4}>
           <GridItem colSpan={{ base: 6, md: 5 }}>
-            <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+            <Grid templateColumns="repeat(5, 1fr)" alignItems="center" gap={4}>
               <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
                 <FilterComponent
                   placeholder="CardType"
@@ -210,6 +198,14 @@ function MarketPlace() {
                   handleChange={handleChangeTeamId}
                   valueState={teamIdState}
                   optionDropdown={teamDropdown}
+                />
+              </GridItem>
+              <GridItem>
+                <FilterComponent
+                  placeholder="Sort"
+                  handleChange={handleChangeSort}
+                  valueState={sortState}
+                  optionDropdown={sortDropdown}
                 />
               </GridItem>
             </Grid>
@@ -244,7 +240,6 @@ function MarketPlace() {
                   boxShadow="content"
                   borderRadius="6px"
                   overflow="hidden"
-                  cursor="pointer"
                   _hover={{ boxShadow: '0 4px 25px 0 rgba(34,41,47,.25)' }}
                 >
                   <Stack direction="column" justify="space-between" h="100%">
@@ -263,15 +258,18 @@ function MarketPlace() {
                         </Link>
                       ))}
                     </Grid>
-                    <Box color="white" align="center" cursor="pointer">
+                    <Box color="white" align="center">
                       <Grid gridTemplateColumns="repeat(2, 1fr)">
                         <Box bg="secondary.base" py={2} fontSize={13}>
                           {card.price} USDT
                         </Box>
                         <Box
-                        bg="warning.base"
+                        bg={theme.colors.primary.base}
                         py={2}
+                        _hover={{background: theme.colors.light, color: theme.colors.primary.base, border:"1px", borderColor:theme.colors.primary.base}}
+                        cursor="pointer"
                         fontSize={13}
+                        fontWeight="bold"
                         onClick={() => {
                           isApprove
                             ? card.userId._id === user._id
@@ -280,7 +278,7 @@ function MarketPlace() {
                             : handleApprove(USDT, FwarMarketDelegate.address);
                         }}
                       >
-                        {isApprove ? (card.userId._id === user._id ? `unList` : `Buy`) : `Approve`}
+                        {isApprove ? (card.userId === user._id ? `unList` : `Buy`) : `Approve`}
 
                       </Box>
                       </Grid>

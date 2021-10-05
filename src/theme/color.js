@@ -12,7 +12,8 @@ const color = {
     base: '#e83e8c'
   },
   red: {
-    base: '#ea5455'
+    base: '#ea5455',
+    sell: '#D5585A'
   },
   orange: {
     base: '#ff9f43'
@@ -65,6 +66,12 @@ const color = {
   dark: {
     base: '#151c31',
     light: '#283046'
+  },
+  removeSell: {
+    base: '#2BC971'
+  },
+  approve:{
+    base: '#43BBFE'
   }
 };
 export default color;

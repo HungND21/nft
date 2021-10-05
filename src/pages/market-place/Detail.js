@@ -279,7 +279,7 @@ function Detail() {
                             name="Rarity"
                             value={rarityDropdown.find((i) => i.value === infoNft['rarity']).label}
                           />
-                          <ItemListComponent name="Team Id" value={infoNft['teamId'].name} />
+                          <ItemListComponent name="Team" value={infoNft['teamId'].name} />
                         </>
                       )}
                       {/* <ItemListComponent name="Level" value={id} /> */}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
+import { MdAddShoppingCart, MdRemoveShoppingCart, MdInfoOutline} from "react-icons/md";
+import {FaRegCheckCircle} from "react-icons/fa"
 import {
   Box,
   Button,
@@ -23,7 +23,8 @@ import {
   useColorMode,
   useDisclosure,
   useTheme,
-  Spinner
+  Spinner,
+  IconButton
 } from '@chakra-ui/react';
 import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
 import { CgShoppingCart } from 'react-icons/cg';
@@ -40,7 +41,6 @@ import { useSelector } from 'react-redux';
 // import Card from 'components/Card';
 import DisplayOpenedCards from 'components/DisplayCard';
 // api
-import OrderApi from 'apis/OrderApi';
 import CharacterApi from 'apis/CharacterApi';
 import TeamApi from 'apis/TeamApi';
 import { useTitle } from 'dapp/hook';
@@ -72,7 +72,6 @@ function Card() {
   const [listCardState, setListCardState] = React.useState([]); // list card
   const [listCardStorage, setListCardStorage] = React.useState([]); // card
   const [isLoading, setIsLoading] = React.useState(false);
-  const [listMyOrder, setListMyOrder] = React.useState([]);
 
   const [pagesQuantity, setPagesQuantity] = React.useState(1);
 
@@ -189,13 +188,7 @@ function Card() {
     }
   };
 
-  const listMyOrderInit = async () => {
-    if (user) {
-      const { data: myOrder } = await OrderApi.getMyOrder(user._id);
-      console.log('ListMyOrder', myOrder.docs);
-      setListMyOrder(myOrder.docs);
-    }
-  };
+
   const approveInit = async () => {
     const isApproveForAll = await FwarChar.isApprovedForAll(
       account,
@@ -262,12 +255,10 @@ function Card() {
 
     if (account) {
       approveInit();
-      listMyOrderInit();
       getMyCard(rarityState, elementState, teamIdState, typeCardState);
       getTeams();
       return () => {
         setListCardStorage();
-        setListMyOrder([]);
         setIsApprove();
       };
     }
@@ -300,6 +291,11 @@ function Card() {
     },
     bg: 'blue.300'
   };
+
+  const linkToDetail = (nftId) => {
+
+  }
+
   return (
     <>
       <Box
@@ -384,50 +380,89 @@ function Card() {
                 <DisplayOpenedCards info={card} text={true} />
                 <Stack
                   direction="column"
-                  align="stretch"
                   justify="center"
-                  bg="rgba(240, 232, 251, 0.8)"
+                  alignItems="center"
+                  bg={colorMode === 'dark' ? "rgba(23, 37, 73, 0.7)" : "rgba(242, 242, 242, 0.7)"}
                   w="100%"
                   h="100%"
                   position="absolute"
                   top="0"
                   left="0"
                   visibility="hidden"
-                  _groupHover={{ visibility: 'visible', color: 'orange' }}
+                  _groupHover={{ visibility: 'visible' }}
                 >
-                  <Link to={`/market-place/detail/${card.nftId}`}>
-                    <Button size="lg" >Detail</Button>
-                  </Link>
-                  {isApprove ? (
-                    (!listMyOrder.length ||
-                      !listMyOrder.find((i) => i.nfts.find((id) => id.nftId === card.nftId))) &&
-                    (listCardStorage &&
-                      listCardStorage.length &&
-                      listCardStorage.find((i) => i.nftId === card.nftId) ? (
-                      <Button onClick={() => handleRemoveSell(card)}>Remove Sell</Button>
-                    ) : (
-                      <Button size="lg" onClick={() => handleSell({ ...card, price: '' })}>Sell</Button>
-                    ))
-                  ) : (
-                    // ------- isApprove = false
-                    <Button
-                      size="lg"
-                      onClick={() =>
-                        handleApprove(
-                          FwarChar,
-                          account,
-                          FwarMarketDelegateJson.networks[97].address
+                  <Button
+                    _hover={
+                      colorMode === 'dark' ?
+                        { bg: Theme.colors.dark.light, color: Theme.colors.primary.base, border: "2px" }
+                        :
+                        { bg: Theme.colors.white.base, color: Theme.colors.primary.base, border: "2px" }}
+                    backgroundColor={Theme.colors.primary.base}
+                    onClick={linkToDetail}
+                    w="80%"
+                    gap={2}
+                  >
+                    <MdInfoOutline />
+                    Detail
+                  </Button>
+                  {isApprove ?
+                    (
+                      card.isListed ?
+                        (
+                          <Text color="orange" fontSize="3xl" fontWeight="bold">
+                            Listed
+                          </Text>
                         )
-                      }
-                    >
-                      Approve
-                    </Button>
-                  )}
-                  {listMyOrder.length > 0 &&
-                    listMyOrder.find((i) => i.nfts.find((id) => id.nftId === card.nftId)) && (
-                      <Text fontSize="3xl" fontWeight="bold">
-                        Listed
-                      </Text>
+                        :
+                        (listCardStorage &&
+                          listCardStorage.length &&
+                          listCardStorage.find((i) => i.nftId === card.nftId) ?
+                          (<Button
+                            _hover={
+                              colorMode === 'dark' ?
+                                { bg: Theme.colors.dark.light, color: Theme.colors.removeSell.base, border: "2px" }
+                                :
+                                { bg: Theme.colors.white.base, color: Theme.colors.removeSell.base, border: "2px" }}
+                            backgroundColor={Theme.colors.removeSell.base}
+                            onClick={() => handleRemoveSell(card)}
+                            w="80%"
+                          ><MdRemoveShoppingCart />
+                            Remove
+                          </Button>)
+                          :
+                          (<Button
+                            _hover={
+                              colorMode === 'dark' ?
+                                { bg: Theme.colors.dark.light, color: Theme.colors.red.sell, border: "2px" }
+                                :
+                                { bg: Theme.colors.white.base, color: Theme.colors.red.sell, border: "2px" }}
+                            backgroundColor={Theme.colors.red.sell}
+                            w="80%"
+                            onClick={() => handleSell({ ...card, price: '' })}><MdAddShoppingCart />Sell</Button>)
+                        )
+                    )
+                    :
+                    (
+                      // ------- isApprove = false
+                      <Button
+                        _hover={
+                          colorMode === 'dark' ?
+                            { bg: Theme.colors.dark.light, color: Theme.colors.approve.base, border: "2px" }
+                            :
+                            { bg: Theme.colors.white.base, color: Theme.colors.approve.base, border: "2px" }}
+                        backgroundColor={Theme.colors.approve.base}
+                        w="80%"
+                        onClick={() =>
+                          handleApprove(
+                            FwarChar,
+                            account,
+                            FwarMarketDelegateJson.networks[97].address
+                          )
+                        }
+                      >
+                        <FaRegCheckCircle/>
+                        Approve
+                      </Button>
                     )}
                 </Stack>
               </Box>
