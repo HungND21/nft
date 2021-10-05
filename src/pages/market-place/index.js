@@ -272,7 +272,7 @@ function MarketPlace() {
                         fontWeight="bold"
                         onClick={() => {
                           isApprove
-                            ? card.userId._id === user._id
+                            ? card.userId === user._id
                               ? handleUnList(FwarMarketDelegate, FwarChar.address, card.nfts.map((i)=> i.nftId))
                               : handleBuy(FwarMarketDelegate, card.orderId)
                             : handleApprove(USDT, FwarMarketDelegate.address);

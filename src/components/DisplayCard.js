@@ -61,10 +61,10 @@ function DisplayOpenedCards({ info, text = false, isCart = false, onremove, isDe
               fontWeight="bold"
             >
               {/* <Text>NFT {info['tokenId']}</Text> */}
-              <Text fontSize={isDetail ? 25 :13}>NFT {info && info.nftId}</Text>
-              <HStack justify="center" spacing="24px" >
-                <Text fontSize={isDetail ? 23 :13}> ✭  {info && info.level}</Text>
-                <Text fontSize={isDetail ? 23 :13}> 🏹  {info && info.attack}</Text>
+              <Text fontSize={isDetail ? '90%' :'50%'}>NFT {info && info.nftId}</Text>
+              <HStack justify="center" spacing="50px" >
+                <Text fontSize={isDetail ? '90%' :'50%'}> ✭  {info && info.level}</Text>
+                <Text fontSize={isDetail ? '90%' :'50%'}> 🏹  {info && info.attack}</Text>
               </HStack>
             </Box>
           )}
