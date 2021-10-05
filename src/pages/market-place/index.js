@@ -19,7 +19,8 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerBody,
-  Button
+  Button,
+  GridItem
 } from '@chakra-ui/react';
 import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
 import { ChevronRightIcon, SearchIcon, HamburgerIcon } from '@chakra-ui/icons';
@@ -35,24 +36,24 @@ import Web3 from 'web3';
 // import marketDelegate from 'utils/dataFilter';
 
 // import Card from 'components/Card';
-import DisplayOpenedCards from 'components/DisplayCard';
+import DisplayOrderCards from './DisplayOrderCards';
 
-import Sidebar from './Sidebar';
 import OrderApi from 'apis/OrderApi';
 import TeamApi from 'apis/TeamApi';
 import { useSelector } from 'react-redux';
 import { useTitle } from 'dapp/hook';
 
+import FilterComponent from 'components/FilterComponent';
+
 function MarketPlace() {
   useTitle('FWAR - MARTKET PLACE');
-
+  
   const [isApprove, setIsApprove] = React.useState(false);
   const [listOrder, setListOrder] = React.useState([]);
   const { account } = useEthers();
   const { user } = useSelector((state) => state.user);
   const theme = useTheme();
   const { colorMode } = useColorMode();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [rarityState, setRarityState] = React.useState('');
   const [elementState, setElementState] = React.useState('');
@@ -98,20 +99,31 @@ function MarketPlace() {
     // console.log(result);
   };
 
-  const handleRarityChange = (rarity) => {
+  const handleChangeRarity = (rarity) => {
     console.log('rarity', rarity);
     setRarityState(rarity);
-    setCurrentPage(1);
+    // setCurrentPage(1);
   };
-  const handleTeamChange = (teamId) => {
-    console.log('rarity', teamId);
+  const handleChangeElement = (element) => {
+    console.log('element', element);
+    setElementState(element);
+    // setCurrentPage(1);
+  };
+  const handleChangeTeamId = (teamId) => {
+    console.log('teamId', teamId);
     setTeamIdState(teamId);
-    setCurrentPage(1);
+    // setCurrentPage(1);
+  };
+
+  const handleChangeCardType = (typeCard) => {
+    console.log('typeCard', typeCard);
+    setTypeCardState(typeCard);
+    // setCurrentPage(1);
   };
   //Get Team Dropdown
   const getTeams = async () => {
     const { data: listTeams } = await TeamApi.getALl();
-    const teams = listTeams.map((i) => ({ value: i._id, label: i.name }));
+    const teams = listTeams.map((i) => ({ value: i.teamId, label: i.name }));
     // console.log('listTeams', listTeams);
     setTeamDropdown(teams);
   };
@@ -124,9 +136,9 @@ function MarketPlace() {
     const { data: orders } = await OrderApi.getAll({
       currentPage,
       rarity: rarityState,
-      elementState, 
-      teamIdState, 
-      typeCardState
+      element: elementState, 
+      teamId: teamIdState, 
+      typeCard: typeCardState
     });
     setListOrder(orders.docs);
     console.log(orders.docs);
@@ -137,41 +149,58 @@ function MarketPlace() {
       getTeams();
       console.log('user',user);
     }
-  }, [account]);
-  const handleChangeRarity = () => {};
+  }, [account, rarityState, elementState, teamIdState, typeCardState]);
   return (
     <>
       {/* bread crumb */}
-      <Stack direction="row" align="center" mb="21px">
-        <Text
-          as="h2"
-          fontWeight="medium"
-          fontSize={25}
-          lineHeight="shorter"
-          pr={2}
-          borderRight="1px solid #d6dce1"
-        >
-          Market
-        </Text>
-        <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />}>
-          <BreadcrumbItem>
-            <Link to="/farm">
-              <Text color={theme.colors.primary.base}>Home</Text>
-            </Link>
-          </BreadcrumbItem>
-
-          <BreadcrumbItem>
-            <Link to="/market-place">
-              <Text color={theme.colors.primary.base}>Market</Text>
-            </Link>
-          </BreadcrumbItem>
-
-          <BreadcrumbItem isCurrentPage>
-            <BreadcrumbLink href="#">NFTs</BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
-      </Stack>
       {/* Sidebar */}
+      <Box
+        bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
+        p={8}
+        boxShadow="content"
+        borderRadius={8}
+        position="relative"
+      >
+        <Grid templateColumns="repeat(6, 1fr)" gap={4}>
+          <GridItem colSpan={{ base: 6, md: 5 }}>
+            <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+              <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <FilterComponent
+                  placeholder="CardType"
+                  handleChange={handleChangeCardType}
+                  valueState={typeCardState}
+                  optionDropdown={cardTypeDropdown}
+                />
+              </GridItem>
+              <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <FilterComponent
+                  placeholder="Rarity"
+                  handleChange={handleChangeRarity}
+                  valueState={rarityState}
+                  optionDropdown={rarityDropdown}
+                />
+              </GridItem>
+              <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <FilterComponent
+                  placeholder="Element"
+                  handleChange={handleChangeElement}
+                  valueState={elementState}
+                  optionDropdown={elementDropdown}
+                />
+              </GridItem>
+              <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <FilterComponent
+                  placeholder="Team"
+                  handleChange={handleChangeTeamId}
+                  valueState={teamIdState}
+                  optionDropdown={teamDropdown}
+                />
+              </GridItem>
+            </Grid>
+          </GridItem>
+        </Grid>
+      </Box>
+
       <Box display="flex" alignItems="start">
         <Box
           display={{
@@ -179,50 +208,8 @@ function MarketPlace() {
             lg: 'block'
           }}
         >
-          <Sidebar handleChangeRarity={handleChangeRarity} />
         </Box>
         <Box width="100%" marginLeft={6}>
-          <Stack direction="row" justify="space-between">
-            <Stack direction="row" align="center">
-              <IconButton
-                variant="ghost"
-                color={colorMode === 'dark' ? 'white.base' : 'primary.dark'}
-                aria-label="color mode"
-                onClick={onOpen}
-                icon={<HamburgerIcon />}
-                display={{
-                  base: 'block',
-                  lg: 'none'
-                }}
-              />
-              <Box>{listOrder && listOrder.length} results</Box>
-            </Stack>
-            <Box></Box>
-          </Stack>
-          <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-            <DrawerOverlay />
-            <DrawerContent>
-              <DrawerBody>
-                <Sidebar />
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
-
-          {/* Card */}
-          <Box
-            display="flex"
-            justify="space-between"
-            alignItems="center"
-            mt={3}
-            px={4}
-            py={2}
-            bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-            borderRadius="6px"
-            boxShadow="content"
-          >
-            <Input variant="unstyled" placeholder="Search by card's name" />
-            <Icon as={SearchIcon}></Icon>
-          </Box>
           <Grid
             templateColumns={{
               base: 'repeat(1, 1fr)',
@@ -233,7 +220,7 @@ function MarketPlace() {
             mt={6}
           >
             {listOrder&&listOrder.length > 0 &&
-              listOrder.map((card) => (
+             listOrder.map((card) => (
                 <Box
                   key={card.orderId}
                   w="100%"
@@ -246,24 +233,20 @@ function MarketPlace() {
                 >
                   <Stack direction="column" justify="space-between" h="100%">
                     <Grid
-                      templateColumns={{
-                        base: 'repeat(1, 1fr)',
-                        md: 'repeat(2, 1fr)'
-                      }}
-                      gap={2}
-                      p={2}
+                      templateColumns=
+                        {card.nfts.length !== 1 ? 'repeat(2, 1fr)':'repeat(1, 1fr)'}
+                      templateRows = {card.nfts.length !== 1 ? 'repeat(2, 1fr)':'repeat(1, 1fr)'}
                     >
-                      {card.nftIds.map((item) => (
+                      {card.nfts.map((item) => (
                         <Link to={`/market-place/detail/${item.nftId}`} key={item.nftId}>
-                          <DisplayOpenedCards 
+                          <DisplayOrderCards 
                           info = {item}
                           text = {true}
+                          isOne = {card.nfts.length === 1}
                           />
-
                         </Link>
                       ))}
                     </Grid>
-                    {/*  */}
                     <Box color="white" align="center" cursor="pointer">
                       <Box bg="secondary.base" py={2} fontSize={13}>
                         {card.price} USDT
@@ -275,7 +258,7 @@ function MarketPlace() {
                         onClick={() => {
                           isApprove
                             ? card.userId._id === user._id
-                              ? handleUnList(FwarMarketDelegate, FwarChar.address, card.nftIds.map((i)=> i.nftId))
+                              ? handleUnList(FwarMarketDelegate, FwarChar.address, card.nfts.map((i)=> i.nftId))
                               : handleBuy(FwarMarketDelegate, card.orderId)
                             : handleApprove(USDT, FwarMarketDelegate.address);
                         }}
@@ -286,7 +269,7 @@ function MarketPlace() {
                     </Box>
                   </Stack>
                 </Box>
-              ))}
+              ))} 
           </Grid>
         </Box>
       </Box>

@@ -222,7 +222,7 @@ function Card() {
   //Get Team Dropdown
   const getTeams = async () => {
     const { data: listTeams } = await TeamApi.getALl();
-    const teams = listTeams.map((i) => ({ value: i._id, label: i.name }));
+    const teams = listTeams.map((i) => ({ value: i.teamId, label: i.name }));
     // console.log('listTeams', listTeams);
     setTeamDropdown(teams);
   };
@@ -400,7 +400,7 @@ function Card() {
                   </Link>
                   {isApprove ? (
                     (!listMyOrder.length ||
-                      !listMyOrder.find((i) => i.nftIds.find((id) => id === card._id))) &&
+                      !listMyOrder.find((i) => i.nfts.find((id) => id.nftId === card.nftId))) &&
                     (listCardStorage &&
                       listCardStorage.length &&
                       listCardStorage.find((i) => i.nftId === card.nftId) ? (
@@ -424,7 +424,7 @@ function Card() {
                     </Button>
                   )}
                   {listMyOrder.length > 0 &&
-                    listMyOrder.find((i) => i.nftIds.find((id) => id === card._id)) && (
+                    listMyOrder.find((i) => i.nfts.find((id) => id.nftId === card.nftId)) && (
                       <Text fontSize="3xl" fontWeight="bold">
                         Listed
                       </Text>
