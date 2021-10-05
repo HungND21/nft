@@ -29,11 +29,11 @@ import FwarCharJson from 'contracts/FwarChar/FWarChar.json';
 import FwarMarketDelegateJson from 'contracts/FwarMarket/FwarMarketDelegate.json';
 
 import Usdt from 'contracts/Usdt.json';
-
 import Web3 from 'web3';
 // import marketDelegate from 'utils/dataFilter';
 
 import Sidebar from './Sidebar';
+import DisplayOrderCards from './DisplayOrderCards';
 import OrderApi from 'apis/OrderApi';
 import { useSelector } from 'react-redux';
 import { useTitle } from 'dapp/hook';
@@ -45,6 +45,14 @@ function MarketPlace() {
   const [listOrder, setListOrder] = React.useState([]);
   const { account } = useEthers();
   const { user } = useSelector((state) => state.user);
+
+    //
+    const [rarityState, setRarityState] = React.useState('');
+    const [elementState, setElementState] = React.useState('');
+    const [teamIdState, setTeamIdState] = React.useState('');
+    const [levelState, setLevelState] = React.useState('');
+    const [typeCardState, setTypeCardState] = React.useState('');
+    //
 
   const theme = useTheme();
   const { colorMode } = useColorMode();
@@ -84,31 +92,44 @@ function MarketPlace() {
     console.log(result);
   };
 
+  const handleChangeRarity = (rarity) => {
+    console.log('rarity', rarity);
+    setRarityState(rarity);
+  };
+  const handleChangeTeam = (selectedteam) => {
+    console.log('team', selectedteam);
+    setTeamIdState(selectedteam);
+  };
+
+    
+  const init = async () => {
+    const allowance = await USDT.allowance(
+      account,
+      FwarMarketDelegateJson.networks[97].address // address FwarMarketDelegate
+    );
+    if (allowance > 0) setIsApprove(true);
+  };
+
+  const getOrderList = async() => {
+    const { data: orders } = await OrderApi.getAll(
+      {
+        rarity: rarityState, 
+        element: elementState, 
+        teamId: teamIdState, 
+        level: levelState, 
+        typeCard: typeCardState
+      }
+    );
+    console.log('orders', orders.docs);
+    setListOrder(orders.docs);
+  };
   React.useEffect(() => {
+    // init();
+    getOrderList();
     if (account) {
-      const init = async () => {
-        const allowance = await USDT.allowance(
-          account,
-          FwarMarketDelegateJson.networks[97].address // address FwarMarketDelegate
-        );
-        if (allowance > 0) setIsApprove(true);
-
-        // const { data: orders } = await OrderApi.getAll();
-        // console.log('orders', orders.docs);
-
-        // setListOrder(orders.docs);
-        // order by id
-
-        // setListOrder(arrayOrderById);
-        // const x = await FwarChar.getCharInfo(6);
-        // console.log('arrayOrderById', arrayOrderById[0]['nftIds'][]);
-        // console.log('arrayOrderById', arrayOrderById);
-        // console.log('getOrderId', getOrderId);
-      };
       init();
     }
-  }, [account]);
-  const handleChangeRarity = () => {};
+  }, [account, rarityState, teamIdState]);
   return (
     <>
       {/* bread crumb */}
@@ -149,7 +170,12 @@ function MarketPlace() {
             lg: 'block'
           }}
         >
-          <Sidebar handleChangeRarity={handleChangeRarity} />
+          <Sidebar 
+            handleChangeRarity={handleChangeRarity} 
+            valueState ={rarityState} 
+            handleChangeTeam={handleChangeTeam} 
+            valueTeam={teamIdState} 
+          />
         </Box>
         <Box width="100%" marginLeft={6}>
           <Stack direction="row" justify="space-between">
@@ -177,9 +203,8 @@ function MarketPlace() {
               </DrawerBody>
             </DrawerContent>
           </Drawer>
-
           {/* Card */}
-          <Box
+          {/* <Box
             display="flex"
             justify="space-between"
             alignItems="center"
@@ -192,7 +217,7 @@ function MarketPlace() {
           >
             <Input variant="unstyled" placeholder="Search by card's name" />
             <Icon as={SearchIcon}></Icon>
-          </Box>
+          </Box> */}
           <Grid
             templateColumns={{
               base: 'repeat(1, 1fr)',
@@ -202,7 +227,7 @@ function MarketPlace() {
             gap={6}
             mt={6}
           >
-            {listOrder.length &&
+            {listOrder&&listOrder.length &&
               listOrder.map((card) => (
                 <Box
                   key={card.orderId}
@@ -214,52 +239,23 @@ function MarketPlace() {
                   cursor="pointer"
                   _hover={{ boxShadow: '0 4px 25px 0 rgba(34,41,47,.25)' }}
                 >
-                  <Stack direction="column" justify="space-between" h="100%">
-                    <Grid
-                      templateColumns={{
-                        base: 'repeat(1, 1fr)',
-                        md: 'repeat(2, 1fr)'
-                      }}
-                      gap={2}
-                      p={2}
-                    >
-                      {card.nftIds.map((item) => (
-                        <Link to={`/market-place/detail/${item}`} key={item}>
-                          <Box position="relative">
-                            <Image src="https://zoogame.app/nfts/bg/1/border.png" width="100%" />
-                            <Image
-                              src="https://zoogame.app/nfts/bg/2/bg.png"
-                              width="100%"
-                              position="absolute"
-                              top="0"
-                            />
-                            <Image
-                              src="https://zoogame.app/nfts/normal/9.png"
-                              position="absolute"
-                              width="100%"
-                              top="12%"
-                              left="5%"
-                            />
-                            <Box
-                              bgImage="https://zoogame.app/nfts/name.png"
-                              bgRepeat="no-repeat"
-                              bgSize="100% 100%"
-                              position="absolute"
-                              width="80%"
-                              bottom="18%"
-                              left="10%"
-                              p="14% 8% 3%"
-                              color="white"
-                              align="center"
-                              fontSize={10}
-                            >
-                              <Text>NFT {item}</Text>
-                              <Text>Panda</Text>
-                            </Box>
-                          </Box>
-                        </Link>
-                      ))}
+                  {card.nfts.length !==1 ?
+                  <Grid  templateColumns="repeat(2 , 1fr)" templateRows="repeat(2, 1fr)" gap={4}>
+                  {card.nfts.map((c) => (
+                    <Link to={`/market-place/detail/${c.nftId}`} key={c.nftId}>
+                      <DisplayOrderCards info={c} text={true} />
+                    </Link>
+                  ))}
+                   </Grid> : 
+                   <Grid  templateColumns="repeat(1 , 1fr)" templateRows="repeat(1, 1fr)" gap={4}>
+                   {card.nfts.map((c) => (
+                     <Link to={`/market-place/detail/${c.nftId}`} key={c.nftId}>
+                       <DisplayOrderCards info={c} text={true} isOne = {true} />
+                     </Link>
+                   ))}
                     </Grid>
+                  }
+                  <Stack direction="column" justify="space-between" h="100%">
                     {/*  */}
                     <Box color="white" align="center" cursor="pointer">
                       <Box bg="secondary.base" py={2} fontSize={13}>

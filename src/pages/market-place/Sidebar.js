@@ -1,52 +1,34 @@
 import { Box, Text, useColorMode, useTheme, Stack, RadioGroup, Radio } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
+import TeamApi from 'apis/TeamApi';
 
 const dataRarity = [
-  { id: '0', name: 'All' },
+  { id: '', name: 'All' },
   { id: '1', name: 'Junk' },
   { id: '2', name: 'Normal' },
   { id: '3', name: 'Rare' },
   { id: '4', name: 'Epic' },
   { id: '5', name: 'Legendary' }
 ];
-const dataTeaming = [
-  { id: '1', name: 'All' },
-  { id: '2', name: 'Pelicans' },
-  { id: '3', name: 'DogeArmy' },
-  { id: '4', name: 'Nuggets' },
-  { id: '5', name: 'Chow Chow' },
-  { id: '6', name: 'Bobcats' },
-  { id: '7', name: 'Uni' },
-  { id: '8', name: 'The Cat & The Mouse' },
-  { id: '9', name: 'Hyena' },
-  { id: '10', name: 'King' },
-  { id: '11', name: 'Kung Fu Bunny' },
-  { id: '12', name: 'Monkey' },
-  { id: '13', name: 'Alligator' },
-  { id: '14', name: 'King Kong' },
-  { id: '15', name: 'ShibaArmy' },
-  { id: '16', name: 'Doggy' },
-  { id: '17', name: 'Giraffe' },
-  { id: '18', name: 'Heavy Weight' },
-  { id: '19', name: 'C&D' },
-  { id: '20', name: 'Akita' },
-  { id: '21', name: 'Bulls' },
-  { id: '22', name: 'Ice Age' },
-  { id: '23', name: 'Wakanda' },
-  { id: '24', name: 'Wakawaka' },
-  { id: '25', name: 'Silance Alan' }
-];
 
-function Sidebar({ handleChangeRarity }) {
+
+function Sidebar({ handleChangeRarity, valueState, handleChangeTeam, valueTeam}) {
+
+  const [teamDropdown, setTeamDropdown] = React.useState([]);
   const { colorMode } = useColorMode();
   const theme = useTheme();
-
-  const [valueRarity, setValueRarity] = React.useState('0');
-  const [valueTeaming, setValueTeaming] = React.useState('1');
-  // const handleChang = (valueRarity) => {
-  //   handleChangeRarity(valueRarity)
-  // }
-  console.log('valueTeaming', valueTeaming);
+  console.log(teamDropdown);
+  //Get Team Dropdown
+  const getTeams = async () => {
+    const { data: listTeams } = await TeamApi.getALl();
+    let teams = [{id: '', name:'All'}]
+    listTeams.map((i) => (teams.push({ id: i.teamId, name: i.name })));
+    console.log('listTeams', listTeams);
+    setTeamDropdown(teams);
+  };
+  React.useEffect(() => {
+    getTeams()
+  }, [valueTeam]);
   return (
     <>
       <Text fontSize="0.9rem" fontWeight="medium" marginBottom="1rem">
@@ -63,7 +45,7 @@ function Sidebar({ handleChangeRarity }) {
           <Text marginTop={10} marginBottom={3}>
             Rarity
           </Text>
-          <RadioGroup onChange={setValueRarity} value={valueRarity}>
+          <RadioGroup onChange={handleChangeRarity} value={valueState}>
             <Stack>
               {dataRarity.map((item) => (
                 <Radio key={item.id} value={item.id}>
@@ -76,10 +58,10 @@ function Sidebar({ handleChangeRarity }) {
           <Text marginTop={10} marginBottom={3}>
             Teaming
           </Text>
-          <RadioGroup onChange={setValueTeaming} value={valueTeaming}>
+          <RadioGroup onChange={handleChangeTeam} value={valueTeam}>
             <Stack>
-              {dataTeaming.map((item) => (
-                <Radio key={item.id} value={item.id}>
+              {teamDropdown.map((item) => (
+                <Radio key={item.name} value={item.id}>
                   {item.name}
                 </Radio>
               ))}
