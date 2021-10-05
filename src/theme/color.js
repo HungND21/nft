@@ -12,7 +12,8 @@ const color = {
     base: '#e83e8c'
   },
   red: {
-    base: '#ea5455'
+    base: '#ea5455',
+    sell: '#D5585A'
   },
   orange: {
     base: '#ff9f43'
@@ -68,6 +69,12 @@ const color = {
     light: '#283046',
     bg: '#141C30'
   },
-  iconPaginator: '#FEBE43'
+  iconPaginator: '#FEBE43',
+  removeSell: {
+    base: '#2BC971'
+  },
+  approve: {
+    base: '#43BBFE'
+  }
 };
 export default color;

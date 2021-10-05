@@ -1,8 +1,8 @@
-import { Box, Image, Text, IconButton, Stack } from '@chakra-ui/react';
+import { Box, Image, Text, IconButton, Stack ,HStack} from '@chakra-ui/react';
 import React from 'react';
 import { MinusIcon } from '@chakra-ui/icons';
 
-function DisplayOpenedCards({ info, text = false, isCart = false, onremove }) {
+function DisplayOpenedCards({ info, text = false, isCart = false, onremove, isDetail = false }) {
   // console.log('info', info);
 
   return (
@@ -51,7 +51,7 @@ function DisplayOpenedCards({ info, text = false, isCart = false, onremove }) {
               // bgSize="100% 100%"
               position="absolute"
               width="100%"
-              bottom="12.5%"
+              bottom="12%"
               left="0%"
               p="0"
               // color="white"
@@ -61,8 +61,11 @@ function DisplayOpenedCards({ info, text = false, isCart = false, onremove }) {
               fontWeight="bold"
             >
               {/* <Text>NFT {info['tokenId']}</Text> */}
-              <Text>NFT {info && info['nftId']}</Text>
-              <Text> {info && info['rarity']}</Text>
+              <Text fontSize={isDetail ? 25 :13}>NFT {info && info.nftId}</Text>
+              <HStack justify="center" spacing="24px" >
+                <Text fontSize={isDetail ? 23 :13}> ✭  {info && info.level}</Text>
+                <Text fontSize={isDetail ? 23 :13}> 🏹  {info && info.attack}</Text>
+              </HStack>
             </Box>
           )}
         </Box>

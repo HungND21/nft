@@ -265,7 +265,7 @@ function Detail() {
           >
             Back
           </Button>
-          {infoNft && <DisplayOpenedCards info={infoNft} text={true} />}
+          {infoNft && <DisplayOpenedCards info={infoNft} text={true} isDetail={true}/>}
         </GridItem>
         <GridItem colSpan={{ base: 3, md: 2 }}>
           <Tabs>
@@ -314,7 +314,7 @@ function Detail() {
                             name="Rarity"
                             value={rarityDropdown.find((i) => i.value === infoNft['rarity']).label}
                           />
-                          <ItemListComponent name="Team Id" value={infoNft['teamId'].name} />
+                          <ItemListComponent name="Team" value={infoNft['teamId'].name} />
                         </>
                       )}
                       {/* <ItemListComponent name="Level" value={id} /> */}
