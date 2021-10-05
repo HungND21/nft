@@ -216,7 +216,7 @@ function Card() {
   //Get Team Dropdown
   const getTeams = async () => {
     const { data: listTeams } = await TeamApi.getALl();
-    const teams = listTeams.map((i) => ({ value: i.teamId, label: i.name }));
+    const teams = listTeams.map((i) => ({ value: i.teamId, id: i._id, label: i.name }));
     // console.log('listTeams', listTeams);
     setTeamDropdown(teams);
   };

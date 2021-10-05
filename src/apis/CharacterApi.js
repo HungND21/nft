@@ -10,7 +10,7 @@ const UserApi = {
     console.log('userId', userId);
     rarity = rarity && rarity.value ? rarity.value : '';
     element = element && element.value ? element.value : '';
-    teamId = teamId && teamId.value ? teamId.value : '';
+    teamId = teamId && teamId.id ? teamId.id : '';
     level = level ? level : '';
     typeCard = typeCard && typeCard.value ? typeCard.value : '';
     console.log(typeCard);
