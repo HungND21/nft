@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, useColorMode, useColorModeValue, useTheme } from '@chakra-ui/react';
 import ModalWalletConnect from 'components/ModalWalletConnect';
 import ScrollButton from 'components/ScrollButton';
+import { Toaster } from 'react-hot-toast';
 
 import { useEthers, useEtherBalance, useTransactions } from '@usedapp/core';
 
@@ -150,6 +151,9 @@ export default function MainLayout({ children }) {
 
           <ScrollButton />
         </Box>
+      </Box>
+      <Box zIndex="toast">
+        <Toaster />
       </Box>
     </React.Fragment>
   );

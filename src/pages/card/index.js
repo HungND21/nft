@@ -1,7 +1,7 @@
 import React from 'react';
-import { MdAddShoppingCart, MdRemoveShoppingCart, MdInfoOutline} from "react-icons/md";
-import {FaRegCheckCircle} from "react-icons/fa"
-import { useHistory } from "react-router-dom";
+import { MdAddShoppingCart, MdRemoveShoppingCart, MdInfoOutline } from 'react-icons/md';
+import { FaRegCheckCircle } from 'react-icons/fa';
+import { useHistory } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -48,6 +48,8 @@ import { useTitle } from 'dapp/hook';
 
 import FilterComponent from 'components/FilterComponent';
 import { elementDropdown, rarityDropdown, cardTypeDropdown } from 'utils/dataFilter';
+import Loader from 'components/Loader';
+import PaginatorCustom from 'components/PaginatorCustom';
 function Card() {
   const Theme = useTheme();
   const { colorMode } = useColorMode();
@@ -86,7 +88,6 @@ function Card() {
     signer
   );
 
-  // console.log('UsdtJson', UsdtJson);
   //
   const handleSell = (card) => {
     const listCartLocalStorage = localStorage.getItem('cardItem');
@@ -141,9 +142,12 @@ function Card() {
         const expiration = 2 * 24 * 60 * 60;
         const totalPriceOrder = listCardStorage.reduce((acc, cur) => +acc + +cur.price, 0);
         // address Fwar, uint[], token Usdt
-        console.log('totalPriceOrder', totalPriceOrder);
-        console.log('listCardStorage', listCardStorage);
+        // console.log('totalPriceOrder', totalPriceOrder);
+        // console.log('listCardStorage', listCardStorage);
         const listCardOrderId = listCardStorage.map((i) => i.nftId);
+        console.log('FwarMarketDelegate', FwarMarketDelegate);
+        console.log('FwarChar.address', FwarChar.address);
+        console.log('listCardOrderId', listCardOrderId);
         const result = await FwarMarketDelegate.createOrder(
           FwarChar.address,
           listCardOrderId,
@@ -167,28 +171,22 @@ function Card() {
   // handleApprove(FwarChar, account, FwarMarketDelegateJson.networks[97].address);
   const handleApprove = async (FwarChar, owner, operator) => {
     if (account) {
-      setIsLoading(true);
-      const isApproveForAll = await FwarChar.isApprovedForAll(owner, operator);
-      // ethers.BigNumber.from(1e6).pow(3).mul(1000000)
+      try {
+        setIsLoading(true);
+        const isApproveForAll = await FwarChar.isApprovedForAll(owner, operator);
+        // ethers.BigNumber.from(1e6).pow(3).mul(1000000)
 
-      if (isApproveForAll) {
-        console.log(isApproveForAll);
-      } else {
-        const result = await FwarChar.setApprovalForAll(operator, true);
-        const { events } = await result.wait();
-        const approved = events[0].args['approved'];
-        if (approved) {
-          setIsApprove(true);
-          toast.success('approve for all successfully!');
-        } else {
-          setIsApprove(false);
-          toast.error('approve for all failed!');
+        if (!isApproveForAll) {
+          const result = await FwarChar.setApprovalForAll(operator, true);
+          await result.wait();
+          setIsLoading(false);
         }
+      } catch (error) {
+        error.data ? toast.error(error.data.message) : toast.error(error.message);
         setIsLoading(false);
       }
     }
   };
-
 
   const approveInit = async () => {
     const isApproveForAll = await FwarChar.isApprovedForAll(
@@ -246,7 +244,7 @@ function Card() {
   React.useEffect(() => {
     document.title = 'FWAR - MY CARDS';
     const listCartLocalStorageJson = localStorage.getItem('cardItem');
-
+    console.log('current ', currentPage);
     if (listCartLocalStorageJson) {
       const listCartParse = JSON.parse(listCartLocalStorageJson);
       if (listCartParse.length) {
@@ -379,7 +377,7 @@ function Card() {
                   direction="column"
                   justify="center"
                   alignItems="center"
-                  bg={colorMode === 'dark' ? "rgba(23, 37, 73, 0.7)" : "rgba(242, 242, 242, 0.7)"}
+                  bg={colorMode === 'dark' ? 'rgba(23, 37, 73, 0.7)' : 'rgba(242, 242, 242, 0.7)'}
                   w="100%"
                   h="100%"
                   position="absolute"
@@ -390,13 +388,21 @@ function Card() {
                 >
                   <Button
                     _hover={
-                      colorMode === 'dark' ?
-                        { bg: Theme.colors.dark.light, color: Theme.colors.primary.base, border: "2px" }
-                        :
-                        { bg: Theme.colors.white.base, color: Theme.colors.primary.base, border: "2px" }}
+                      colorMode === 'dark'
+                        ? {
+                            bg: Theme.colors.dark.light,
+                            color: Theme.colors.primary.base,
+                            border: '2px'
+                          }
+                        : {
+                            bg: Theme.colors.white.base,
+                            color: Theme.colors.primary.base,
+                            border: '2px'
+                          }
+                    }
                     backgroundColor={Theme.colors.primary.base}
-                    onClick={()=>{
-                      let path = `./market-place/detail/${card.nftId}`
+                    onClick={() => {
+                      let path = `./market-place/detail/${card.nftId}`;
 
                       history.push(path);
                     }}
@@ -406,92 +412,99 @@ function Card() {
                     <MdInfoOutline />
                     Detail
                   </Button>
-                  {isApprove ?
-                    (
-                      card.isListed ?
-                        (
-                          <Text color="orange" fontSize="3xl" fontWeight="bold">
-                            Listed
-                          </Text>
-                        )
-                        :
-                        (listCardStorage &&
-                          listCardStorage.length &&
-                          listCardStorage.find((i) => i.nftId === card.nftId) ?
-                          (<Button
-                            _hover={
-                              colorMode === 'dark' ?
-                                { bg: Theme.colors.dark.light, color: Theme.colors.removeSell.base, border: "2px" }
-                                :
-                                { bg: Theme.colors.white.base, color: Theme.colors.removeSell.base, border: "2px" }}
-                            backgroundColor={Theme.colors.removeSell.base}
-                            onClick={() => handleRemoveSell(card)}
-                            w="80%"
-                          ><MdRemoveShoppingCart />
-                            Remove
-                          </Button>)
-                          :
-                          (<Button
-                            _hover={
-                              colorMode === 'dark' ?
-                                { bg: Theme.colors.dark.light, color: Theme.colors.red.sell, border: "2px" }
-                                :
-                                { bg: Theme.colors.white.base, color: Theme.colors.red.sell, border: "2px" }}
-                            backgroundColor={Theme.colors.red.sell}
-                            w="80%"
-                            onClick={() => handleSell({ ...card, price: '' })}><MdAddShoppingCart />Sell</Button>)
-                        )
-                    )
-                    :
-                    (
-                      // ------- isApprove = false
+                  {isApprove ? (
+                    card.isListed ? (
+                      <Text color="orange" fontSize="3xl" fontWeight="bold">
+                        Listed
+                      </Text>
+                    ) : listCardStorage &&
+                      listCardStorage.length &&
+                      listCardStorage.find((i) => i.nftId === card.nftId) ? (
                       <Button
                         _hover={
-                          colorMode === 'dark' ?
-                            { bg: Theme.colors.dark.light, color: Theme.colors.approve.base, border: "2px" }
-                            :
-                            { bg: Theme.colors.white.base, color: Theme.colors.approve.base, border: "2px" }}
-                        backgroundColor={Theme.colors.approve.base}
-                        w="80%"
-                        onClick={() =>
-                          handleApprove(
-                            FwarChar,
-                            account,
-                            FwarMarketDelegateJson.networks[97].address
-                          )
+                          colorMode === 'dark'
+                            ? {
+                                bg: Theme.colors.dark.light,
+                                color: Theme.colors.removeSell.base,
+                                border: '2px'
+                              }
+                            : {
+                                bg: Theme.colors.white.base,
+                                color: Theme.colors.removeSell.base,
+                                border: '2px'
+                              }
                         }
+                        backgroundColor={Theme.colors.removeSell.base}
+                        onClick={() => handleRemoveSell(card)}
+                        w="80%"
                       >
-                        <FaRegCheckCircle/>
-                        Approve
+                        <MdRemoveShoppingCart />
+                        Remove
                       </Button>
-                    )}
+                    ) : (
+                      <Button
+                        _hover={
+                          colorMode === 'dark'
+                            ? {
+                                bg: Theme.colors.dark.light,
+                                color: Theme.colors.red.sell,
+                                border: '2px'
+                              }
+                            : {
+                                bg: Theme.colors.white.base,
+                                color: Theme.colors.red.sell,
+                                border: '2px'
+                              }
+                        }
+                        backgroundColor={Theme.colors.red.sell}
+                        w="80%"
+                        onClick={() => handleSell({ ...card, price: '' })}
+                      >
+                        <MdAddShoppingCart />
+                        Sell
+                      </Button>
+                    )
+                  ) : (
+                    // ------- isApprove = false
+                    <Button
+                      _hover={
+                        colorMode === 'dark'
+                          ? {
+                              bg: Theme.colors.dark.light,
+                              color: Theme.colors.approve.base,
+                              border: '2px'
+                            }
+                          : {
+                              bg: Theme.colors.white.base,
+                              color: Theme.colors.approve.base,
+                              border: '2px'
+                            }
+                      }
+                      backgroundColor={Theme.colors.approve.base}
+                      w="80%"
+                      onClick={() =>
+                        handleApprove(
+                          FwarChar,
+                          account,
+                          FwarMarketDelegateJson.networks[97].address
+                        )
+                      }
+                    >
+                      <FaRegCheckCircle />
+                      Approve
+                    </Button>
+                  )}
                 </Stack>
               </Box>
             ))}
         </Grid>
       </Box>
-      <Box>
-        <Paginator
+      <Box my={5}>
+        <PaginatorCustom
           pagesQuantity={pagesQuantity > 0 && pagesQuantity}
           currentPage={currentPage}
-          onPageChange={setCurrentPage}
-          activeStyles={activeStyles}
-          // normalStyles={normalStyles}
-          outerLimit={3}
-          innerLimit={3}
-        >
-          <Container align="center" justify="space-between" w="full" p={4}>
-            <Previous>
-              Previous
-              {/* Or an icon from `react-icons` */}
-            </Previous>
-            <PageGroup isInline align="center" />
-            <Next>
-              Next
-              {/* Or an icon from `react-icons` */}
-            </Next>
-          </Container>
-        </Paginator>
+          setCurrentPage={setCurrentPage}
+        />
       </Box>
       {/* loading*/}
       {isLoading && (
@@ -499,13 +512,13 @@ function Card() {
           direction="row"
           justify="center"
           align="center"
-          position="absolute"
-          top="0"
-          width="100%"
-          height="100%"
-          zIndex="50"
+          pos="absolute"
+          zIndex="docked"
+          bg="#f6f6f6"
+          opacity="0.85"
+          inset="0"
         >
-          <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+          <Loader size="lg" />
         </Stack>
       )}
       <Modal isOpen={isOpen} onClose={onClose} size="6xl">
@@ -543,7 +556,10 @@ function Card() {
                           value={card.price}
                           onChange={(e) => handleOnchangePrice(e, card)}
                         />
-                        <InputRightAddon backgroundColor={Theme.colors.primary.base} children="USDT" />
+                        <InputRightAddon
+                          backgroundColor={Theme.colors.primary.base}
+                          children="USDT"
+                        />
                       </InputGroup>
                     </Stack>
                   </Box>

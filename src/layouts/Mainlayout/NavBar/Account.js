@@ -1,10 +1,8 @@
+import { Box } from '@chakra-ui/react';
+import { useEthers } from '@usedapp/core';
 import React from 'react';
-import { Box, useDisclosure } from '@chakra-ui/react';
-import { useWeb3React } from '@web3-react/core';
-import { Toaster } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { openModalWalletConnect } from 'store/metamaskSlice';
-import { useEthers } from '@usedapp/core';
 
 export function Account() {
   const { account } = useEthers();
@@ -31,8 +29,6 @@ export function Account() {
           ? `${account.slice(0, 6)}...${account.slice(account.length - 4, account.length)}`
           : 'Connect To Wallet'}
       </Box>
-
-      <Toaster />
     </>
   );
 }

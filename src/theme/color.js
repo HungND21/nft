@@ -61,16 +61,19 @@ const color = {
     base: '#ea5455'
   },
   light: {
-    base: '#f6f6f6'
+    base: '#f6f6f6',
+    bg: '#F2F2F2'
   },
   dark: {
     base: '#151c31',
-    light: '#283046'
+    light: '#283046',
+    bg: '#141C30'
   },
+  iconPaginator: '#FEBE43',
   removeSell: {
     base: '#2BC971'
   },
-  approve:{
+  approve: {
     base: '#43BBFE'
   }
 };

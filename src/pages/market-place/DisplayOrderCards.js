@@ -1,8 +1,8 @@
 import { Box, Image, Text, HStack, Flex } from '@chakra-ui/react';
-import { StarIcon } from '@chakra-ui/icons'
+import { StarIcon } from '@chakra-ui/icons';
 import React from 'react';
 
-function DisplayOrderCards({ info, text = false, isOne = false}) {
+function DisplayOrderCards({ info, text = false, isOne = false }) {
   // console.log('info', info);
 
   return (
@@ -37,7 +37,7 @@ function DisplayOrderCards({ info, text = false, isOne = false}) {
             <Box
               position="absolute"
               width="100%"
-              bottom= {isOne ?"12.5%":"13.5%"}
+              bottom={isOne ? '13.5%' : '15.5%'}
               left="0%"
               p="0"
               // color="white"

@@ -16,6 +16,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Stack,
   Tab,
   Table,
@@ -31,24 +32,24 @@ import {
   Tr,
   useColorMode,
   useDisclosure,
-  useTheme,
-  Spinner
+  useTheme
 } from '@chakra-ui/react';
 import { useEthers } from '@usedapp/core';
 import CharacterApi from 'apis/CharacterApi';
-
-import { useSelector } from 'react-redux';
-
+import { usePaginator } from 'chakra-paginator';
+import DisplayOpenedCards from 'components/DisplayCard';
+import PaginatorCustom from 'components/PaginatorCustom';
 import FwarCharJson from 'contracts/FwarChar/FWarChar.json';
 import FwarCharDelegateJson from 'contracts/FwarChar/FwarCharDelegate.json';
 import { ethers } from 'ethers';
 import React from 'react';
 import toast from 'react-hot-toast';
 import { FiArrowUp, FiPlus } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import ItemListComponent from './ItemListComponent';
-import DisplayOpenedCards from 'components/DisplayCard';
 import { elementDropdown, rarityDropdown } from 'utils/dataFilter';
+import DisplayCardSelect from './DisplayCardSelect';
+import ItemListComponent from './ItemListComponent';
 
 function Detail() {
   const [infoNft, setInfoNft] = React.useState(null);
@@ -57,12 +58,17 @@ function Detail() {
   const [isApprove, setIsApprove] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [needUpgrade, setNeedUpgrade] = React.useState({});
+  const [pagesQuantity, setPagesQuantity] = React.useState(1);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [listSelectCard, setListSelectCard] = React.useState([]);
   const [listSelectCardId, setListSelectCardId] = React.useState([]);
 
   const [selected, setSelected] = React.useState([]);
+
+  const { currentPage, setCurrentPage } = usePaginator({
+    initialState: { currentPage: 1 }
+  });
 
   const { user } = useSelector((state) => state.user);
 
@@ -80,10 +86,22 @@ function Detail() {
     FwarCharDelegateJson.abi,
     signer
   );
+
   const handleUpgrade = async () => {
-    // const burnedNfts = selected.map((i) => listSelectCardId[i]);
-    const upgraded = await FwarCharDelegate.upgrade(2238, [1757]);
-    console.log('upgraded', upgraded);
+    try {
+      setIsLoading(true);
+      const burnedNfts = selected.map((i) => listSelectCard[i].nftId);
+
+      const upgraded = await FwarCharDelegate.upgrade(id, burnedNfts);
+      const tx = await upgraded.wait();
+      setIsLoading(false);
+
+      console.log('burnedNfts', burnedNfts);
+      console.log('upgraded', upgraded);
+    } catch (error) {
+      error.data ? toast.error(error.data.message) : toast.error(error.message);
+      setIsLoading(false);
+    }
   };
   const handleApproveForAll = async () => {
     try {
@@ -113,28 +131,43 @@ function Detail() {
         selected.slice(selectedIndex + 1)
       );
     }
-    if (newSelected.length > 2) {
-      toast.error('select 2 cards');
-    } else {
-      setSelected(newSelected);
-    }
+    console.log('newSelected', newSelected);
+    setSelected(newSelected);
   };
   React.useEffect(() => {
     if (account) {
       const init = async () => {
         const { data: nft } = await CharacterApi.getOne(id);
-        console.log('nft', nft);
         setInfoNft(nft);
-        if (infoNft) {
-          const burnInfo = await FwarCharDelegate.getBurnInfo(infoNft.rarity, infoNft.level);
+        console.log('nft', nft);
+        if (nft) {
+          const burnInfo = await FwarCharDelegate.getBurnInfo(nft.rarity, nft.level);
           const baseAmount = burnInfo['baseAmount'];
           const junkAmount = burnInfo['junkAmount'];
           const normalAmount = burnInfo['normalAmount'];
           const rareAmount = burnInfo['rareAmount'];
           setNeedUpgrade({ baseAmount, junkAmount, normalAmount, rareAmount });
-          console.log('burnInfo', burnInfo);
+          // console.log('burnInfo', { baseAmount, junkAmount, normalAmount, rareAmount });
         }
-
+      };
+      init();
+      return () => {
+        setInfoNft(null); // This worked for me
+      };
+    }
+  }, [setInfoNft, account, setNeedUpgrade]);
+  React.useEffect(() => {
+    (async function () {
+      if (user && infoNft) {
+        const { data: listCardSelect } = await CharacterApi.getMyList({
+          userId: user._id,
+          isListed: false,
+          teamId: infoNft.teamId,
+          page: currentPage
+        });
+        setListSelectCard(listCardSelect.docs);
+        setPagesQuantity(listCardSelect.totalPages);
+        // console.log('teamId', infoNft.teamId._id);
         // const listSelect = listCard.filter((card, index) => {
         //   if (
         //     Number(card['level']) === 1 &&
@@ -154,20 +187,19 @@ function Detail() {
         //   );
         // });
         // let listSelectId = listSelectIdIndex.map((i) => listCardIds[i]);
-        // setListSelectCard(listSelect);
+
         // setListSelectCardId(listSelectId);
         // console.log('list select card', listSelectCard);
         // console.log('listSelectId', listSelectId);
         // console.log('listCardIds', listCardIds);
-      };
-      init();
+        console.log('listCardSelect', listCardSelect);
+      }
       return () => {
-        setInfoNft(null); // This worked for me
         setListSelectCard([]); // This worked for me
         setListSelectCardId([]); // This worked for me
       };
-    }
-  }, [setInfoNft, account, isApprove]);
+    })();
+  }, [user, infoNft]);
 
   React.useEffect(() => {
     if (account) {
@@ -178,11 +210,11 @@ function Detail() {
             FwarCharDelegate.address
           );
           setIsApprove(isApproveForAll);
+
           const ownerOf = await FwarChar.ownerOf(+id);
+
           if (ownerOf === account) {
             setIsMyNft(true);
-            const { data: listCardChoose } = await CharacterApi.getMyList({ userId: user._id });
-            console.log('listCardChoose', listCardChoose.docs);
           }
         } catch (error) {
           setIsMyNft(false);
@@ -190,7 +222,7 @@ function Detail() {
       })();
     }
     // console.log(FwarChar);
-  }, [account, setIsMyNft, isApprove]);
+  }, [account, isMyNft, isApprove]);
   return (
     <>
       {/* bread crumb */}
@@ -233,13 +265,16 @@ function Detail() {
           >
             Back
           </Button>
-          {infoNft && <DisplayOpenedCards info={infoNft} text={true} isDetail={true}/>}
+          {infoNft && <DisplayOpenedCards info={infoNft} text={true} isDetail={true} />}
         </GridItem>
         <GridItem colSpan={{ base: 3, md: 2 }}>
           <Tabs>
             <TabList>
               <Tab>Details</Tab>
-              {isMyNft && infoNft && Number(infoNft['rarity']) >= 4 && <Tab>Upgrade</Tab>}
+              {isMyNft && infoNft && Number(infoNft['rarity']) >= 4 && !infoNft.isListed && (
+                <Tab>Upgrade</Tab>
+              )}
+              {/* {isMyNft && <Tab>Upgrade</Tab>} */}
             </TabList>
 
             <TabPanels>
@@ -256,18 +291,9 @@ function Detail() {
                       <ItemListComponent name="NFT Token ID" value={id} />
                       {infoNft && (
                         <>
-                          <ItemListComponent
-                            name="Attack"
-                            value={Number(infoNft['baseAttack'])}
-                          />
-                          <ItemListComponent
-                            name="Defend"
-                            value={Number(infoNft['baseDefense'])}
-                          />
-                          <ItemListComponent
-                            name="Health"
-                            value={Number(infoNft['baseHeath'])}
-                          />
+                          <ItemListComponent name="Attack" value={Number(infoNft['baseAttack'])} />
+                          <ItemListComponent name="Defend" value={Number(infoNft['baseDefense'])} />
+                          <ItemListComponent name="Health" value={Number(infoNft['baseHeath'])} />
                           <ItemListComponent
                             name="Element Type"
                             value={
@@ -297,7 +323,7 @@ function Detail() {
               >
                 <Stack direction="row" align="center" justify="space-between">
                   <Box>Upgrade to Level {infoNft && Number(infoNft['level']) + 1}</Box>
-                  <Grid templateColumns="repeat(4, 1fr)" gap={2} align="center">
+                  {/* <Grid templateColumns="repeat(4, 1fr)" gap={2} align="center">
                     {Object.keys(needUpgrade).length && (
                       <>
                         <Box>
@@ -314,13 +340,32 @@ function Detail() {
                         </Box>
                       </>
                     )}
-                  </Grid>
+                  </Grid> */}
                 </Stack>
                 <Stack direction="row" align="center" justify="space-between">
-                  <Stack direction="row">
-                    <Image src="/assets/water.png" w="50px" />
-                    <Image src="/assets/water.png" w="50px" marginLeft="0" />
-                  </Stack>
+                  <Box>
+                    {needUpgrade && Object.keys(needUpgrade).length > 0 && (
+                      <>
+                        {Object.entries(needUpgrade).map((i, index) => (
+                          <Stack key={index} direction="row" align="center">
+                            <Image
+                              src={`/assets/card/rarity/${
+                                i[0] === 'baseAmount'
+                                  ? 4
+                                  : i[0] === 'junkAmount'
+                                  ? 1
+                                  : i[0] === 'normalAmount'
+                                  ? 2
+                                  : i[0] === 'rareAmount' && 3
+                              }.png`}
+                              w="50px"
+                            />
+                            <Box>x {i[1]}</Box>
+                          </Stack>
+                        ))}
+                      </>
+                    )}
+                  </Box>
                   <Button leftIcon={<FiPlus />} onClick={onOpen}>
                     Select
                   </Button>
@@ -344,9 +389,9 @@ function Detail() {
                     bg={theme.colors.primary.base}
                     color="white"
                     _hover={{ bg: theme.colors.primary.light }}
-                    isDisabled={isLoading}
+                    isDisabled={isLoading || (selected && !selected.length > 0)}
                     onClick={() => {
-                      !isApprove ? handleUpgrade() : handleApproveForAll();
+                      isApprove ? handleUpgrade() : handleApproveForAll();
                     }}
                   >
                     {isApprove ? `Upgrade` : `Approve`}
@@ -359,8 +404,13 @@ function Detail() {
       </Grid>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Please select {infoNft && Number(infoNft['level']) + 1} cards</ModalHeader>
+        <ModalContent overflow="hidden" color={colorMode === 'dark' && 'white'}>
+          <ModalHeader
+            fontSize="18px"
+            bg={colorMode === 'dark' ? theme.colors.dark.bg : theme.colors.light.bg}
+          >
+            Please select {infoNft && Number(infoNft['level']) + 1} cards
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Table variant="simple">
@@ -368,59 +418,37 @@ function Detail() {
                 <Tr>
                   <Th>Card</Th>
                   <Th>Level</Th>
-                  <Th>Team Id</Th>
+                  <Th>Team</Th>
                   <Th>Rarity</Th>
+                  <Th>Element</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {listSelectCard &&
                   listSelectCard.map((card, index) => (
                     <Tr
-                      key={index}
-                      _hover={{ bg: theme.colors.secondary.light }}
+                      key={card._id}
+                      _hover={{
+                        cursor: 'pointer',
+                        bg: colorMode === 'dark' ? theme.colors.dark.light : theme.colors.light.bg
+                      }}
                       onClick={(e) => handleClick(e, index)}
-                      bg={selected.length && selected.includes(index) && '#ECF4FC'}
+                      bg={
+                        selected.length &&
+                        selected.includes(index) &&
+                        (colorMode === 'dark' ? theme.colors.dark.bg : theme.colors.light.base)
+                      }
                     >
                       <Td>
                         {/* rgb(236 244 252) */}
                         <Link to={`/market-place/detail/${1}`}>
-                          <Box position="relative" w="80px">
-                            <Image src="https://zoogame.app/nfts/bg/1/border.png" width="100%" />
-                            <Image
-                              src="https://zoogame.app/nfts/bg/2/bg.png"
-                              width="100%"
-                              position="absolute"
-                              top="0"
-                            />
-                            <Image
-                              src="https://zoogame.app/nfts/normal/9.png"
-                              position="absolute"
-                              width="100%"
-                              top="12%"
-                              left="5%"
-                            />
-                            <Box
-                              bgImage="https://zoogame.app/nfts/name.png"
-                              bgRepeat="no-repeat"
-                              bgSize="100% 100%"
-                              position="absolute"
-                              width="80%"
-                              bottom="18%"
-                              left="10%"
-                              p="14% 8% 3%"
-                              color="white"
-                              align="center"
-                              fontSize={10}
-                            >
-                              {/* <Text lineHeight="10px">NFT {1}</Text> */}
-                              <Text lineHeight="10px">{card['teamId'].cardName}</Text>
-                            </Box>
-                          </Box>
+                          <DisplayCardSelect info={card} text={true} />
                         </Link>
                       </Td>
-                      <Td>{Number(card['level'])}</Td>
-                      <Td>{Number(card['teamId'])}</Td>
-                      <Td>{Number(card['rarity'])}</Td>
+                      <Td>{card.level}</Td>
+                      <Td>{card.teamId.name}</Td>
+                      <Td>{card.rarity}</Td>
+                      <Td>{elementDropdown.find((i) => i.value === card.element).label}</Td>
                     </Tr>
                   ))}
               </Tbody>
@@ -428,9 +456,16 @@ function Detail() {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" w="full" mr={3} onClick={onClose}>
+            {/* <Button colorScheme="blue" w="full" mr={3} onClick={onClose}>
               Close
-            </Button>
+            </Button> */}
+            <Box w="100%">
+              <PaginatorCustom
+                pagesQuantity={pagesQuantity}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </Box>
           </ModalFooter>
         </ModalContent>
       </Modal>

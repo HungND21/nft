@@ -255,7 +255,7 @@ const ChestInit = () => {
           {openedCard.length > 0 && (
             <Grid templateColumns="repeat(5 , 1fr)" gap={1} w="68%">
               {openedCard.map((cardInfo) => (
-                <Box key={cardInfo.nftIf}>
+                <Box key={cardInfo.nftId}>
                   <DisplayOpenedCards info={cardInfo} />
                 </Box>
               ))}
