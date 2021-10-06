@@ -48,6 +48,8 @@ import { useTitle } from 'dapp/hook';
 
 import FilterComponent from 'components/FilterComponent';
 import { elementDropdown, rarityDropdown, cardTypeDropdown } from 'utils/dataFilter';
+import Loader from 'components/Loader';
+import PaginatorCustom from 'components/PaginatorCustom';
 function Card() {
   const Theme = useTheme();
   const { colorMode } = useColorMode();
@@ -86,7 +88,6 @@ function Card() {
     signer
   );
 
-  // console.log('UsdtJson', UsdtJson);
   //
   const handleSell = (card) => {
     const listCartLocalStorage = localStorage.getItem('cardItem');
@@ -141,9 +142,12 @@ function Card() {
         const expiration = 2 * 24 * 60 * 60;
         const totalPriceOrder = listCardStorage.reduce((acc, cur) => +acc + +cur.price, 0);
         // address Fwar, uint[], token Usdt
-        console.log('totalPriceOrder', totalPriceOrder);
-        console.log('listCardStorage', listCardStorage);
+        // console.log('totalPriceOrder', totalPriceOrder);
+        // console.log('listCardStorage', listCardStorage);
         const listCardOrderId = listCardStorage.map((i) => i.nftId);
+        console.log('FwarMarketDelegate', FwarMarketDelegate);
+        console.log('FwarChar.address', FwarChar.address);
+        console.log('listCardOrderId', listCardOrderId);
         const result = await FwarMarketDelegate.createOrder(
           FwarChar.address,
           listCardOrderId,
@@ -167,23 +171,17 @@ function Card() {
   // handleApprove(FwarChar, account, FwarMarketDelegateJson.networks[97].address);
   const handleApprove = async (FwarChar, owner, operator) => {
     if (account) {
-      setIsLoading(true);
-      const isApproveForAll = await FwarChar.isApprovedForAll(owner, operator);
-      // ethers.BigNumber.from(1e6).pow(3).mul(1000000)
+      try {
+        setIsLoading(true);
+        const isApproveForAll = await FwarChar.isApprovedForAll(owner, operator);
+        // ethers.BigNumber.from(1e6).pow(3).mul(1000000)
 
-      if (isApproveForAll) {
-        console.log(isApproveForAll);
-      } else {
-        const result = await FwarChar.setApprovalForAll(operator, true);
-        const { events } = await result.wait();
-        const approved = events[0].args['approved'];
-        if (approved) {
-          setIsApprove(true);
-          toast.success('approve for all successfully!');
-        } else {
-          setIsApprove(false);
-          toast.error('approve for all failed!');
+        if (!isApproveForAll) {
+          const result = await FwarChar.setApprovalForAll(operator, true);
+          await result.wait();
         }
+      } catch (error) {
+        error.data ? toast.error(error.data.message) : toast.error(error.message);
         setIsLoading(false);
       }
     }
@@ -215,7 +213,7 @@ function Card() {
   //Get Team Dropdown
   const getTeams = async () => {
     const { data: listTeams } = await TeamApi.getALl();
-    const teams = listTeams.map((i) => ({ value: i.teamId, label: i.name }));
+    const teams = listTeams.map((i) => ({ value: i.teamId, id: i._id, label: i.name }));
     // console.log('listTeams', listTeams);
     setTeamDropdown(teams);
   };
@@ -245,7 +243,7 @@ function Card() {
   React.useEffect(() => {
     document.title = 'FWAR - MY CARDS';
     const listCartLocalStorageJson = localStorage.getItem('cardItem');
-
+    console.log('current ', currentPage);
     if (listCartLocalStorageJson) {
       const listCartParse = JSON.parse(listCartLocalStorageJson);
       if (listCartParse.length) {
@@ -500,28 +498,12 @@ function Card() {
             ))}
         </Grid>
       </Box>
-      <Box>
-        <Paginator
+      <Box my={5}>
+        <PaginatorCustom
           pagesQuantity={pagesQuantity > 0 && pagesQuantity}
           currentPage={currentPage}
-          onPageChange={setCurrentPage}
-          activeStyles={activeStyles}
-          // normalStyles={normalStyles}
-          outerLimit={3}
-          innerLimit={3}
-        >
-          <Container align="center" justify="space-between" w="full" p={4}>
-            <Previous>
-              Previous
-              {/* Or an icon from `react-icons` */}
-            </Previous>
-            <PageGroup isInline align="center" />
-            <Next>
-              Next
-              {/* Or an icon from `react-icons` */}
-            </Next>
-          </Container>
-        </Paginator>
+          setCurrentPage={setCurrentPage}
+        />
       </Box>
       {/* loading*/}
       {isLoading && (
@@ -529,13 +511,13 @@ function Card() {
           direction="row"
           justify="center"
           align="center"
-          position="absolute"
-          top="0"
-          width="100%"
-          height="100%"
-          zIndex="50"
+          pos="absolute"
+          zIndex="docked"
+          bg="#f6f6f6"
+          opacity="0.85"
+          inset="0"
         >
-          <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+          <Loader size="lg" />
         </Stack>
       )}
       <Modal isOpen={isOpen} onClose={onClose} size="6xl">

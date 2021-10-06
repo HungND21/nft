@@ -12,9 +12,9 @@ const UserApi = {
     isListed = isListed !== undefined ? isListed : '';
 
     rarity = rarity && rarity.value ? rarity.value : '';
-    rarity = rarity && rarity.value ? rarity.value : '';
+
     element = element && element.value ? element.value : '';
-    teamId = teamId ? teamId : '';
+    teamId = teamId && teamId.id ? teamId.id : '';
     level = level ? level : '';
     typeCard = typeCard && typeCard.value ? typeCard.value : '';
 

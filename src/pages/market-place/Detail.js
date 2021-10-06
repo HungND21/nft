@@ -293,15 +293,15 @@ function Detail() {
                         <>
                           <ItemListComponent
                             name="Attack"
-                            value={Number(infoNft['baseAttack']) / 1000}
+                            value={Number(infoNft['baseAttack'])}
                           />
                           <ItemListComponent
                             name="Defend"
-                            value={Number(infoNft['baseDefense']) / 1000}
+                            value={Number(infoNft['baseDefense'])}
                           />
                           <ItemListComponent
                             name="Health"
-                            value={Number(infoNft['baseHeath']) / 1000}
+                            value={Number(infoNft['baseHeath'])}
                           />
                           <ItemListComponent
                             name="Element Type"

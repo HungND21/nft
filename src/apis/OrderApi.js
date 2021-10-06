@@ -15,6 +15,7 @@ const OrderApi = {
     teamId = teamId && teamId.value ? teamId.value : '';
     level = level ? level : '';
     typeCard = typeCard && typeCard.value ? typeCard.value : '';
+
     const sortColumn = sort && sort.column ? sort.column : 'createdAt';
     const sortOrder = sort && sort.order ? sort.order : 'desc';
     const url = `/order?&_page=${page}&_rarity=${rarity}&_element=${element}&_teamId=${teamId}&_level=${level}&_cardType=${typeCard}&_sort=${sortColumn}&_order=${sortOrder}`;
