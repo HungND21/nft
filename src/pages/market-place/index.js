@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Stack, useTheme, Grid, useColorMode, GridItem } from '@chakra-ui/react';
+import { Box, Stack, useTheme, Grid, useColorMode, GridItem, Button } from '@chakra-ui/react';
 import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
 import toast from 'react-hot-toast';
 import { ethers } from 'ethers';
@@ -41,6 +41,7 @@ function MarketPlace() {
   const [teamDropdown, setTeamDropdown] = React.useState([]);
   const [sortState, setSortState] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState({});
   // paginate
   const { currentPage, setCurrentPage } = usePaginator({
     initialState: { currentPage: 1, pageSize: 5 }
@@ -74,10 +75,9 @@ function MarketPlace() {
     }
   };
   const handleBuy = async (FwarMarketDelegate, orderId) => {
-    console.log(orderId);
-
     try {
-      setIsLoading(true);
+      setLoading({ orderId: true });
+
       const result = await FwarMarketDelegate.buyOrder(orderId);
       console.log(result);
       const tx = await result.wait();
@@ -90,24 +90,31 @@ function MarketPlace() {
     }
   };
 
-  const handleUnList = async (FwarMarketDelegate, FwarCharAddress, nftIds, tokenUsdt = '') => {
+  const handleUnList = async (
+    FwarMarketDelegate,
+    FwarCharAddress,
+    nftIds,
+    index,
+    tokenUsdt = ''
+  ) => {
     try {
-      setIsLoading(true);
+      setLoading({ [index]: true });
+      console.log('orderId', index);
+
       tokenUsdt = '0xB3C3575552F6e250E2Ee7EeB94BB9BD91E57e51E';
       console.log('nftIds', nftIds);
       const result = await FwarMarketDelegate.cancelOrder(FwarCharAddress, nftIds, tokenUsdt);
       const tx = await result.wait();
       console.log('tx', tx);
       toast.success('unlist successfully!');
-      setIsLoading(false);
+      setLoading({ [index]: false });
     } catch (error) {
       error.data ? toast.error(error.data.message) : toast.error(error.message);
-      setIsLoading(false);
+      setLoading({ [index]: false });
     }
     // toast.success('cancel successfully!');
     // console.log(result);
   };
-
   const handleChangeRarity = (rarity) => {
     console.log('rarity', rarity);
     setRarityState(rarity);
@@ -147,16 +154,17 @@ function MarketPlace() {
     );
     if (allowance > 0) setIsApprove(true);
     const { data: orders } = await OrderApi.getAll({
-      currentPage,
+      page: currentPage,
       rarity: rarityState,
       element: elementState,
       teamId: teamIdState,
       typeCard: typeCardState,
       sort: sortState
     });
+
     setListOrder(orders.docs);
     setPagesQuantity(orders.totalPages);
-    console.log(orders.docs);
+    console.log('orders.docs', orders.docs);
   };
   React.useEffect(() => {
     if (account) {
@@ -164,7 +172,7 @@ function MarketPlace() {
       getTeams();
       console.log('user', user);
     }
-  }, [account, rarityState, elementState, teamIdState, typeCardState, sortState]);
+  }, [account, rarityState, elementState, teamIdState, typeCardState, sortState, currentPage]);
 
   const baseStyles = {
     w: 7,
@@ -256,7 +264,7 @@ function MarketPlace() {
           >
             {listOrder &&
               listOrder.length > 0 &&
-              listOrder.map((card) => (
+              listOrder.map((card, index) => (
                 <Box
                   key={card.orderId}
                   w="100%"
@@ -267,20 +275,6 @@ function MarketPlace() {
                   pos="relative"
                   _hover={{ boxShadow: '0 4px 25px 0 rgba(34,41,47,.25)' }}
                 >
-                  {isLoading && (
-                    <Stack
-                      direction="row"
-                      justify="center"
-                      align="center"
-                      pos="absolute"
-                      zIndex="docked"
-                      bg="#f6f6f6"
-                      opacity="0.85"
-                      inset="0"
-                    >
-                      <Loader size="lg" />
-                    </Stack>
-                  )}
                   <Stack direction="column" justify="space-between" h="100%">
                     <Grid
                       templateColumns={card.nfts.length !== 1 ? 'repeat(2, 1fr)' : 'repeat(1, 1fr)'}
@@ -301,25 +295,28 @@ function MarketPlace() {
                         <Box bg="secondary.base" py={2} fontSize={13}>
                           {card.price} USDT
                         </Box>
-                        <Box
+                        <Button
                           bg={theme.colors.primary.base}
                           py={2}
                           _hover={{
                             background: theme.colors.light,
-                            color: theme.colors.primary.base,
+                            // color: theme.colors.primary.base,
                             border: '1px',
                             borderColor: theme.colors.primary.base
                           }}
-                          cursor="pointer"
+                          isDisabled={loading && loading[index]}
+                          leftIcon={loading && loading[index] && <Loader size="sm" color="white" />}
                           fontSize={13}
                           fontWeight="bold"
+                          borderRadius="0"
                           onClick={() => {
                             if (isApprove) {
                               card.userId === user._id
                                 ? handleUnList(
                                     FwarMarketDelegate,
                                     FwarChar.address,
-                                    card.nfts.map((i) => i.nftId)
+                                    card.nfts.map((i) => i.nftId),
+                                    index
                                   )
                                 : handleBuy(FwarMarketDelegate, card.orderId);
                             } else {
@@ -327,8 +324,8 @@ function MarketPlace() {
                             }
                           }}
                         >
-                          {isApprove ? (card.userId === user._id ? `unList` : `Buy`) : `Approve`}
-                        </Box>
+                          {isApprove ? (card.userId === user._id ? `UnList` : `Buy`) : `Approve`}
+                        </Button>
                       </Grid>
                     </Box>
                   </Stack>

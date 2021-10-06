@@ -162,7 +162,7 @@ function Detail() {
         const { data: listCardSelect } = await CharacterApi.getMyList({
           userId: user._id,
           isListed: false,
-          teamId: infoNft.teamId._id,
+          teamId: infoNft.teamId,
           page: currentPage
         });
         setListSelectCard(listCardSelect.docs);
@@ -265,7 +265,7 @@ function Detail() {
           >
             Back
           </Button>
-          {infoNft && <DisplayOpenedCards info={infoNft} text={true} isDetail={true}/>}
+          {infoNft && <DisplayOpenedCards info={infoNft} text={true} isDetail={true} />}
         </GridItem>
         <GridItem colSpan={{ base: 3, md: 2 }}>
           <Tabs>
@@ -291,18 +291,9 @@ function Detail() {
                       <ItemListComponent name="NFT Token ID" value={id} />
                       {infoNft && (
                         <>
-                          <ItemListComponent
-                            name="Attack"
-                            value={Number(infoNft['baseAttack'])}
-                          />
-                          <ItemListComponent
-                            name="Defend"
-                            value={Number(infoNft['baseDefense'])}
-                          />
-                          <ItemListComponent
-                            name="Health"
-                            value={Number(infoNft['baseHeath'])}
-                          />
+                          <ItemListComponent name="Attack" value={Number(infoNft['baseAttack'])} />
+                          <ItemListComponent name="Defend" value={Number(infoNft['baseDefense'])} />
+                          <ItemListComponent name="Health" value={Number(infoNft['baseHeath'])} />
                           <ItemListComponent
                             name="Element Type"
                             value={
@@ -398,7 +389,7 @@ function Detail() {
                     bg={theme.colors.primary.base}
                     color="white"
                     _hover={{ bg: theme.colors.primary.light }}
-                    isDisabled={isLoading}
+                    isDisabled={isLoading || (selected && !selected.length > 0)}
                     onClick={() => {
                       isApprove ? handleUpgrade() : handleApproveForAll();
                     }}

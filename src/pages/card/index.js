@@ -179,6 +179,7 @@ function Card() {
         if (!isApproveForAll) {
           const result = await FwarChar.setApprovalForAll(operator, true);
           await result.wait();
+          setIsLoading(false);
         }
       } catch (error) {
         error.data ? toast.error(error.data.message) : toast.error(error.message);

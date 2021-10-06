@@ -1,8 +1,8 @@
 import { Box, Image, Text, HStack, Flex } from '@chakra-ui/react';
-import { StarIcon } from '@chakra-ui/icons'
+import { StarIcon } from '@chakra-ui/icons';
 import React from 'react';
 
-function DisplayOrderCards({ info, text = false, isOne = false}) {
+function DisplayOrderCards({ info, text = false, isOne = false }) {
   // console.log('info', info);
 
   return (
@@ -37,7 +37,7 @@ function DisplayOrderCards({ info, text = false, isOne = false}) {
             <Box
               position="absolute"
               width="100%"
-              bottom= {isOne ?"13.5%":"15.5%"}
+              bottom={isOne ? '13.5%' : '15.5%'}
               left="0%"
               p="0"
               // color="white"
@@ -47,10 +47,10 @@ function DisplayOrderCards({ info, text = false, isOne = false}) {
               fontWeight="bold"
             >
               {/* <Text>NFT {info['tokenId']}</Text> */}
-              <Text fontSize={isOne ? 15: 6}>NFT {info && info.nftId}</Text>
-              <HStack justify="center" spacing="24px" >
-                <Text fontSize={isOne ? 15: 6}> ✭  {info && info.level}</Text>
-                <Text fontSize={isOne ? 15: 6}> 🏹  {info && info.attack}</Text>
+              <Text fontSize={isOne ? 15 : 6}>NFT {info && info.nftId}</Text>
+              <HStack justify="center" spacing="24px">
+                <Text fontSize={isOne ? 15 : 6}> ✭ {info && info.level}</Text>
+                <Text fontSize={isOne ? 15 : 6}> 🏹 {info && info.attack}</Text>
               </HStack>
             </Box>
           )}
