@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, useColorMode, useColorModeValue, useTheme } from '@chakra-ui/react';
+import { Box, useColorMode, useColorModeValue, useTheme, ScaleFade } from '@chakra-ui/react';
 import ModalWalletConnect from 'components/ModalWalletConnect';
 import ScrollButton from 'components/ScrollButton';
 import { Toaster } from 'react-hot-toast';
@@ -146,9 +146,9 @@ export default function MainLayout({ children }) {
             }
             zIndex="8"
           />
+
           {children}
           <ModalWalletConnect onClose={closeModalWallet} />
-
           <ScrollButton />
         </Box>
       </Box>

@@ -40,14 +40,14 @@ import UsdtJson from 'contracts/Usdt.json';
 import { useSelector } from 'react-redux';
 
 // import Card from 'components/Card';
-import DisplayOpenedCards from 'components/DisplayCard';
+import DisplayOpenedCards from './DisplayCard';
 // api
 import CharacterApi from 'apis/CharacterApi';
 import TeamApi from 'apis/TeamApi';
 import { useTitle } from 'dapp/hook';
 
 import FilterComponent from 'components/FilterComponent';
-import { elementDropdown, rarityDropdown, cardTypeDropdown } from 'utils/dataFilter';
+import { elementDropdown, rarityDropdown, cardTypeDropdown, ListedOrNotDropdown } from 'utils/dataFilter';
 import Loader from 'components/Loader';
 import PaginatorCustom from 'components/PaginatorCustom';
 function Card() {
@@ -65,6 +65,7 @@ function Card() {
   const [elementState, setElementState] = React.useState('');
   const [teamIdState, setTeamIdState] = React.useState('');
   const [typeCardState, setTypeCardState] = React.useState('');
+  const [isListedState, setIsListedState] = React.useState('');
   //
 
   const [teamDropdown, setTeamDropdown] = React.useState([]);
@@ -195,7 +196,7 @@ function Card() {
     );
     if (isApproveForAll) setIsApprove(true);
   };
-  const getMyCard = async (rarity, element, teamId, typeCard) => {
+  const getMyCard = async (rarity, element, teamId, typeCard, isListed) => {
     if (user) {
       const { data: listCard } = await CharacterApi.getMyList({
         userId: user._id,
@@ -203,7 +204,8 @@ function Card() {
         rarity,
         element,
         teamId,
-        typeCard
+        typeCard,
+        isListed
       });
       setListCardState(listCard.docs);
       console.log('listCard', listCard.docs);
@@ -214,7 +216,7 @@ function Card() {
   //Get Team Dropdown
   const getTeams = async () => {
     const { data: listTeams } = await TeamApi.getALl();
-    const teams = listTeams.map((i) => ({ value: i.teamId, id: i._id, label: i.name }));
+    const teams = listTeams.map((i) => ({ value: i.teamId, _id: i._id, label: i.name }));
     // console.log('listTeams', listTeams);
     setTeamDropdown(teams);
   };
@@ -241,6 +243,12 @@ function Card() {
     setCurrentPage(1);
   };
 
+  const handleChangeIsListed = (isListed) => {
+    console.log('isListed', isListed);
+    setIsListedState(isListed);
+    setCurrentPage(1);
+  };
+
   React.useEffect(() => {
     document.title = 'FWAR - MY CARDS';
     const listCartLocalStorageJson = localStorage.getItem('cardItem');
@@ -254,7 +262,7 @@ function Card() {
 
     if (account) {
       approveInit();
-      getMyCard(rarityState, elementState, teamIdState, typeCardState);
+      getMyCard(rarityState, elementState, teamIdState, typeCardState, isListedState);
       getTeams();
       return () => {
         setListCardStorage();
@@ -269,7 +277,8 @@ function Card() {
     rarityState,
     elementState,
     teamIdState,
-    typeCardState
+    typeCardState,
+    isListedState
   ]);
   let history = useHistory();
   const baseStyles = {
@@ -302,7 +311,7 @@ function Card() {
       >
         <Grid templateColumns="repeat(6, 1fr)" gap={4}>
           <GridItem colSpan={{ base: 6, md: 5 }}>
-            <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+            <Grid templateColumns="repeat(5, 1fr)" gap={4}>
               <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
                 <FilterComponent
                   placeholder="CardType"
@@ -333,6 +342,14 @@ function Card() {
                   handleChange={handleChangeTeamId}
                   valueState={teamIdState}
                   optionDropdown={teamDropdown}
+                />
+              </GridItem>
+              <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <FilterComponent
+                  placeholder="ListedOrNot"
+                  handleChange={handleChangeIsListed}
+                  valueState={isListedState}
+                  optionDropdown={ListedOrNotDropdown}
                 />
               </GridItem>
             </Grid>

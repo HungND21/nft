@@ -1,20 +1,31 @@
-import { Box, Image, Text, HStack, Flex } from '@chakra-ui/react';
+import { Box, Image, Text, IconButton, Stack ,HStack} from '@chakra-ui/react';
 import React from 'react';
+import { MinusIcon } from '@chakra-ui/icons';
 import {GiAlliedStar, GiCrossedSwords} from 'react-icons/gi';
 
-function DisplayOrderCards({ info, text = false, isOne = false }) {
+function DisplayOpenedCards({ info, isCart = false, onremove}) {
   // console.log('info', info);
 
   return (
     <>
       <Box>
         <Box position="relative">
+          <Stack position="absolute" top="0" right="0" zIndex="1">
+            {isCart && (
+              <IconButton
+                position="relative"
+                icon={<MinusIcon />}
+                colorScheme="red"
+                onClick={onremove}
+              ></IconButton>
+            )}
+          </Stack>
           {info && (
-            <Image src={`/assets/card/rarity/${info.rarity}.png`} width="100%" height="100%" />
+            <Image src={`/assets/card/rarity/${info['rarity']}.png`} width="100%" height="100%" />
           )}
           {info && (
             <Image
-              src={`/assets/card/element/${info.element}.png`}
+              src={`/assets/card/element/${info['element']}.png`}
               width="100%"
               height="100%"
               position="absolute"
@@ -23,7 +34,9 @@ function DisplayOrderCards({ info, text = false, isOne = false }) {
           )}
           {info && (
             <Image
-              src={`/assets/char/T_${info.teamId}.png`}
+              src={`/assets/char/T_${
+                info['teamId'].teamId ? info['teamId'].teamId : info.teamId
+              }.png`}
               width="100%"
               height="100%"
               position="absolute"
@@ -33,11 +46,12 @@ function DisplayOrderCards({ info, text = false, isOne = false }) {
             />
           )}
 
-          {text && (
             <Box
+              // bgRepeat="no-repeat"
+              // bgSize="100% 100%"
               position="absolute"
               width="100%"
-              bottom={isOne ? '13.5%' : '13.5%'}
+              bottom="12%"
               left="0%"
               p="0"
               // color="white"
@@ -47,8 +61,8 @@ function DisplayOrderCards({ info, text = false, isOne = false }) {
               fontWeight="bold"
             >
               {/* <Text>NFT {info['tokenId']}</Text> */}
-              <Text fontSize={isOne ? "60%" : "30%"}>NFT {info && info.nftId}</Text>
-              <HStack justify="center" spacing="24px" fontSize={isOne ? "60%" : "30%"}>
+              <Text fontSize="60%">NFT {info && info.nftId}</Text>
+              <HStack justify="center" spacing="24px" fontSize="50%">
                 <HStack spacing="5px">
                   <GiAlliedStar/>  
                   <Text>{info && info.level}</Text>
@@ -58,13 +72,11 @@ function DisplayOrderCards({ info, text = false, isOne = false }) {
                   <Text>{info && info.attack}</Text>
                   </HStack>
               </HStack>
-              
             </Box>
-          )}
         </Box>
       </Box>
     </>
   );
 }
 
-export default DisplayOrderCards;
+export default DisplayOpenedCards;

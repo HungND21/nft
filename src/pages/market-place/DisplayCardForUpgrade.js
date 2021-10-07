@@ -2,7 +2,7 @@ import { Box, Image, Text, IconButton, Stack } from '@chakra-ui/react';
 import React from 'react';
 import { MinusIcon } from '@chakra-ui/icons';
 
-function DisplayCardSelect({ info, text = false, isCart = false, onremove }) {
+function DisplayCardForUpgrade({ info, text = false }) {
   // console.log('info', info);
 
   return (
@@ -10,14 +10,6 @@ function DisplayCardSelect({ info, text = false, isCart = false, onremove }) {
       <Box>
         <Box position="relative">
           <Stack position="absolute" top="0" right="0" zIndex="1">
-            {isCart && (
-              <IconButton
-                position="relative"
-                icon={<MinusIcon />}
-                colorScheme="red"
-                onClick={onremove}
-              ></IconButton>
-            )}
           </Stack>
           {info && (
             <Image src={`/assets/card/rarity/${info['rarity']}.png`} width="100%" height="100%" />
@@ -71,4 +63,4 @@ function DisplayCardSelect({ info, text = false, isCart = false, onremove }) {
   );
 }
 
-export default DisplayCardSelect;
+export default DisplayCardForUpgrade;

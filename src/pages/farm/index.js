@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { Box, useColorMode, useTheme } from '@chakra-ui/react';
+import { Box, useColorMode, useTheme, ScaleFade } from '@chakra-ui/react';
 import AlertNews from './AlertNews';
 import Loadable from 'components/Loadable';
 import Statistics from './Statistics';
@@ -11,6 +11,7 @@ import { ethers } from 'ethers';
 import { useEthers } from '@usedapp/core';
 import LPFBNBUSD from './pool/FBNB-Usdt';
 import { useAllMyKey, useDailyRewards, useTitle, useTotalStakedAndPendingKey } from 'dapp/hook';
+import ScaleFadeCustom from 'components/ScaleFadeCustom';
 
 // fake data
 const news = [
@@ -53,28 +54,30 @@ const Farm = () => {
     <AlertNews key={i.id} id={i.id} content={i.content} onClose={handleCloseMessage} />
   ));
   return (
-    <Box>
-      {alerts}
+    <>
+      <ScaleFadeCustom>
+        {alerts}
 
-      {/* Statistics */}
+        {/* Statistics */}
 
-      <Box
-        bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-        marginBottom="2rem"
-        borderRadius="md"
-        boxShadow={theme.shadows.content}
-      >
-        <Statistics
-          totalStake={totalStake}
-          dailyRewards={dailyRewards}
-          allMyKey={allMyKey}
-          pendingKeyState={pendingKeyState}
-        />
-      </Box>
-      <Box marginBottom="2rem">
-        <ListPool account={account} FwarPool={fwarPool} signer={signer} listPool={listPool} />
-      </Box>
-    </Box>
+        <Box
+          bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
+          marginBottom="2rem"
+          borderRadius="md"
+          boxShadow={theme.shadows.content}
+        >
+          <Statistics
+            totalStake={totalStake}
+            dailyRewards={dailyRewards}
+            allMyKey={allMyKey}
+            pendingKeyState={pendingKeyState}
+          />
+        </Box>
+        <Box marginBottom="2rem">
+          <ListPool account={account} FwarPool={fwarPool} signer={signer} listPool={listPool} />
+        </Box>
+      </ScaleFadeCustom>
+    </>
   );
 };
 export default Farm;

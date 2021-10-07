@@ -9,14 +9,20 @@ const UserApi = {
     // character?_userId=6154b18b08495c9b6ccaa330&_page=1&_rarity=4&_element=1
     console.log('teamId', teamId);
     page = page ? page : '';
-    isListed = isListed !== undefined ? isListed : '';
+    isListed = isListed && isListed.value ? isListed.value : '';
 
+<<<<<<< HEAD
     rarity = rarity && rarity.value ? rarity.value : '';
-
     element = element && element.value ? element.value : '';
-    teamId = teamId && teamId.id ? teamId.id : '';
+    teamId = teamId && teamId._id ? teamId._id : '';
+=======
+    rarity = rarity ? rarity : '';
+
+    element = element && element ? element : '';
+    teamId = teamId ? teamId : '';
+>>>>>>> 26490e54cd6c2b9323cd78e6a4d2820b79ef10c1
     level = level ? level : '';
-    typeCard = typeCard && typeCard.value ? typeCard.value : '';
+    typeCard = typeCard ? typeCard : '';
 
     const url = `/character?_userId=${userId}&_page=${page}&_rarity=${rarity}&_element=${element}&_teamId=${teamId}&_level=${level}&_cardType=${typeCard}&_isListed=${isListed}`;
     return axiosClient.get(url);

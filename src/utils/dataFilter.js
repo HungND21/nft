@@ -24,3 +24,8 @@ export const sortDropdown = [
   {value: '1', column: 'price', order:'asc', label: 'Price: Low To High'},
   {value: '2', column: 'price', order:'desc', label: 'Price: High To Low'}
 ]
+
+export const ListedOrNotDropdown = [
+  {value: 'true', label: "Listed NFT"},
+  {value: 'false', label: "Unlisted NFT"}
+]

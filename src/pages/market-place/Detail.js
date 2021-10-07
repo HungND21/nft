@@ -32,7 +32,8 @@ import {
   Tr,
   useColorMode,
   useDisclosure,
-  useTheme
+  useTheme,
+  ScaleFade
 } from '@chakra-ui/react';
 import { useEthers } from '@usedapp/core';
 import CharacterApi from 'apis/CharacterApi';
@@ -48,7 +49,7 @@ import { FiArrowUp, FiPlus } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { elementDropdown, rarityDropdown } from 'utils/dataFilter';
-import DisplayCardSelect from './DisplayCardSelect';
+import DisplayCardForUpgrade from './DisplayCardForUpgrade';
 import ItemListComponent from './ItemListComponent';
 
 function Detail() {
@@ -162,8 +163,9 @@ function Detail() {
         const { data: listCardSelect } = await CharacterApi.getMyList({
           userId: user._id,
           isListed: false,
-          teamId: infoNft.teamId,
-          page: currentPage
+          teamId: infoNft.teamId._id,
+          page: currentPage,
+          element: infoNft.element
         });
         setListSelectCard(listCardSelect.docs);
         setPagesQuantity(listCardSelect.totalPages);
@@ -225,105 +227,114 @@ function Detail() {
   }, [account, isMyNft, isApprove]);
   return (
     <>
-      {/* bread crumb */}
-      <Stack direction="row" align="center" mb="21px">
-        <Text
-          as="h2"
-          fontWeight="medium"
-          fontSize={25}
-          lineHeight="shorter"
-          pr={2}
-          borderRight="1px solid #d6dce1"
-        >
-          NFT Details
-        </Text>
-        <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />}>
-          <BreadcrumbItem>
-            <Link to="/farm">
-              <Text color={theme.colors.primary.base}>Home</Text>
-            </Link>
-          </BreadcrumbItem>
-
-          <BreadcrumbItem>
-            <Text>NFT</Text>
-          </BreadcrumbItem>
-
-          <BreadcrumbItem isCurrentPage>
-            <BreadcrumbLink href="#">Details</BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
-      </Stack>
-
-      {/*  */}
-      <Grid templateColumns="repeat(3, 1fr)" gap={4} mt={10}>
-        <GridItem colSpan={{ base: 3, md: 1 }}>
-          <Button
-            leftIcon={<ArrowBackIcon />}
-            // colorScheme="purple"
-            variant="solid"
-            onClick={() => history.goBack()}
+      <ScaleFade initialScale={0.9} in>
+        {/* bread crumb */}
+        <Stack direction="row" align="center" mb="21px">
+          <Text
+            as="h2"
+            fontWeight="medium"
+            fontSize={25}
+            lineHeight="shorter"
+            pr={2}
+            borderRight="1px solid #d6dce1"
           >
-            Back
-          </Button>
-          {infoNft && <DisplayOpenedCards info={infoNft} text={true} isDetail={true} />}
-        </GridItem>
-        <GridItem colSpan={{ base: 3, md: 2 }}>
-          <Tabs>
-            <TabList>
-              <Tab>Details</Tab>
-              {isMyNft && infoNft && Number(infoNft['rarity']) >= 4 && !infoNft.isListed && (
-                <Tab>Upgrade</Tab>
-              )}
-              {/* {isMyNft && <Tab>Upgrade</Tab>} */}
-            </TabList>
+            NFT Details
+          </Text>
+          <Breadcrumb spacing="8px" separator={<ChevronRightIcon color="gray.500" />}>
+            <BreadcrumbItem>
+              <Link to="/farm">
+                <Text color={theme.colors.primary.base}>Home</Text>
+              </Link>
+            </BreadcrumbItem>
 
-            <TabPanels>
-              <TabPanel
-                mt={4}
-                bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-                boxShadow="content"
-                borderRadius="6px"
-              >
-                <Box>{infoNft && infoNft['teamId'].cardName}</Box>
-                <Grid templateColumns="repeat(12, 1fr)" gap={4} mt={10}>
-                  <GridItem colSpan={{ base: 12, lg: 5 }}>
-                    <List spacing={3} paddingBottom={5}>
-                      <ItemListComponent name="NFT Token ID" value={id} />
-                      {infoNft && (
-                        <>
-                          <ItemListComponent name="Attack" value={Number(infoNft['baseAttack'])} />
-                          <ItemListComponent name="Defend" value={Number(infoNft['baseDefense'])} />
-                          <ItemListComponent name="Health" value={Number(infoNft['baseHeath'])} />
-                          <ItemListComponent
-                            name="Element Type"
-                            value={
-                              elementDropdown.find((i) => i.value === infoNft['element']).label
-                            }
-                          />
-                          <ItemListComponent name="Level" value={infoNft['level']} />
-                          <ItemListComponent
-                            name="Rarity"
-                            value={rarityDropdown.find((i) => i.value === infoNft['rarity']).label}
-                          />
-                          <ItemListComponent name="Team" value={infoNft['teamId'].name} />
-                        </>
-                      )}
-                      {/* <ItemListComponent name="Level" value={id} /> */}
-                      {/* <ItemListComponent name="HashPower" value={id} /> */}
-                    </List>
-                  </GridItem>
-                  <GridItem colSpan={{ base: 12, lg: 7 }}>canvas </GridItem>
-                </Grid>
-              </TabPanel>
-              <TabPanel
-                mt={4}
-                bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-                boxShadow="content"
-                borderRadius="6px"
-              >
-                <Stack direction="row" align="center" justify="space-between">
-                  <Box>Upgrade to Level {infoNft && Number(infoNft['level']) + 1}</Box>
-                  {/* <Grid templateColumns="repeat(4, 1fr)" gap={2} align="center">
+            <BreadcrumbItem>
+              <Text>NFT</Text>
+            </BreadcrumbItem>
+
+            <BreadcrumbItem isCurrentPage>
+              <BreadcrumbLink href="#">Details</BreadcrumbLink>
+            </BreadcrumbItem>
+          </Breadcrumb>
+        </Stack>
+
+        {/*  */}
+        <Grid templateColumns="repeat(3, 1fr)" gap={4} mt={10}>
+          <GridItem colSpan={{ base: 3, md: 1 }}>
+            <Button
+              leftIcon={<ArrowBackIcon />}
+              // colorScheme="purple"
+              variant="solid"
+              onClick={() => history.goBack()}
+            >
+              Back
+            </Button>
+            {infoNft && <DisplayOpenedCards info={infoNft} text={true} isDetail={true} />}
+          </GridItem>
+          <GridItem colSpan={{ base: 3, md: 2 }}>
+            <Tabs>
+              <TabList>
+                <Tab>Details</Tab>
+                {isMyNft && infoNft && Number(infoNft['rarity']) >= 4 && !infoNft.isListed && (
+                  <Tab>Upgrade</Tab>
+                )}
+                {/* {isMyNft && <Tab>Upgrade</Tab>} */}
+              </TabList>
+
+              <TabPanels>
+                <TabPanel
+                  mt={4}
+                  bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
+                  boxShadow="content"
+                  borderRadius="6px"
+                >
+                  <Box>{infoNft && infoNft['teamId'].cardName}</Box>
+                  <Grid templateColumns="repeat(12, 1fr)" gap={4} mt={10}>
+                    <GridItem colSpan={{ base: 12, lg: 5 }}>
+                      <List spacing={3} paddingBottom={5}>
+                        <ItemListComponent name="NFT Token ID" value={id} />
+                        {infoNft && (
+                          <>
+                            <ItemListComponent
+                              name="Attack"
+                              value={Number(infoNft['baseAttack'])}
+                            />
+                            <ItemListComponent
+                              name="Defend"
+                              value={Number(infoNft['baseDefense'])}
+                            />
+                            <ItemListComponent name="Health" value={Number(infoNft['baseHeath'])} />
+                            <ItemListComponent
+                              name="Element Type"
+                              value={
+                                elementDropdown.find((i) => i.value === infoNft['element']).label
+                              }
+                            />
+                            <ItemListComponent name="Level" value={infoNft['level']} />
+                            <ItemListComponent
+                              name="Rarity"
+                              value={
+                                rarityDropdown.find((i) => i.value === infoNft['rarity']).label
+                              }
+                            />
+                            <ItemListComponent name="Team" value={infoNft['teamId'].name} />
+                          </>
+                        )}
+                        {/* <ItemListComponent name="Level" value={id} /> */}
+                        {/* <ItemListComponent name="HashPower" value={id} /> */}
+                      </List>
+                    </GridItem>
+                    <GridItem colSpan={{ base: 12, lg: 7 }}>canvas </GridItem>
+                  </Grid>
+                </TabPanel>
+                <TabPanel
+                  mt={4}
+                  bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
+                  boxShadow="content"
+                  borderRadius="6px"
+                >
+                  <Stack direction="row" align="center" justify="space-between">
+                    <Box>Upgrade to Level {infoNft && Number(infoNft['level']) + 1}</Box>
+                    {/* <Grid templateColumns="repeat(4, 1fr)" gap={2} align="center">
                     {Object.keys(needUpgrade).length && (
                       <>
                         <Box>
@@ -341,108 +352,64 @@ function Detail() {
                       </>
                     )}
                   </Grid> */}
-                </Stack>
-                <Stack direction="row" align="center" justify="space-between">
-                  <Box>
-                    {needUpgrade && Object.keys(needUpgrade).length > 0 && (
-                      <>
-                        {Object.entries(needUpgrade).map((i, index) => (
-                          <Stack key={index} direction="row" align="center">
-                            <Image
-                              src={`/assets/card/rarity/${
-                                i[0] === 'baseAmount'
-                                  ? 4
-                                  : i[0] === 'junkAmount'
-                                  ? 1
-                                  : i[0] === 'normalAmount'
-                                  ? 2
-                                  : i[0] === 'rareAmount' && 3
-                              }.png`}
-                              w="50px"
-                            />
-                            <Box>x {i[1]}</Box>
-                          </Stack>
-                        ))}
-                      </>
-                    )}
-                  </Box>
-                  <Button leftIcon={<FiPlus />} onClick={onOpen}>
-                    Select
-                  </Button>
-                </Stack>
-                <Box pt={6}>
-                  <Button
-                    // leftIcon={<FiArrowUp />}
-                    leftIcon={
-                      isLoading ? (
-                        <Spinner
-                          thickness="5px"
-                          speed="0.65s"
-                          emptyColor={theme.colors.primary.base}
-                          color="blue.500"
-                        />
-                      ) : (
-                        <FiArrowUp />
-                      )
-                    }
-                    w="full"
-                    bg={theme.colors.primary.base}
-                    color="white"
-                    _hover={{ bg: theme.colors.primary.light }}
-                    isDisabled={isLoading || (selected && !selected.length > 0)}
-                    onClick={() => {
-                      isApprove ? handleUpgrade() : handleApproveForAll();
-                    }}
-                  >
-                    {isApprove ? `Upgrade` : `Approve`}
-                  </Button>
-                </Box>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </GridItem>
-      </Grid>
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
-        <ModalOverlay />
-        <ModalContent overflow="hidden" color={colorMode === 'dark' && 'white'}>
-          <ModalHeader
-            fontSize="18px"
-            bg={colorMode === 'dark' ? theme.colors.dark.bg : theme.colors.light.bg}
-          >
-            Please select {infoNft && Number(infoNft['level']) + 1} cards
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  <Th>Card</Th>
-                  <Th>Level</Th>
-                  <Th>Team</Th>
-                  <Th>Rarity</Th>
-                  <Th>Element</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {listSelectCard &&
-                  listSelectCard.map((card, index) => (
-                    <Tr
-                      key={card._id}
-                      _hover={{
-                        cursor: 'pointer',
-                        bg: colorMode === 'dark' ? theme.colors.dark.light : theme.colors.light.bg
-                      }}
-                      onClick={(e) => handleClick(e, index)}
-                      bg={
-                        selected.length &&
-                        selected.includes(index) &&
-                        (colorMode === 'dark' ? theme.colors.dark.bg : theme.colors.light.base)
+                  </Stack>
+                  <Stack direction="row" align="center" justify="space-between">
+                    <Box>
+                      {needUpgrade && Object.keys(needUpgrade).length > 0 && (
+                        <>
+                          {Object.entries(needUpgrade).map((i, index) => (
+                            <Stack key={index} direction="row" align="center">
+                              <Image
+                                src={`/assets/card/rarity/${
+                                  i[0] === 'baseAmount'
+                                    ? 4
+                                    : i[0] === 'junkAmount'
+                                    ? 1
+                                    : i[0] === 'normalAmount'
+                                    ? 2
+                                    : i[0] === 'rareAmount' && 3
+                                }.png`}
+                                w="50px"
+                              />
+                              <Box>x {i[1]}</Box>
+                            </Stack>
+                          ))}
+                        </>
+                      )}
+                    </Box>
+                    <Button leftIcon={<FiPlus />} onClick={onOpen}>
+                      Select
+                    </Button>
+                  </Stack>
+                  <Box pt={6}>
+                    <Button
+                      // leftIcon={<FiArrowUp />}
+                      leftIcon={
+                        isLoading ? (
+                          <Spinner
+                            thickness="5px"
+                            speed="0.65s"
+                            emptyColor={theme.colors.primary.base}
+                            color="blue.500"
+                          />
+                        ) : (
+                          <FiArrowUp />
+                        )
                       }
+                      w="full"
+                      bg={theme.colors.primary.base}
+                      color="white"
+                      _hover={{ bg: theme.colors.primary.light }}
+                      isDisabled={isLoading || (selected && !selected.length > 0)}
+                      onClick={() => {
+                        isApprove ? handleUpgrade() : handleApproveForAll();
+                      }}
                     >
+<<<<<<< HEAD
                       <Td>
                         {/* rgb(236 244 252) */}
                         <Link to={`/market-place/detail/${1}`}>
-                          <DisplayCardSelect info={card} text={true} />
+                          <DisplayCardForUpgrade info={card} text={true} />
                         </Link>
                       </Td>
                       <Td>{card.level}</Td>
@@ -454,21 +421,84 @@ function Detail() {
               </Tbody>
             </Table>
           </ModalBody>
+=======
+                      {isApprove ? `Upgrade` : `Approve`}
+                    </Button>
+                  </Box>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </GridItem>
+        </Grid>
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+          <ModalOverlay />
+          <ModalContent overflow="hidden" color={colorMode === 'dark' && 'white'}>
+            <ModalHeader
+              fontSize="18px"
+              bg={colorMode === 'dark' ? theme.colors.dark.bg : theme.colors.light.bg}
+            >
+              Please select {infoNft && Number(infoNft['level']) + 1} cards
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th>Card</Th>
+                    <Th>Level</Th>
+                    <Th>Team</Th>
+                    <Th>Rarity</Th>
+                    <Th>Element</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {listSelectCard &&
+                    listSelectCard.map((card, index) => (
+                      <Tr
+                        key={card._id}
+                        _hover={{
+                          cursor: 'pointer',
+                          bg: colorMode === 'dark' ? theme.colors.dark.light : theme.colors.light.bg
+                        }}
+                        onClick={(e) => handleClick(e, index)}
+                        bg={
+                          selected.length &&
+                          selected.includes(index) &&
+                          (colorMode === 'dark' ? theme.colors.dark.bg : theme.colors.light.base)
+                        }
+                      >
+                        <Td>
+                          {/* rgb(236 244 252) */}
+                          <Link to={`/market-place/detail/${1}`}>
+                            <DisplayCardSelect info={card} text={true} />
+                          </Link>
+                        </Td>
+                        <Td>{card.level}</Td>
+                        <Td>{card.teamId.name}</Td>
+                        <Td>{card.rarity}</Td>
+                        <Td>{elementDropdown.find((i) => i.value === card.element).label}</Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
+            </ModalBody>
+>>>>>>> 26490e54cd6c2b9323cd78e6a4d2820b79ef10c1
 
-          <ModalFooter>
-            {/* <Button colorScheme="blue" w="full" mr={3} onClick={onClose}>
+            <ModalFooter>
+              {/* <Button colorScheme="blue" w="full" mr={3} onClick={onClose}>
               Close
             </Button> */}
-            <Box w="100%">
-              <PaginatorCustom
-                pagesQuantity={pagesQuantity}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-              />
-            </Box>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+              <Box w="100%">
+                <PaginatorCustom
+                  pagesQuantity={pagesQuantity}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                />
+              </Box>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </ScaleFade>
     </>
   );
 }
