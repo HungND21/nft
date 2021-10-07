@@ -1,12 +1,10 @@
-import React from 'react';
-import moment from 'moment';
 // react
 // lib ui
-
 import {
   Box,
   Button,
   Grid,
+  Icon,
   Image,
   Input,
   InputGroup,
@@ -21,30 +19,27 @@ import {
   Thead,
   Tr,
   useColorMode,
-  useTheme,
-  Icon
+  useTheme
 } from '@chakra-ui/react';
-import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-// smart contract
-import { ethers } from 'ethers';
 import { useEthers } from '@usedapp/core';
-import FwarChar from 'contracts/FwarChar/FWarChar.json';
-import FwarCharDelegate from 'contracts/FwarChar/FwarCharDelegate.json';
-
-import { default as FwarKey, default as FwarKeyContract } from 'contracts/FwarKey/FWarKey.json';
-import { useAllMyKey, useTitle } from 'dapp/hook';
-import toast from 'react-hot-toast';
-import { FiKey, FiRefreshCcw, FiUnlock, FiEye } from 'react-icons/fi';
 // api
 // import CharacterApi from 'apis/CharacterApi';
 import OpenChestHistoryApi from 'apis/OpenChestHistoryApi';
-// import TeamApi from 'apis/TeamApi';
-// file project
-import OpenedCards from './OpenedCards';
+import { usePaginator } from 'chakra-paginator';
 import DisplayOpenedCards from 'components/DisplayCard';
-import { formatDate } from 'utils/formatDate';
+import PaginatorCustom from 'components/PaginatorCustom';
+import ScaleFadeCustom from 'components/ScaleFadeCustom';
+import FwarCharDelegate from 'contracts/FwarChar/FwarCharDelegate.json';
+import { default as FwarKey, default as FwarKeyContract } from 'contracts/FwarKey/FWarKey.json';
+import { useAllMyKey, useTitle } from 'dapp/hook';
+// smart contract
+import { ethers } from 'ethers';
+import moment from 'moment';
+import React from 'react';
+import toast from 'react-hot-toast';
+import { FiEye, FiKey, FiUnlock } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const ChestInit = () => {
   useTitle('FWAR - OPEN CHEST');
@@ -158,10 +153,7 @@ const ChestInit = () => {
     setIsApprove(true);
     setIsLoadingOpen(false);
   };
-  const handleReturn = async () => {
-    setOpenedCards([]);
-    setAmount('');
-  };
+
   const listOpenedChest = listOpenedChestHistory?.map((item, index) => (
     <Tr key={item._id}>
       {/* <Td>{item.createdAt}</Td> */}
@@ -191,174 +183,149 @@ const ChestInit = () => {
     </Tr>
   ));
 
-  const baseStyles = {
-    w: 7,
-    fontSize: 'sm'
-  };
-  const activeStyles = {
-    ...baseStyles,
-    _hover: {
-      bg: 'green.300'
-    },
-    bg: 'green.300'
-  };
   return (
     <>
-      <Box
-        bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-        marginBottom="26px"
-        borderRadius="md"
-        boxShadow={theme.shadows.content}
-      >
-        {/* <Header /> */}
-      </Box>
-      <Box marginBottom="26px" position="relative">
-        <Image src="/assets/chest-bg.png" top="0" h="100%" w="100%" />
-        <Image src="/assets/chest.png" position="absolute" width="52%" top="3px" left="25%" />
+      <ScaleFadeCustom>
+        <Box
+          bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
+          marginBottom="26px"
+          borderRadius="md"
+          boxShadow={theme.shadows.content}
+        >
+          {/* <Header /> */}
+        </Box>
+        <Box marginBottom="26px" position="relative">
+          <Image src="/assets/chest-bg.png" top="0" h="100%" w="100%" />
+          <Image src="/assets/chest.png" position="absolute" width="52%" top="3px" left="25%" />
 
-        {isLoadingOpen && (
+          {isLoadingOpen && (
+            <Stack
+              direction="row"
+              justify="center"
+              align="center"
+              position="absolute"
+              top="0"
+              w="100%"
+              h="100%"
+              zIndex="20"
+              bg={theme.colors.primary.light}
+            >
+              <Spinner
+                thickness="5px"
+                speed="0.65s"
+                emptyColor={theme.colors.primary.base}
+                color="blue.500"
+                size="xl"
+              />
+            </Stack>
+          )}
           <Stack
             direction="row"
+            align="center"
+            justify="center"
+            w="100%"
+            h="87%"
+            pt="2%"
+            position="absolute"
+            top="0"
+            left="0"
+            zIndex="10"
+
+            // bg={theme.colors.primary.light}
+            // overflow="hidden"
+          >
+            {openedCard.length > 0 && (
+              <Grid templateColumns="repeat(5 , 1fr)" gap={1} w="68%">
+                {openedCard.map((cardInfo) => (
+                  <Box key={cardInfo.nftId}>
+                    <DisplayOpenedCards info={cardInfo} />
+                  </Box>
+                ))}
+              </Grid>
+            )}
+          </Stack>
+          <Box
+            position="absolute"
+            w="100%"
+            top="2%"
+            textAlign="center"
+            color="white"
+            fontSize="1.5rem"
+            fontWeight="bold"
+          >
+            {Intl.NumberFormat().format(allMyKey)} Key
+          </Box>
+          <Stack
+            direction="column"
             justify="center"
             align="center"
             position="absolute"
-            top="0"
             w="100%"
-            h="100%"
-            zIndex="20"
-            bg={theme.colors.primary.light}
+            bottom="2%"
+            left="0"
+            zIndex="100"
           >
-            <Spinner
-              thickness="5px"
-              speed="0.65s"
-              emptyColor={theme.colors.primary.base}
-              color="blue.500"
-              size="xl"
-            />
-          </Stack>
-        )}
-        <Stack
-          direction="row"
-          align="center"
-          justify="center"
-          w="100%"
-          h="87%"
-          pt="2%"
-          position="absolute"
-          top="0"
-          left="0"
-          zIndex="10"
-
-          // bg={theme.colors.primary.light}
-          // overflow="hidden"
-        >
-          {openedCard.length > 0 && (
-            <Grid templateColumns="repeat(5 , 1fr)" gap={1} w="68%">
-              {openedCard.map((cardInfo) => (
-                <Box key={cardInfo.nftId}>
-                  <DisplayOpenedCards info={cardInfo} />
-                </Box>
-              ))}
-            </Grid>
-          )}
-        </Stack>
-        <Box
-          position="absolute"
-          w="100%"
-          top="2%"
-          textAlign="center"
-          color="white"
-          fontSize="1.5rem"
-          fontWeight="bold"
-        >
-          {Intl.NumberFormat().format(allMyKey)} Key
-        </Box>
-        <Stack
-          direction="column"
-          justify="center"
-          align="center"
-          position="absolute"
-          w="100%"
-          bottom="2%"
-          left="0"
-          zIndex="100"
-        >
-          {!isLoadingOpen && (
-            <>
-              {isApprove && (
-                <InputGroup
-                  width="14%"
-                  bg="white"
-                  borderRadius="1rem"
-                  color={theme.colors.dark.light}
+            {!isLoadingOpen && (
+              <>
+                {isApprove && (
+                  <InputGroup
+                    width="14%"
+                    bg="white"
+                    borderRadius="1rem"
+                    color={theme.colors.dark.light}
+                  >
+                    <InputLeftElement pointerEvents="none" children={<FiKey color="gray.300" />} />
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      textAlign="center"
+                      _placeholder={{ color: theme.colors.dark.light }}
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                    />
+                    <InputRightElement pointerEvents="none" children="Key" />
+                  </InputGroup>
+                )}
+                <Button
+                  leftIcon={<FiUnlock />}
+                  size="sm"
+                  color={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
+                  bg={theme.colors.primary.base}
+                  onClick={() => {
+                    isApprove ? handleOpenChest(amount) : handleApprove();
+                  }}
                 >
-                  <InputLeftElement pointerEvents="none" children={<FiKey color="gray.300" />} />
-                  <Input
-                    type="number"
-                    placeholder="0"
-                    textAlign="center"
-                    _placeholder={{ color: theme.colors.dark.light }}
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                  />
-                  <InputRightElement pointerEvents="none" children="Key" />
-                </InputGroup>
-              )}
-              <Button
-                leftIcon={<FiUnlock />}
-                size="sm"
-                color={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-                bg={theme.colors.primary.base}
-                onClick={() => {
-                  isApprove ? handleOpenChest(amount) : handleApprove();
-                }}
-              >
-                {isApprove ? `Open` : `Approve`}
-              </Button>
-            </>
-          )}
-        </Stack>
-      </Box>
-      <Box>
-        <Box overflowY="scroll">
-          <Table variant="simple">
-            {/* <TableCaption>Paginate</TableCaption> */}
-            <Thead bgColor="gray.100">
-              <Tr>
-                <Th textAlign="center">TIME</Th>
-                {/* <Th>TYPE</Th> */}
-                <Th textAlign="center">AMOUNT</Th>
-                <Th>NFTS</Th>
-                <Th textAlign="center">TX</Th>
-              </Tr>
-            </Thead>
-            <Tbody>{listOpenedChest}</Tbody>
-          </Table>
+                  {isApprove ? `Open` : `Approve`}
+                </Button>
+              </>
+            )}
+          </Stack>
         </Box>
         <Box>
-          <Paginator
-            pagesQuantity={pagesQuantity}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-            activeStyles={activeStyles}
-            // normalStyles={normalStyles}
-            outerLimit={3}
-            innerLimit={3}
-          >
-            <Container align="center" justify="center" w="full" p={4}>
-              <Previous mx={4}>
-                Previous
-                {/* Or an icon from `react-icons` */}
-              </Previous>
-              <PageGroup isInline align="center" />
-              <Next mx={4}>
-                Next
-                {/* Or an icon from `react-icons` */}
-              </Next>
-            </Container>
-          </Paginator>
+          <Box overflowY="scroll">
+            <Table variant="simple">
+              {/* <TableCaption>Paginate</TableCaption> */}
+              <Thead bgColor="gray.100">
+                <Tr>
+                  <Th textAlign="center">TIME</Th>
+                  {/* <Th>TYPE</Th> */}
+                  <Th textAlign="center">AMOUNT</Th>
+                  <Th>NFTS</Th>
+                  <Th textAlign="center">TX</Th>
+                </Tr>
+              </Thead>
+              <Tbody>{listOpenedChest}</Tbody>
+            </Table>
+          </Box>
+          <Box>
+            <PaginatorCustom
+              pagesQuantity={pagesQuantity}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+            />
+          </Box>
         </Box>
-      </Box>
+      </ScaleFadeCustom>
     </>
   );
 };

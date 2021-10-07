@@ -14,7 +14,8 @@ import {
   Thead,
   Tr,
   useColorMode,
-  useTheme
+  useTheme,
+  ScaleFade
 } from '@chakra-ui/react';
 import React from 'react';
 import RankPlayerImage from './RankPlayerImage';
@@ -93,48 +94,50 @@ function LeaderBoard() {
 
   return (
     <>
-      <Tabs variant="unstyled">
-        <TabList display="flex" justifyContent="center" mb={6}>
-          <Tab _selected={{ color: 'white', bg: 'primary.base' }} borderRadius="6px">
-            Player Hash Power
-          </Tab>
-          <Tab _selected={{ color: 'white', bg: 'primary.base' }} borderRadius="6px">
-            NFTs Hash Power
-          </Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel
-            bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-            boxShadow="content"
-            p="0"
-          >
-            {rankPlayerTop3.length && <RankPlayerImage data={rankPlayerTop3} />}
-            <Box p={5}>
-              <Box overflowY="scroll">
-                <Table variant="simple">
-                  {/* <TableCaption>Paginate</TableCaption> */}
-                  <Thead bgColor="gray.100">
-                    <Tr>
-                      <Th>Ranking</Th>
-                      <Th>region</Th>
-                      <Th>Player</Th>
-                      <Th>strongest hero</Th>
-                      <Th>Hash Power</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>{data && listRankPlayer}</Tbody>
-                </Table>
+      <ScaleFade initialScale={1.15} in>
+        <Tabs variant="unstyled">
+          <TabList display="flex" justifyContent="center" mb={6}>
+            <Tab _selected={{ color: 'white', bg: 'primary.base' }} borderRadius="6px">
+              Player Hash Power
+            </Tab>
+            <Tab _selected={{ color: 'white', bg: 'primary.base' }} borderRadius="6px">
+              NFTs Hash Power
+            </Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel
+              bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
+              boxShadow="content"
+              p="0"
+            >
+              {rankPlayerTop3.length && <RankPlayerImage data={rankPlayerTop3} />}
+              <Box p={5}>
+                <Box overflowY="scroll">
+                  <Table variant="simple">
+                    {/* <TableCaption>Paginate</TableCaption> */}
+                    <Thead bgColor="gray.100">
+                      <Tr>
+                        <Th>Ranking</Th>
+                        <Th>region</Th>
+                        <Th>Player</Th>
+                        <Th>strongest hero</Th>
+                        <Th>Hash Power</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>{data && listRankPlayer}</Tbody>
+                  </Table>
+                </Box>
               </Box>
-            </Box>
-          </TabPanel>
-          <TabPanel
-            bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-            boxShadow="content"
-          >
-            <p>two!</p>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+            </TabPanel>
+            <TabPanel
+              bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
+              boxShadow="content"
+            >
+              <p>two!</p>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </ScaleFade>
     </>
   );
 }

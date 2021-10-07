@@ -1,6 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Stack, useTheme, Grid, useColorMode, GridItem, Button } from '@chakra-ui/react';
+import {
+  Box,
+  Stack,
+  useTheme,
+  Grid,
+  useColorMode,
+  GridItem,
+  Button,
+  ScaleFade
+} from '@chakra-ui/react';
 import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
 import toast from 'react-hot-toast';
 import { ethers } from 'ethers';
@@ -23,6 +32,7 @@ import { useTitle } from 'dapp/hook';
 import FilterComponent from 'components/FilterComponent';
 import PaginatorCustom from 'components/PaginatorCustom';
 import Loader from 'components/Loader';
+import ScaleFadeCustom from 'components/ScaleFadeCustom';
 
 function MarketPlace() {
   useTitle('FWAR - MARTKET PLACE');
@@ -188,159 +198,164 @@ function MarketPlace() {
   };
   return (
     <>
-      {/* bread crumb */}
-      {/* Sidebar */}
-      <Box
-        bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-        p={8}
-        boxShadow="content"
-        borderRadius={8}
-        position="relative"
-      >
-        <Grid templateColumns="repeat(5, 1fr)" gap={4}>
-          <GridItem colSpan={{ base: 6, md: 5 }}>
-            <Grid templateColumns="repeat(5, 1fr)" alignItems="center" gap={4}>
-              <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-                <FilterComponent
-                  placeholder="CardType"
-                  handleChange={handleChangeCardType}
-                  valueState={typeCardState}
-                  optionDropdown={cardTypeDropdown}
-                />
-              </GridItem>
-              <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-                <FilterComponent
-                  placeholder="Rarity"
-                  handleChange={handleChangeRarity}
-                  valueState={rarityState}
-                  optionDropdown={rarityDropdown}
-                />
-              </GridItem>
-              <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-                <FilterComponent
-                  placeholder="Element"
-                  handleChange={handleChangeElement}
-                  valueState={elementState}
-                  optionDropdown={elementDropdown}
-                />
-              </GridItem>
-              <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-                <FilterComponent
-                  placeholder="Team"
-                  handleChange={handleChangeTeamId}
-                  valueState={teamIdState}
-                  optionDropdown={teamDropdown}
-                />
-              </GridItem>
-              <GridItem>
-                <FilterComponent
-                  placeholder="Sort"
-                  handleChange={handleChangeSort}
-                  valueState={sortState}
-                  optionDropdown={sortDropdown}
-                />
-              </GridItem>
-            </Grid>
-          </GridItem>
-        </Grid>
-      </Box>
-
-      <Box display="flex" alignItems="start">
+      <ScaleFadeCustom>
+        {/* Sidebar */}
         <Box
-          display={{
-            base: 'none',
-            lg: 'block'
-          }}
-        ></Box>
-        <Box width="100%" marginLeft={6}>
-          <Grid
-            templateColumns={{
-              base: 'repeat(1, 1fr)',
-              md: 'repeat(2, 1fr)',
-              lg: 'repeat(4, 1fr)'
-            }}
-            gap={6}
-            mt={6}
-          >
-            {listOrder &&
-              listOrder.length > 0 &&
-              listOrder.map((card, index) => (
-                <Box
-                  key={card.orderId}
-                  w="100%"
-                  bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-                  boxShadow="content"
-                  borderRadius="6px"
-                  overflow="hidden"
-                  pos="relative"
-                  _hover={{ boxShadow: '0 4px 25px 0 rgba(34,41,47,.25)' }}
-                >
-                  <Stack direction="column" justify="space-between" h="100%">
-                    <Grid
-                      templateColumns={card.nfts.length !== 1 ? 'repeat(2, 1fr)' : 'repeat(1, 1fr)'}
-                      templateRows={card.nfts.length !== 1 ? 'repeat(2, 1fr)' : 'repeat(1, 1fr)'}
-                    >
-                      {card.nfts.map((item) => (
-                        <Link to={`/market-place/detail/${item.nftId}`} key={item.nftId}>
-                          <DisplayOrderCards
-                            info={item}
-                            text={true}
-                            isOne={card.nfts.length === 1}
-                          />
-                        </Link>
-                      ))}
-                    </Grid>
-                    <Box color="white" align="center">
-                      <Grid gridTemplateColumns="repeat(2, 1fr)">
-                        <Box bg="secondary.base" py={2} fontSize={13}>
-                          {card.price} USDT
-                        </Box>
-                        <Button
-                          bg={theme.colors.primary.base}
-                          py={2}
-                          _hover={{
-                            background: theme.colors.light,
-                            // color: theme.colors.primary.base,
-                            border: '1px',
-                            borderColor: theme.colors.primary.base
-                          }}
-                          isDisabled={loading && loading[index]}
-                          leftIcon={loading && loading[index] && <Loader size="sm" color="white" />}
-                          fontSize={13}
-                          fontWeight="bold"
-                          borderRadius="0"
-                          onClick={() => {
-                            if (isApprove) {
-                              card.userId === user._id
-                                ? handleUnList(
-                                    FwarMarketDelegate,
-                                    FwarChar.address,
-                                    card.nfts.map((i) => i.nftId),
-                                    index
-                                  )
-                                : handleBuy(FwarMarketDelegate, card.orderId);
-                            } else {
-                              handleApprove(USDT, FwarMarketDelegate.address);
-                            }
-                          }}
-                        >
-                          {isApprove ? (card.userId === user._id ? `UnList` : `Buy`) : `Approve`}
-                        </Button>
-                      </Grid>
-                    </Box>
-                  </Stack>
-                </Box>
-              ))}
+          bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
+          p={8}
+          boxShadow="content"
+          borderRadius={8}
+          position="relative"
+        >
+          <Grid templateColumns="repeat(5, 1fr)" gap={4}>
+            <GridItem colSpan={{ base: 6, md: 5 }}>
+              <Grid templateColumns="repeat(5, 1fr)" alignItems="center" gap={4}>
+                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                  <FilterComponent
+                    placeholder="CardType"
+                    handleChange={handleChangeCardType}
+                    valueState={typeCardState}
+                    optionDropdown={cardTypeDropdown}
+                  />
+                </GridItem>
+                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                  <FilterComponent
+                    placeholder="Rarity"
+                    handleChange={handleChangeRarity}
+                    valueState={rarityState}
+                    optionDropdown={rarityDropdown}
+                  />
+                </GridItem>
+                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                  <FilterComponent
+                    placeholder="Element"
+                    handleChange={handleChangeElement}
+                    valueState={elementState}
+                    optionDropdown={elementDropdown}
+                  />
+                </GridItem>
+                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                  <FilterComponent
+                    placeholder="Team"
+                    handleChange={handleChangeTeamId}
+                    valueState={teamIdState}
+                    optionDropdown={teamDropdown}
+                  />
+                </GridItem>
+                <GridItem>
+                  <FilterComponent
+                    placeholder="Sort"
+                    handleChange={handleChangeSort}
+                    valueState={sortState}
+                    optionDropdown={sortDropdown}
+                  />
+                </GridItem>
+              </Grid>
+            </GridItem>
           </Grid>
-          <Box mt={5}>
-            <PaginatorCustom
-              pagesQuantity={pagesQuantity > 0 && pagesQuantity}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
+        </Box>
+
+        <Box display="flex" alignItems="start">
+          <Box
+            display={{
+              base: 'none',
+              lg: 'block'
+            }}
+          ></Box>
+          <Box width="100%" marginLeft={6}>
+            <Grid
+              templateColumns={{
+                base: 'repeat(1, 1fr)',
+                md: 'repeat(2, 1fr)',
+                lg: 'repeat(4, 1fr)'
+              }}
+              gap={6}
+              mt={6}
+            >
+              {listOrder &&
+                listOrder.length > 0 &&
+                listOrder.map((card, index) => (
+                  <Box
+                    key={card.orderId}
+                    w="100%"
+                    bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
+                    boxShadow="content"
+                    borderRadius="6px"
+                    overflow="hidden"
+                    pos="relative"
+                    _hover={{ boxShadow: '0 4px 25px 0 rgba(34,41,47,.25)' }}
+                  >
+                    <Stack direction="column" justify="space-between" h="100%">
+                      <Grid
+                        templateColumns={
+                          card.nfts.length !== 1 ? 'repeat(2, 1fr)' : 'repeat(1, 1fr)'
+                        }
+                        templateRows={card.nfts.length !== 1 ? 'repeat(2, 1fr)' : 'repeat(1, 1fr)'}
+                      >
+                        {card.nfts.map((item) => (
+                          <Link to={`/market-place/detail/${item.nftId}`} key={item.nftId}>
+                            <DisplayOrderCards
+                              info={item}
+                              text={true}
+                              isOne={card.nfts.length === 1}
+                            />
+                          </Link>
+                        ))}
+                      </Grid>
+                      <Box color="white" align="center">
+                        <Grid gridTemplateColumns="repeat(2, 1fr)">
+                          <Box bg="secondary.base" py={2} fontSize={13}>
+                            {card.price} USDT
+                          </Box>
+                          <Button
+                            bg={theme.colors.primary.base}
+                            py={2}
+                            _hover={{
+                              background: theme.colors.light,
+                              // color: theme.colors.primary.base,
+                              border: '1px',
+                              borderColor: theme.colors.primary.base
+                            }}
+                            isDisabled={loading && loading[index]}
+                            leftIcon={
+                              loading && loading[index] && <Loader size="sm" color="white" />
+                            }
+                            fontSize={13}
+                            fontWeight="bold"
+                            borderRadius="0"
+                            onClick={() => {
+                              if (isApprove) {
+                                card.userId === user._id
+                                  ? handleUnList(
+                                      FwarMarketDelegate,
+                                      FwarChar.address,
+                                      card.nfts.map((i) => i.nftId),
+                                      index
+                                    )
+                                  : handleBuy(FwarMarketDelegate, card.orderId);
+                              } else {
+                                handleApprove(USDT, FwarMarketDelegate.address);
+                              }
+                            }}
+                          >
+                            {isApprove ? (card.userId === user._id ? `UnList` : `Buy`) : `Approve`}
+                          </Button>
+                        </Grid>
+                      </Box>
+                    </Stack>
+                  </Box>
+                ))}
+            </Grid>
+            <Box mt={5}>
+              <PaginatorCustom
+                pagesQuantity={pagesQuantity > 0 && pagesQuantity}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </Box>
           </Box>
         </Box>
-      </Box>
+      </ScaleFadeCustom>
     </>
   );
 }
