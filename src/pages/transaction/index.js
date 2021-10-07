@@ -29,8 +29,7 @@ import { ViewIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
 import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
 import TransactionApi from 'apis/TransactionApi';
-import TransactionRow from './TransactionDisplay';
-import PaginatorCustom from 'components/PaginatorCustom'
+import TransactionDisplay from './TransactionDisplay';
 
 function Transaction() {
   const theme = useTheme();
@@ -68,6 +67,7 @@ function Transaction() {
       SetListAllTransaction(listTrans.docs);
       console.log('allTrans', listTrans.docs);
       setAllPagesQuantity(listTrans.totalPages);
+
   };
 
   React.useEffect(() => {
@@ -93,59 +93,24 @@ function Transaction() {
               bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
               boxShadow="content"
             >
-              <Table variant="simple">
-                <Thead bgColor="gray.200">
-                  <Tr>
-                    <Th>createdAt</Th>
-                    <Th>from</Th>
-                    <Th>owner</Th>
-                    <Th>price</Th>
-                    <Th>nfts</Th>
-                    <Th>tx</Th>
-                  </Tr>
-                </Thead>
-                <Tbody >
-                {listmyTransaction.map((c) => (
-                    <TransactionRow key ={c._id} transaction={c}/>
-                ))}
-                </Tbody>
-              </Table>
-              <Box my={5}>
-                <PaginatorCustom
-                  pagesQuantity={pagesQuantityMine > 0 && pagesQuantityMine}
-                  currentPage={currentPageMine}
-                  setCurrentPage={setCurrentPageMine}
-                />
-              </Box>
+              <TransactionDisplay 
+                listTransaction={listmyTransaction} 
+                currentPage={currentPageMine} 
+                setCurrentPage = {setCurrentPageMine} 
+                pagesQuantity={pagesQuantityMine}
+              ></TransactionDisplay>
             </TabPanel>
             <TabPanel
               bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
               boxShadow="content"
             >
-              <Table variant="simple">
-                <Thead bgColor="gray.200">
-                  <Tr>
-                    <Th>createdAt</Th>
-                    <Th>from</Th>
-                    <Th>owner</Th>
-                    <Th>price</Th>
-                    <Th>nfts</Th>
-                    <Th>tx</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {listAllTransaction.map((c) => (
-                      <TransactionRow key ={c._id} transaction={c}/>
-                  ))}
-                </Tbody>
-              </Table>
-              <Box my={5}>
-                <PaginatorCustom
-                  pagesQuantity={pagesQuantityAll > 0 && pagesQuantityAll}
-                  currentPage={currentPageAll}
-                  setCurrentPage={setCurrentPageAll}
-                />
-              </Box>
+              <TransactionDisplay 
+                listTransaction={listAllTransaction} 
+                currentPage={currentPageAll} 
+                setCurrentPage = {setCurrentPageAll} 
+                pagesQuantity={pagesQuantityAll}
+              >
+              </TransactionDisplay>
             </TabPanel>
           </TabPanels> 
         </Tabs>
