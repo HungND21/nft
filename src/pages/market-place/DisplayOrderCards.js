@@ -1,6 +1,6 @@
 import { Box, Image, Text, HStack, Flex } from '@chakra-ui/react';
-import { StarIcon } from '@chakra-ui/icons';
 import React from 'react';
+import {GiAlliedStar, GiCrossedSwords} from 'react-icons/gi';
 
 function DisplayOrderCards({ info, text = false, isOne = false }) {
   // console.log('info', info);
@@ -37,7 +37,7 @@ function DisplayOrderCards({ info, text = false, isOne = false }) {
             <Box
               position="absolute"
               width="100%"
-              bottom={isOne ? '13.5%' : '15.5%'}
+              bottom={isOne ? '13.5%' : '13.5%'}
               left="0%"
               p="0"
               // color="white"
@@ -47,11 +47,18 @@ function DisplayOrderCards({ info, text = false, isOne = false }) {
               fontWeight="bold"
             >
               {/* <Text>NFT {info['tokenId']}</Text> */}
-              <Text fontSize={isOne ? 15 : 6}>NFT {info && info.nftId}</Text>
-              <HStack justify="center" spacing="24px">
-                <Text fontSize={isOne ? 15 : 6}> ✭ {info && info.level}</Text>
-                <Text fontSize={isOne ? 15 : 6}> 🏹 {info && info.attack}</Text>
+              <Text fontSize={isOne ? "60%" : "30%"}>NFT {info && info.nftId}</Text>
+              <HStack justify="center" spacing="24px" fontSize={isOne ? "60%" : "30%"}>
+                <HStack spacing="5px">
+                  <GiAlliedStar/>  
+                  <Text>{info && info.level}</Text>
+                  </HStack>
+                  <HStack spacing="5px">
+                  <GiCrossedSwords/>  
+                  <Text>{info && info.attack}</Text>
+                  </HStack>
               </HStack>
+              
             </Box>
           )}
         </Box>

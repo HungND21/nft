@@ -52,7 +52,7 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import { elementDropdown, rarityDropdown } from 'utils/dataFilter';
 import ItemListComponent from './ItemListComponent';
 
-const DisplayCardSelect = Loadable(lazy(() => import('./DisplayCardSelect')));
+const DisplayCardSelect = Loadable(lazy(() => import('./DisplayCardForUpgrade')));
 // const DisplayCardSelect = Loadable(lazy(() => import('./DisplayCardSelect')));
 
 function Detail() {

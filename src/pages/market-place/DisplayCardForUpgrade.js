@@ -1,9 +1,8 @@
-import { Box, Image, Text, IconButton, Stack ,HStack} from '@chakra-ui/react';
+import { Box, Image, Text, IconButton, Stack } from '@chakra-ui/react';
 import React from 'react';
 import { MinusIcon } from '@chakra-ui/icons';
-import {GiAlliedStar, GiCrossedSwords, GiSwordBreak} from 'react-icons/gi';
 
-function DisplayOpenedCards({ info, text = false, isCart = false, onremove, isDetail = false }) {
+function DisplayCardForUpgrade({ info, text = false }) {
   // console.log('info', info);
 
   return (
@@ -11,14 +10,6 @@ function DisplayOpenedCards({ info, text = false, isCart = false, onremove, isDe
       <Box>
         <Box position="relative">
           <Stack position="absolute" top="0" right="0" zIndex="1">
-            {isCart && (
-              <IconButton
-                position="relative"
-                icon={<MinusIcon />}
-                colorScheme="red"
-                onClick={onremove}
-              ></IconButton>
-            )}
           </Stack>
           {info && (
             <Image src={`/assets/card/rarity/${info['rarity']}.png`} width="100%" height="100%" />
@@ -52,27 +43,18 @@ function DisplayOpenedCards({ info, text = false, isCart = false, onremove, isDe
               // bgSize="100% 100%"
               position="absolute"
               width="100%"
-              bottom="12%"
+              bottom="12.5%"
               left="0%"
               p="0"
               // color="white"
               align="center"
               color="#283046"
-              fontSize={24}
+              fontSize={13}
               fontWeight="bold"
             >
               {/* <Text>NFT {info['tokenId']}</Text> */}
-              <Text fontSize={isDetail ? 25 :13}>NFT {info && info.nftId}</Text>
-              <HStack justify="center" spacing="24px" >
-                <HStack fontSize={isDetail ? 23 :13} spacing="5px">
-                  <GiAlliedStar/>  
-                  <Text>{info && info.level}</Text>
-                  </HStack>
-                  <HStack fontSize={isDetail ? 23 :13} spacing="5px">
-                  <GiCrossedSwords/>  
-                  <Text>{info && info.attack}</Text>
-                  </HStack>
-              </HStack>
+              <Text>NFT {info && info['nftId']}</Text>
+              <Text> {info && info.teamId.name}</Text>
             </Box>
           )}
         </Box>
@@ -81,4 +63,4 @@ function DisplayOpenedCards({ info, text = false, isCart = false, onremove, isDe
   );
 }
 
-export default DisplayOpenedCards;
+export default DisplayCardForUpgrade;

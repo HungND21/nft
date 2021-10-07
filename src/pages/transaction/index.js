@@ -1,104 +1,90 @@
+import { Tab, TabList, TabPanel, TabPanels, Tabs, useColorMode, useTheme } from '@chakra-ui/react';
+import { useEthers } from '@usedapp/core';
+import TransactionApi from 'apis/TransactionApi';
+import { usePaginator } from 'chakra-paginator';
 import React from 'react';
-import {
-  Box,
-  Stack,
-  Button,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  useTheme,
-  useColorMode,
-  Table,
-  TableCaption,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  Tfoot,
-  Image,
-  Icon,
-  ScaleFade
-} from '@chakra-ui/react';
-import { ViewIcon } from '@chakra-ui/icons';
-import ScaleFadeCustom from 'components/ScaleFadeCustom';
+import { useSelector } from 'react-redux';
+import TransactionDisplay from './TransactionDisplay';
+
 function Transaction() {
   const theme = useTheme();
   const { colorMode, toggleColorMode } = useColorMode();
+  const { account } = useEthers();
+  const { user } = useSelector((state) => state.user);
+  const [listMyTransaction, SetListMyTransaction] = React.useState([]);
+  const [listAllTransaction, SetListAllTransaction] = React.useState([]);
+
+  const [currentPageAll, setCurrentPageAll] = React.useState(1);
+  const [currentPageMine, setCurrentPageMine] = React.useState(1);
+
+  const [pagesQuantityMine, setMinePagesQuantity] = React.useState(1);
+  const [pagesQuantityAll, setAllPagesQuantity] = React.useState(1);
+
+  const getMyTransaction = async () => {
+    if (user) {
+      // console.log(user._id);
+      const { data: listTrans } = await TransactionApi.getMyTrans({
+        userId: user.address,
+        page: currentPageMine
+      });
+      SetListMyTransaction(listTrans.docs);
+      // console.log('listTrans', listTrans.docs);
+      setMinePagesQuantity(listTrans.totalPages);
+    }
+  };
+  const setPageAll = (page) => {
+    console.log('page', page);
+    setCurrentPageAll(page);
+  };
+  const setPageMine = (page) => {
+    setCurrentPageMine(page);
+  };
+  const getAllTransaction = async (currentPageAll) => {
+    if (user) {
+      const { data: listTrans } = await TransactionApi.getAllTrans({
+        page: currentPageAll
+      });
+      SetListAllTransaction(listTrans.docs);
+      setAllPagesQuantity(listTrans.totalPages);
+    }
+    // console.log('allTrans', listTrans.docs);
+  };
+
+  React.useEffect(() => {
+    document.title = 'FWAR - TRANSACTIONS';
+    if (account) {
+      getMyTransaction(currentPageMine);
+      getAllTransaction(currentPageAll);
+    }
+  }, [account, currentPageMine, user, currentPageAll]);
+
   return (
-    <>
-      <ScaleFadeCustom>
-        <Tabs variant="unstyled">
-          <TabList display="flex" justifyContent="center" mb={6}>
-            <Tab _selected={{ color: 'white', bg: 'primary.base' }} borderRadius="6px">
-              Mine
-            </Tab>
-            <Tab _selected={{ color: 'white', bg: 'primary.base' }} borderRadius="6px">
-              All
-            </Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel
-              bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-              boxShadow="content"
-            >
-              <Table variant="simple">
-                <TableCaption>Paginate</TableCaption>
-                <Thead bgColor="gray.200">
-                  <Tr>
-                    <Th>createdAt</Th>
-                    <Th>from</Th>
-                    <Th>owner</Th>
-                    <Th>price</Th>
-                    <Th>nfts</Th>
-                    <Th>tx</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td>2021-09-08 04:32:46</Td>
-                    <Td>0xf7...e9ab</Td>
-                    <Td>0x2f...80dc</Td>
-                    <Td>$ 8</Td>
-                    <Td>
-                      <Box w="3rem">
-                        <Box w="3rem" position="relative">
-                          <Image src="https://zoogame.app/nfts/bg/1/bg.png" w="100%" />
-                          <Image
-                            src="https://zoogame.app/nfts/normal/20.png"
-                            w="90%"
-                            position="absolute"
-                            top="20%"
-                            left="5%"
-                          />
-                          <Image
-                            src="https://zoogame.app/nfts/bg/1/border.png"
-                            w="100%"
-                            position="absolute"
-                            top="0"
-                          />
-                        </Box>
-                      </Box>
-                    </Td>
-                    <Td>
-                      <Icon color="primary.base" as={ViewIcon} />
-                    </Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            </TabPanel>
-            <TabPanel
-              bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-              boxShadow="content"
-            >
-              <p>two!</p>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </ScaleFadeCustom>
-    </>
+    <Tabs variant="unstyled">
+      <TabList display="flex" justifyContent="center" mb={6}>
+        <Tab _selected={{ color: 'white', bg: 'primary.base' }} borderRadius="6px">
+          Mine
+        </Tab>
+        <Tab _selected={{ color: 'white', bg: 'primary.base' }} borderRadius="6px">
+          All
+        </Tab>
+      </TabList>
+      <TabPanels>
+        <TabPanel bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'} boxShadow="content">
+          <TransactionDisplay
+            listTransaction={listMyTransaction}
+            getTransaction={setPageMine}
+            pagesQuantity={pagesQuantityMine}
+          />
+        </TabPanel>
+        <TabPanel bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'} boxShadow="content">
+          <TransactionDisplay
+            listTransaction={listAllTransaction}
+            getTransaction={setPageAll}
+            pagesQuantity={pagesQuantityAll}
+          />
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
   );
 }
 

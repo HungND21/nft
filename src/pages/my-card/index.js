@@ -44,7 +44,12 @@ import { FaRegCheckCircle } from 'react-icons/fa';
 import { MdAddShoppingCart, MdInfoOutline, MdRemoveShoppingCart } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { cardTypeDropdown, elementDropdown, rarityDropdown } from 'utils/dataFilter';
+import {
+  cardTypeDropdown,
+  elementDropdown,
+  rarityDropdown,
+  ListedOrNotDropdown
+} from 'utils/dataFilter';
 import { getItem } from 'utils/LocalStorage';
 function Card() {
   useTitle('FWAR - MY CARDS');
@@ -56,13 +61,15 @@ function Card() {
   const { user } = useSelector((state) => state.user);
   // paginate
   const { currentPage, setCurrentPage } = usePaginator({
-    initialState: { currentPage: 1, pageSize: 5 }
+    initialState: { currentPage: 1 }
   });
   //
   const [rarityState, setRarityState] = React.useState('');
   const [elementState, setElementState] = React.useState('');
   const [teamIdState, setTeamIdState] = React.useState('');
   const [typeCardState, setTypeCardState] = React.useState('');
+  const [isListedState, setIsListedState] = React.useState('');
+
   //
 
   const [teamDropdown, setTeamDropdown] = React.useState([]);
@@ -189,7 +196,13 @@ function Card() {
     );
     if (isApproveForAll) setIsApprove(true);
   };
-  const getMyCard = async (rarityState, elementState, teamIdState, typeCardState) => {
+  const getMyCard = async (
+    rarityState,
+    elementState,
+    teamIdState,
+    typeCardState,
+    isListedState
+  ) => {
     if (user) {
       const { data: listCard } = await CharacterApi.getMyList({
         userId: user._id,
@@ -197,7 +210,8 @@ function Card() {
         rarity: rarityState ? rarityState.value : '',
         element: elementState ? elementState.value : '',
         teamId: teamIdState ? teamIdState._id : '',
-        typeCard: typeCardState ? typeCardState.value : ''
+        typeCard: typeCardState ? typeCardState.value : '',
+        isListed: isListedState ? isListedState.value : ''
       });
       setListCardState(listCard.docs);
       console.log('listCard', listCard.docs);
@@ -233,7 +247,11 @@ function Card() {
     setTypeCardState(typeCard);
     setCurrentPage(1);
   };
-
+  const handleChangeIsListed = (isListed) => {
+    console.log('isListed', isListed);
+    setIsListedState(isListed);
+    setCurrentPage(1);
+  };
   React.useEffect(() => {
     const listCartParse = getItem('cardItem');
     console.log('current ', currentPage);
@@ -244,14 +262,23 @@ function Card() {
     }
     if (account) {
       approveInit();
-      getMyCard(rarityState, elementState, teamIdState, typeCardState);
+      getMyCard(rarityState, elementState, teamIdState, typeCardState, isListedState);
       getTeams();
       return () => {
         setListCardStorage();
         setIsApprove();
       };
     }
-  }, [account, currentPage, user, rarityState, elementState, teamIdState, typeCardState]);
+  }, [
+    account,
+    currentPage,
+    user,
+    rarityState,
+    elementState,
+    teamIdState,
+    typeCardState,
+    isListedState
+  ]);
   let history = useHistory();
   const baseStyles = {
     w: 7,
@@ -284,7 +311,7 @@ function Card() {
         >
           <Grid templateColumns="repeat(6, 1fr)" gap={4}>
             <GridItem colSpan={{ base: 6, md: 5 }}>
-              <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+              <Grid templateColumns="repeat(5, 1fr)" gap={4}>
                 <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
                   <FilterComponent
                     placeholder="CardType"
@@ -315,6 +342,14 @@ function Card() {
                     handleChange={handleChangeTeamId}
                     valueState={teamIdState}
                     optionDropdown={teamDropdown}
+                  />
+                </GridItem>
+                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                  <FilterComponent
+                    placeholder="ListedOrNot"
+                    handleChange={handleChangeIsListed}
+                    valueState={isListedState}
+                    optionDropdown={ListedOrNotDropdown}
                   />
                 </GridItem>
               </Grid>
