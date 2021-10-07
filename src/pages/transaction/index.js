@@ -21,54 +21,64 @@ import {
   Tfoot,
   Image,
   Icon,
-  ScaleFade
+  ScaleFade,
+  Tooltip,
+  Text
 } from '@chakra-ui/react';
 import { ViewIcon } from '@chakra-ui/icons';
-<<<<<<< HEAD
 import { useSelector } from 'react-redux';
 import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'chakra-paginator';
-import OrderAPI from 'apis/OrderApi';
+import TransactionApi from 'apis/TransactionApi';
+import TransactionRow from './TransactionDisplay';
+import PaginatorCustom from 'components/PaginatorCustom'
 
-=======
-import ScaleFadeCustom from 'components/ScaleFadeCustom';
->>>>>>> 26490e54cd6c2b9323cd78e6a4d2820b79ef10c1
 function Transaction() {
   const theme = useTheme();
   const { colorMode, toggleColorMode } = useColorMode();
   const { account } = useEthers();
   const { user } = useSelector((state) => state.user);
-  const [listTransaction, SetListTransaction] = React.useState({})
-  const { currentPage, setCurrentPage } = usePaginator({
+  const [listmyTransaction, SetListMyTransaction] = React.useState([])
+  const [listAllTransaction, SetListAllTransaction] = React.useState([])
+  const { currentPageMine, setCurrentPageMine } = usePaginator({
     initialState: { currentPage: 1, pageSize: 5 }
   });
-  const [pagesQuantity, setPagesQuantity] = React.useState(1);
+  const { currentPageAll, setCurrentPageAll } = usePaginator({
+    initialState: { currentPage: 1, pageSize: 5 }
+  });
+  const [pagesQuantityMine, setMinePagesQuantity] = React.useState(1);
+  const [pagesQuantityAll, setAllPagesQuantity] = React.useState(1);
 
   const getMyTransaction = async () => {
     if (user) {
       console.log(user._id);
-      const { data: listTrans } = await OrderAPI.getMyOrder({
-        userId: user._id,
-        page: currentPage,
-        status: 'buyed'
+      const { data: listTrans } = await TransactionApi.getMyTrans({
+        userId: user.address,
+        page: currentPageMine,
       });
-      SetListTransaction(listTrans.docs);
+      SetListMyTransaction(listTrans.docs);
       console.log('listTrans', listTrans.docs);
-      setPagesQuantity(listTrans.totalPages);
+      setMinePagesQuantity(listTrans.totalPages);
     }
   };
+
+  const getAllTransaction = async () => {
+      const { data: listTrans } = await TransactionApi.getAllTrans({
+        page: currentPageAll,
+      });
+      SetListAllTransaction(listTrans.docs);
+      console.log('allTrans', listTrans.docs);
+      setAllPagesQuantity(listTrans.totalPages);
+  };
+
   React.useEffect(() => {
     document.title = 'FWAR - TRANSACTIONS';
     if (account) {
       getMyTransaction();
     }
-  }, [
-    account,
-    currentPage,
-    user
-  ]);
+    getAllTransaction();
+  }, [account, currentPageMine, currentPageAll, user]);
+
   return (
-    <>
-      <ScaleFadeCustom>
         <Tabs variant="unstyled">
           <TabList display="flex" justifyContent="center" mb={6}>
             <Tab _selected={{ color: 'white', bg: 'primary.base' }} borderRadius="6px">
@@ -84,7 +94,35 @@ function Transaction() {
               boxShadow="content"
             >
               <Table variant="simple">
-                <TableCaption>Paginate</TableCaption>
+                <Thead bgColor="gray.200">
+                  <Tr>
+                    <Th>createdAt</Th>
+                    <Th>from</Th>
+                    <Th>owner</Th>
+                    <Th>price</Th>
+                    <Th>nfts</Th>
+                    <Th>tx</Th>
+                  </Tr>
+                </Thead>
+                <Tbody >
+                {listmyTransaction.map((c) => (
+                    <TransactionRow key ={c._id} transaction={c}/>
+                ))}
+                </Tbody>
+              </Table>
+              <Box my={5}>
+                <PaginatorCustom
+                  pagesQuantity={pagesQuantityMine > 0 && pagesQuantityMine}
+                  currentPage={currentPageMine}
+                  setCurrentPage={setCurrentPageMine}
+                />
+              </Box>
+            </TabPanel>
+            <TabPanel
+              bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
+              boxShadow="content"
+            >
+              <Table variant="simple">
                 <Thead bgColor="gray.200">
                   <Tr>
                     <Th>createdAt</Th>
@@ -96,48 +134,21 @@ function Transaction() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td>2021-09-08 04:32:46</Td>
-                    <Td>0xf7...e9ab</Td>
-                    <Td>0x2f...80dc</Td>
-                    <Td>$ 8</Td>
-                    <Td>
-                      <Box w="3rem">
-                        <Box w="3rem" position="relative">
-                          <Image src="https://zoogame.app/nfts/bg/1/bg.png" w="100%" />
-                          <Image
-                            src="https://zoogame.app/nfts/normal/20.png"
-                            w="90%"
-                            position="absolute"
-                            top="20%"
-                            left="5%"
-                          />
-                          <Image
-                            src="https://zoogame.app/nfts/bg/1/border.png"
-                            w="100%"
-                            position="absolute"
-                            top="0"
-                          />
-                        </Box>
-                      </Box>
-                    </Td>
-                    <Td>
-                      <Icon color="primary.base" as={ViewIcon} />
-                    </Td>
-                  </Tr>
+                  {listAllTransaction.map((c) => (
+                      <TransactionRow key ={c._id} transaction={c}/>
+                  ))}
                 </Tbody>
               </Table>
+              <Box my={5}>
+                <PaginatorCustom
+                  pagesQuantity={pagesQuantityAll > 0 && pagesQuantityAll}
+                  currentPage={currentPageAll}
+                  setCurrentPage={setCurrentPageAll}
+                />
+              </Box>
             </TabPanel>
-            <TabPanel
-              bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-              boxShadow="content"
-            >
-              <p>two!</p>
-            </TabPanel>
-          </TabPanels>
+          </TabPanels> 
         </Tabs>
-      </ScaleFadeCustom>
-    </>
   );
 }
 

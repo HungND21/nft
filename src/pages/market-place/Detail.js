@@ -405,23 +405,6 @@ function Detail() {
                         isApprove ? handleUpgrade() : handleApproveForAll();
                       }}
                     >
-<<<<<<< HEAD
-                      <Td>
-                        {/* rgb(236 244 252) */}
-                        <Link to={`/market-place/detail/${1}`}>
-                          <DisplayCardForUpgrade info={card} text={true} />
-                        </Link>
-                      </Td>
-                      <Td>{card.level}</Td>
-                      <Td>{card.teamId.name}</Td>
-                      <Td>{card.rarity}</Td>
-                      <Td>{elementDropdown.find((i) => i.value === card.element).label}</Td>
-                    </Tr>
-                  ))}
-              </Tbody>
-            </Table>
-          </ModalBody>
-=======
                       {isApprove ? `Upgrade` : `Approve`}
                     </Button>
                   </Box>
@@ -470,7 +453,7 @@ function Detail() {
                         <Td>
                           {/* rgb(236 244 252) */}
                           <Link to={`/market-place/detail/${1}`}>
-                            <DisplayCardSelect info={card} text={true} />
+                            <DisplayCardForUpgrade info={card} text={true} />
                           </Link>
                         </Td>
                         <Td>{card.level}</Td>
@@ -482,7 +465,6 @@ function Detail() {
                 </Tbody>
               </Table>
             </ModalBody>
->>>>>>> 26490e54cd6c2b9323cd78e6a4d2820b79ef10c1
 
             <ModalFooter>
               {/* <Button colorScheme="blue" w="full" mr={3} onClick={onClose}>

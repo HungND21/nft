@@ -11,16 +11,10 @@ const UserApi = {
     page = page ? page : '';
     isListed = isListed && isListed.value ? isListed.value : '';
 
-<<<<<<< HEAD
-    rarity = rarity && rarity.value ? rarity.value : '';
-    element = element && element.value ? element.value : '';
-    teamId = teamId && teamId._id ? teamId._id : '';
-=======
     rarity = rarity ? rarity : '';
 
     element = element && element ? element : '';
     teamId = teamId ? teamId : '';
->>>>>>> 26490e54cd6c2b9323cd78e6a4d2820b79ef10c1
     level = level ? level : '';
     typeCard = typeCard ? typeCard : '';
 
