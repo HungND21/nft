@@ -84,19 +84,19 @@ function MarketPlace() {
       setIsLoading(false);
     }
   };
-  const handleBuy = async (FwarMarketDelegate, orderId) => {
+  const handleBuy = async (FwarMarketDelegate, orderId, index) => {
     try {
-      setLoading({ orderId: true });
+      setLoading({ [index]: true });
 
       const result = await FwarMarketDelegate.buyOrder(orderId);
       console.log(result);
       const tx = await result.wait();
       console.log('tx', tx);
       toast.success('Buy successfully!');
-      setIsLoading(false);
+      setLoading({ [index]: false });
     } catch (error) {
       error.data ? toast.error(error.data.message) : toast.error(error.message);
-      setIsLoading(false);
+      setLoading({ [index]: false });
     }
   };
 
@@ -109,8 +109,6 @@ function MarketPlace() {
   ) => {
     try {
       setLoading({ [index]: true });
-      console.log('orderId', index);
-
       tokenUsdt = '0xB3C3575552F6e250E2Ee7EeB94BB9BD91E57e51E';
       console.log('nftIds', nftIds);
       const result = await FwarMarketDelegate.cancelOrder(FwarCharAddress, nftIds, tokenUsdt);
@@ -180,7 +178,6 @@ function MarketPlace() {
     if (account) {
       init();
       getTeams();
-      console.log('user', user);
     }
   }, [account, rarityState, elementState, teamIdState, typeCardState, sortState, currentPage]);
 
@@ -332,7 +329,7 @@ function MarketPlace() {
                                       card.nfts.map((i) => i.nftId),
                                       index
                                     )
-                                  : handleBuy(FwarMarketDelegate, card.orderId);
+                                  : handleBuy(FwarMarketDelegate, card.orderId, index);
                               } else {
                                 handleApprove(USDT, FwarMarketDelegate.address);
                               }

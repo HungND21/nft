@@ -1,7 +1,3 @@
-import React from 'react';
-import { MdAddShoppingCart, MdRemoveShoppingCart, MdInfoOutline } from 'react-icons/md';
-import { FaRegCheckCircle } from 'react-icons/fa';
-import { useHistory } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -23,36 +19,36 @@ import {
   Text,
   useColorMode,
   useDisclosure,
-  useTheme,
-  Spinner,
-  IconButton,
-  ScaleFade
+  useTheme
 } from '@chakra-ui/react';
-import { usePaginator } from 'chakra-paginator';
-import { CgShoppingCart } from 'react-icons/cg';
-import toast from 'react-hot-toast';
-
-import { ethers } from 'ethers';
 import { useEthers } from '@usedapp/core';
-import FwarCharJson from 'contracts/FwarChar/FWarChar.json';
-import FwarMarketDelegateJson from 'contracts/FwarMarket/FwarMarketDelegate.json';
-import UsdtJson from 'contracts/Usdt.json';
-
-import { useSelector } from 'react-redux';
-
-// import Card from 'components/Card';
-import DisplayOpenedCards from 'components/DisplayCard';
 // api
 import CharacterApi from 'apis/CharacterApi';
 import TeamApi from 'apis/TeamApi';
-import { useTitle } from 'dapp/hook';
-
+import { usePaginator } from 'chakra-paginator';
+// import Card from 'components/Card';
+import DisplayOpenedCards from 'components/DisplayCard';
 import FilterComponent from 'components/FilterComponent';
-import { elementDropdown, rarityDropdown, cardTypeDropdown } from 'utils/dataFilter';
 import Loader from 'components/Loader';
 import PaginatorCustom from 'components/PaginatorCustom';
 import ScaleFadeCustom from 'components/ScaleFadeCustom';
+import FwarCharJson from 'contracts/FwarChar/FWarChar.json';
+import FwarMarketDelegateJson from 'contracts/FwarMarket/FwarMarketDelegate.json';
+import UsdtJson from 'contracts/Usdt.json';
+import { useTitle } from 'dapp/hook';
+import { ethers } from 'ethers';
+import React from 'react';
+import toast from 'react-hot-toast';
+import { CgShoppingCart } from 'react-icons/cg';
+import { FaRegCheckCircle } from 'react-icons/fa';
+import { MdAddShoppingCart, MdInfoOutline, MdRemoveShoppingCart } from 'react-icons/md';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { cardTypeDropdown, elementDropdown, rarityDropdown } from 'utils/dataFilter';
+import { getItem } from 'utils/LocalStorage';
 function Card() {
+  useTitle('FWAR - MY CARDS');
+
   const Theme = useTheme();
   const { colorMode } = useColorMode();
   const { account } = useEthers();
@@ -143,13 +139,7 @@ function Card() {
         onClose();
         const expiration = 2 * 24 * 60 * 60;
         const totalPriceOrder = listCardStorage.reduce((acc, cur) => +acc + +cur.price, 0);
-        // address Fwar, uint[], token Usdt
-        // console.log('totalPriceOrder', totalPriceOrder);
-        // console.log('listCardStorage', listCardStorage);
         const listCardOrderId = listCardStorage.map((i) => i.nftId);
-        console.log('FwarMarketDelegate', FwarMarketDelegate);
-        console.log('FwarChar.address', FwarChar.address);
-        console.log('listCardOrderId', listCardOrderId);
         const result = await FwarMarketDelegate.createOrder(
           FwarChar.address,
           listCardOrderId,
@@ -158,8 +148,10 @@ function Card() {
           expiration
         );
         const tx = await result.wait();
-        console.log(tx);
-        toast.success('Sucess');
+        console.log('tx', tx);
+        getMyCard();
+
+        toast.success('create order Success');
         localStorage.removeItem('cardItem');
         setListCardStorage([]);
         setIsLoading(false);
@@ -243,16 +235,13 @@ function Card() {
   };
 
   React.useEffect(() => {
-    document.title = 'FWAR - MY CARDS';
-    const listCartLocalStorageJson = localStorage.getItem('cardItem');
+    const listCartParse = getItem('cardItem');
     console.log('current ', currentPage);
-    if (listCartLocalStorageJson) {
-      const listCartParse = JSON.parse(listCartLocalStorageJson);
+    if (listCartParse) {
       if (listCartParse.length) {
         setListCardStorage(listCartParse);
       }
     }
-
     if (account) {
       approveInit();
       getMyCard(rarityState, elementState, teamIdState, typeCardState);
@@ -262,16 +251,7 @@ function Card() {
         setIsApprove();
       };
     }
-  }, [
-    account,
-    currentPage,
-    user,
-    setListCardStorage,
-    rarityState,
-    elementState,
-    teamIdState,
-    typeCardState
-  ]);
+  }, [account, currentPage, user, rarityState, elementState, teamIdState, typeCardState]);
   let history = useHistory();
   const baseStyles = {
     w: 7,
@@ -340,7 +320,7 @@ function Card() {
               </Grid>
             </GridItem>
             <GridItem colSpan={{ base: 6, md: 1 }}>
-              <Box position="relative" align="right">
+              <Box position="relative" align="right" cursor="pointer">
                 <Icon as={CgShoppingCart} w={8} h={8} onClick={onOpen} />
                 <Text position="absolute" top="-10px" right="0" color="red">
                   {listCardStorage ? listCardStorage.length : 0}
