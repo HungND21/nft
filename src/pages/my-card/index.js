@@ -44,7 +44,7 @@ import { FaRegCheckCircle } from 'react-icons/fa';
 import { MdAddShoppingCart, MdInfoOutline, MdRemoveShoppingCart } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { cardTypeDropdown, elementDropdown, rarityDropdown } from 'utils/dataFilter';
+import { cardTypeDropdown, elementDropdown, rarityDropdown, ListedOrNotDropdown } from 'utils/dataFilter';
 import { getItem } from 'utils/LocalStorage';
 function Card() {
   useTitle('FWAR - MY CARDS');
@@ -63,6 +63,7 @@ function Card() {
   const [elementState, setElementState] = React.useState('');
   const [teamIdState, setTeamIdState] = React.useState('');
   const [typeCardState, setTypeCardState] = React.useState('');
+  const [isListedState, setIsListedState] = React.useState('');
   //
 
   const [teamDropdown, setTeamDropdown] = React.useState([]);
@@ -233,6 +234,11 @@ function Card() {
     setTypeCardState(typeCard);
     setCurrentPage(1);
   };
+  const handleChangeIsListed = (isListed) => {
+    console.log('isListed', isListed);
+    setIsListedState(isListed);
+    setCurrentPage(1);
+  };
 
   React.useEffect(() => {
     const listCartParse = getItem('cardItem');
@@ -251,7 +257,7 @@ function Card() {
         setIsApprove();
       };
     }
-  }, [account, currentPage, user, rarityState, elementState, teamIdState, typeCardState]);
+  }, [account, currentPage, user, rarityState, elementState, teamIdState, typeCardState,isListedState]);
   let history = useHistory();
   const baseStyles = {
     w: 7,
@@ -284,7 +290,7 @@ function Card() {
         >
           <Grid templateColumns="repeat(6, 1fr)" gap={4}>
             <GridItem colSpan={{ base: 6, md: 5 }}>
-              <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+              <Grid templateColumns="repeat(5, 1fr)" gap={4}>
                 <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
                   <FilterComponent
                     placeholder="CardType"
@@ -317,6 +323,14 @@ function Card() {
                     optionDropdown={teamDropdown}
                   />
                 </GridItem>
+                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <FilterComponent
+                  placeholder="ListedOrNot"
+                  handleChange={handleChangeIsListed}
+                  valueState={isListedState}
+                  optionDropdown={ListedOrNotDropdown}
+                />
+              </GridItem>
               </Grid>
             </GridItem>
             <GridItem colSpan={{ base: 6, md: 1 }}>

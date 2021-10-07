@@ -1,17 +1,13 @@
 import { 
     Box, 
-    Image, 
     Text, 
-    ViewIcon, 
     Tooltip,
     Table,
-    TableCaption,
     Thead,
     Tr,
     Th,
     Tbody,
     Td,
-    Tfoot, 
     Icon,
     Grid,
     Link } from '@chakra-ui/react';
@@ -19,7 +15,7 @@ import React from 'react';
 import moment from 'moment';
 import TransactionCard from 'components/DisplayCard';
 import { FiEye} from 'react-icons/fi';
-import { BACKEND_URL_LOCAL, BACKEND_URL_HOSTING, BSCTESTNET_TRANSACTION_URL } from 'utils/config';
+import { BSCTESTNET_TRANSACTION_URL } from 'utils/config';
 import PaginatorCustom from 'components/PaginatorCustom'
 
 function TransactionDisplay({ listTransaction, pagesQuantity, currentPage, setCurrentPage}) {
@@ -70,6 +66,13 @@ function TransactionDisplay({ listTransaction, pagesQuantity, currentPage, setCu
             ))}
         </Tbody>
     </Table>
+    <Box my={5}>
+          <PaginatorCustom
+            pagesQuantity={pagesQuantity > 0 && pagesQuantity}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </Box>
     </>
   );
 }

@@ -13,7 +13,7 @@ const TransactionApi = {
     console.log(page);
     const sortColumn = sort && sort.column ? sort.column : 'createdAt';
     const sortOrder = sort && sort.order ? sort.order : 'desc';
-    const url = `/transaction?&_page=${page}&_sort=${sortColumn}&_order=${sortOrder}&_limit=${5}`;
+    const url = `/transaction?&_page=${page}&_sort=${sortColumn}&_order=${sortOrder}`;
     return axiosClient.get(url);
   }
 };
