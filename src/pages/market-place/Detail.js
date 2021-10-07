@@ -16,6 +16,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  ScaleFade,
   Spinner,
   Stack,
   Tab,
@@ -32,25 +33,27 @@ import {
   Tr,
   useColorMode,
   useDisclosure,
-  useTheme,
-  ScaleFade
+  useTheme
 } from '@chakra-ui/react';
 import { useEthers } from '@usedapp/core';
 import CharacterApi from 'apis/CharacterApi';
 import { usePaginator } from 'chakra-paginator';
 import DisplayOpenedCards from 'components/DisplayCard';
+import Loadable from 'components/Loadable';
 import PaginatorCustom from 'components/PaginatorCustom';
 import FwarCharJson from 'contracts/FwarChar/FWarChar.json';
 import FwarCharDelegateJson from 'contracts/FwarChar/FwarCharDelegate.json';
 import { ethers } from 'ethers';
-import React from 'react';
+import React, { lazy } from 'react';
 import toast from 'react-hot-toast';
 import { FiArrowUp, FiPlus } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { elementDropdown, rarityDropdown } from 'utils/dataFilter';
-import DisplayCardForUpgrade from './DisplayCardForUpgrade';
 import ItemListComponent from './ItemListComponent';
+
+const DisplayCardSelect = Loadable(lazy(() => import('./DisplayCardSelect')));
+// const DisplayCardSelect = Loadable(lazy(() => import('./DisplayCardSelect')));
 
 function Detail() {
   const [infoNft, setInfoNft] = React.useState(null);
@@ -63,9 +66,9 @@ function Detail() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [listSelectCard, setListSelectCard] = React.useState([]);
-  const [listSelectCardId, setListSelectCardId] = React.useState([]);
 
   const [selected, setSelected] = React.useState([]);
+  const [isUpgrade, setIsUpgrade] = React.useState(false);
 
   const { currentPage, setCurrentPage } = usePaginator({
     initialState: { currentPage: 1 }
@@ -91,14 +94,14 @@ function Detail() {
   const handleUpgrade = async () => {
     try {
       setIsLoading(true);
-      const burnedNfts = selected.map((i) => listSelectCard[i].nftId);
+      const burnedNfts = selected.map((i) => i.nftId);
 
       const upgraded = await FwarCharDelegate.upgrade(id, burnedNfts);
       const tx = await upgraded.wait();
       setIsLoading(false);
-
-      console.log('burnedNfts', burnedNfts);
-      console.log('upgraded', upgraded);
+      setIsUpgrade(false);
+      getNftDetail();
+      console.log('tx', tx);
     } catch (error) {
       error.data ? toast.error(error.data.message) : toast.error(error.message);
       setIsLoading(false);
@@ -116,12 +119,12 @@ function Detail() {
       toast.error(error.message);
     }
   };
-  const handleClick = (event, index) => {
-    const selectedIndex = selected.indexOf(index);
-    let newSelected = [];
+  const handleClick = (event, card) => {
+    const selectedIndex = selected.indexOf(card);
 
+    let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, index);
+      newSelected = newSelected.concat(selected, card);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -132,31 +135,48 @@ function Detail() {
         selected.slice(selectedIndex + 1)
       );
     }
-    console.log('newSelected', newSelected);
+    const result = newSelected.reduce(function (acc, curr, index) {
+      if (typeof acc[curr.rarity] == 'undefined') {
+        acc[curr.rarity] = 1;
+      } else {
+        acc[curr.rarity] += 1;
+      }
+      return acc;
+    }, {});
+    for (let i = 1; i <= 4; i++) {
+      if (!result[i]) result[i] = 0;
+    }
+    needUpgrade['junkAmount'] === result['1'] &&
+    needUpgrade['normalAmount'] === result['2'] &&
+    needUpgrade['rareAmount'] === result['3'] &&
+    needUpgrade['baseAmount'] === result['4']
+      ? setIsUpgrade(true)
+      : setIsUpgrade(false);
     setSelected(newSelected);
   };
+
+  async function getNftDetail() {
+    const { data: nft } = await CharacterApi.getOne(id);
+    setInfoNft(nft);
+    // console.log('nft', nft);
+    if (nft) {
+      const burnInfo = await FwarCharDelegate.getBurnInfo(nft.rarity, nft.level);
+      const baseAmount = burnInfo['baseAmount'];
+      const junkAmount = burnInfo['junkAmount'];
+      const normalAmount = burnInfo['normalAmount'];
+      const rareAmount = burnInfo['rareAmount'];
+      setNeedUpgrade({ baseAmount, junkAmount, normalAmount, rareAmount });
+    }
+  }
+
   React.useEffect(() => {
     if (account) {
-      const init = async () => {
-        const { data: nft } = await CharacterApi.getOne(id);
-        setInfoNft(nft);
-        console.log('nft', nft);
-        if (nft) {
-          const burnInfo = await FwarCharDelegate.getBurnInfo(nft.rarity, nft.level);
-          const baseAmount = burnInfo['baseAmount'];
-          const junkAmount = burnInfo['junkAmount'];
-          const normalAmount = burnInfo['normalAmount'];
-          const rareAmount = burnInfo['rareAmount'];
-          setNeedUpgrade({ baseAmount, junkAmount, normalAmount, rareAmount });
-          // console.log('burnInfo', { baseAmount, junkAmount, normalAmount, rareAmount });
-        }
-      };
-      init();
+      getNftDetail();
       return () => {
         setInfoNft(null); // This worked for me
       };
     }
-  }, [setInfoNft, account, setNeedUpgrade]);
+  }, [account]);
   React.useEffect(() => {
     (async function () {
       if (user && infoNft) {
@@ -169,36 +189,10 @@ function Detail() {
         });
         setListSelectCard(listCardSelect.docs);
         setPagesQuantity(listCardSelect.totalPages);
-        // console.log('teamId', infoNft.teamId._id);
-        // const listSelect = listCard.filter((card, index) => {
-        //   if (
-        //     Number(card['level']) === 1 &&
-        //     Number(card['rarity']) === 1 &&
-        //     Number(card['teamId']) === Number(info['teamId']) &&
-        //     Number(card['elementType']) === Number(info['elementType'])
-        //   ) {
-        //     listSelectIdIndex.push(index);
-        //   }
-
-        //   return (
-        //     Number(card['level']) === 1 &&
-        //     Number(card['rarity']) === 1 &&
-        //     Number(card['teamId']) === Number(info['teamId']) &&
-        //     Number(card['elementType']) === Number(info['elementType']) &&
-        //     true
-        //   );
-        // });
-        // let listSelectId = listSelectIdIndex.map((i) => listCardIds[i]);
-
-        // setListSelectCardId(listSelectId);
-        // console.log('list select card', listSelectCard);
-        // console.log('listSelectId', listSelectId);
-        // console.log('listCardIds', listCardIds);
-        console.log('listCardSelect', listCardSelect);
+        // console.log('listCardSelect', listCardSelect);
       }
       return () => {
         setListSelectCard([]); // This worked for me
-        setListSelectCardId([]); // This worked for me
       };
     })();
   }, [user, infoNft]);
@@ -334,24 +328,6 @@ function Detail() {
                 >
                   <Stack direction="row" align="center" justify="space-between">
                     <Box>Upgrade to Level {infoNft && Number(infoNft['level']) + 1}</Box>
-                    {/* <Grid templateColumns="repeat(4, 1fr)" gap={2} align="center">
-                    {Object.keys(needUpgrade).length && (
-                      <>
-                        <Box>
-                          Base Amount<Text>{needUpgrade['baseAmount']}</Text>
-                        </Box>
-                        <Box>
-                          Junk Amount<Text>{needUpgrade['junkAmount']}</Text>
-                        </Box>
-                        <Box>
-                          Normal Amount<Text>{needUpgrade['normalAmount']}</Text>
-                        </Box>
-                        <Box>
-                          Rare Amount<Text>{needUpgrade['rareAmount']}</Text>
-                        </Box>
-                      </>
-                    )}
-                  </Grid> */}
                   </Stack>
                   <Stack direction="row" align="center" justify="space-between">
                     <Box>
@@ -399,8 +375,8 @@ function Detail() {
                       w="full"
                       bg={theme.colors.primary.base}
                       color="white"
-                      _hover={{ bg: theme.colors.primary.light }}
-                      isDisabled={isLoading || (selected && !selected.length > 0)}
+                      _hover={{ boxShadow: theme.shadows.button }}
+                      isDisabled={isLoading || !isUpgrade}
                       onClick={() => {
                         isApprove ? handleUpgrade() : handleApproveForAll();
                       }}
@@ -443,17 +419,17 @@ function Detail() {
                           cursor: 'pointer',
                           bg: colorMode === 'dark' ? theme.colors.dark.light : theme.colors.light.bg
                         }}
-                        onClick={(e) => handleClick(e, index)}
+                        onClick={(e) => handleClick(e, card)}
                         bg={
                           selected.length &&
-                          selected.includes(index) &&
+                          selected.includes(card) &&
                           (colorMode === 'dark' ? theme.colors.dark.bg : theme.colors.light.base)
                         }
                       >
                         <Td>
                           {/* rgb(236 244 252) */}
                           <Link to={`/market-place/detail/${1}`}>
-                            <DisplayCardForUpgrade info={card} text={true} />
+                            <DisplayCardSelect info={card} text={true} />
                           </Link>
                         </Td>
                         <Td>{card.level}</Td>
