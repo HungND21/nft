@@ -10,9 +10,10 @@ const TransactionApi = {
     return axiosClient.post(url, data);
   },
   getAllTrans({ page, sort }) {
+    console.log(page);
     const sortColumn = sort && sort.column ? sort.column : 'createdAt';
     const sortOrder = sort && sort.order ? sort.order : 'desc';
-    const url = `/transaction?&_page=${page}&_sort=${sortColumn}&_order=${sortOrder}`;
+    const url = `/transaction?&_page=${page}&_sort=${sortColumn}&_order=${sortOrder}&_limit=${5}`;
     return axiosClient.get(url);
   }
 };
