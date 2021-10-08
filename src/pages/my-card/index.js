@@ -156,7 +156,7 @@ function Card() {
         );
         const tx = await result.wait();
         console.log('tx', tx);
-        getMyCard();
+        getMyCard(rarityState, elementState, teamIdState, typeCardState, isListedState);
 
         toast.success('create order Success');
         localStorage.removeItem('cardItem');

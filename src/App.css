@@ -1,15 +1,19 @@
-body {
+html,
+html body {
   font-family: Inter, Roboto, Helvetica, Arial, serif;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.45;
   background-color: #f8f8f8;
-  height: 100vh;
+  height: 100%;
 }
 
 * {
   /* animation: begin 0.6s ease; */
   transition: all 0.3 ease;
+}
+#root {
+  height: 100%;
 }
 .menu-item-active {
   display: block;
@@ -21,63 +25,12 @@ body {
 .menu-item-active > :hover {
   color: white !important;
 }
-@keyframes begin {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+::-webkit-scrollbar {
+  width: 8px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-.nft-bg-1[data-v-e4a14d74] {
-  left: 0;
-  -webkit-animation: my-ani-ltr-data-v-e4a14d74 2s steps(19) infinite;
-  animation: my-ani-ltr-data-v-e4a14d74 2s steps(19) infinite;
-  background: url('https://zoogame.app/nfts/bg/2/sprite.png') no-repeat;
-  background-size: auto;
-  background-size: 100% 2000%;
-}
-.nft-bg-hover-4[data-v-e4a14d74] {
-  left: 0;
-  -webkit-animation: my-ani-ltr-data-v-e4a14d74 3s steps(19) infinite;
-  animation: my-ani-ltr-data-v-e4a14d74 3s steps(19) infinite;
-}
-@keyframes my-ani-ltr-data-v-e4a14d74 {
-  0% {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 0 100%;
-  }
-}
-@keyframes my-ani-rtl-data-v-e4a14d74 {
-  0% {
-    background-position: 100% 0;
-  }
-  to {
-    background-position: 100% 100%;
-  }
-}
-@-webkit-keyframes my-ani-ltr-data-v-e4a14d74 {
-  0% {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 0 100%;
-  }
+/* ::-webkit-scrollbar-track {
+  background: #febe43;
+} */
+::-webkit-scrollbar-thumb {
+  background: #febe43;
 }

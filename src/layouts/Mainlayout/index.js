@@ -97,7 +97,7 @@ export default function MainLayout({ children }) {
   };
   return (
     <React.Fragment>
-      <Box bg="#f8f8f8" color={color} h="calc(100vh)">
+      <Box bg={colorMode === 'dark' ? theme.colors.dark.base : 'white'} color={color} h="100%">
         <Box
           w="16.25rem"
           // h="100%"
@@ -125,7 +125,6 @@ export default function MainLayout({ children }) {
             base: 'full',
             xl: 'calc(100% - 260px)'
           }}
-          h="100%"
           ml={{
             base: '0px',
             xl: '260px'
@@ -149,7 +148,7 @@ export default function MainLayout({ children }) {
 
           {children}
           <ModalWalletConnect onClose={closeModalWallet} />
-          <ScrollButton />
+          {/* <ScrollButton /> */}
         </Box>
       </Box>
       <Box zIndex="toast">
