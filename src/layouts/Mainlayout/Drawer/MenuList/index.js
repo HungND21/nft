@@ -8,6 +8,7 @@ function MenuList({ handleCloseDrawer }) {
     return (
       // _hover={{ background: 'linear-gradient(118deg,#7367f0,rgba(115,103,240,.7))' }}
       <ListItem key={item.id}>
+        {/* {item.type === 'group' &&  } */}
         <NavLink to={item.url} onClick={handleCloseDrawer} exact activeClassName="menu-item-active">
           <Box
             display="flex"

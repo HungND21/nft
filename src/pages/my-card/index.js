@@ -164,7 +164,6 @@ function Card() {
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
-
         toast.error(error.message);
       }
     }
@@ -181,6 +180,7 @@ function Card() {
           const result = await FwarChar.setApprovalForAll(operator, true);
           await result.wait();
           setIsLoading(false);
+          approveInit();
         }
       } catch (error) {
         error.data ? toast.error(error.data.message) : toast.error(error.message);

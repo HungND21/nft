@@ -77,6 +77,7 @@ function MarketPlace() {
       );
       const tx = await result.wait();
       console.log('tx', tx);
+      checkApprove();
       setIsLoading(false);
       toast.success('approve for all successfully!');
     } catch (error) {
@@ -92,6 +93,7 @@ function MarketPlace() {
       console.log(result);
       const tx = await result.wait();
       console.log('tx', tx);
+      getListOrder();
       toast.success('Buy successfully!');
       setLoading({ [index]: false });
     } catch (error) {
@@ -100,20 +102,15 @@ function MarketPlace() {
     }
   };
 
-  const handleUnList = async (
-    FwarMarketDelegate,
-    FwarCharAddress,
-    nftIds,
-    index,
-    tokenUsdt = ''
-  ) => {
+  const handleUnList = async (FwarMarketDelegate, FwarCharAddress, nftIds, index, orderId) => {
     try {
       setLoading({ [index]: true });
-      tokenUsdt = '0xB3C3575552F6e250E2Ee7EeB94BB9BD91E57e51E';
+      // tokenUsdt = '0xB3C3575552F6e250E2Ee7EeB94BB9BD91E57e51E';
       console.log('nftIds', nftIds);
-      const result = await FwarMarketDelegate.cancelOrder(FwarCharAddress, nftIds, tokenUsdt);
+      const result = await FwarMarketDelegate.cancelOrder(orderId, FwarCharAddress, nftIds);
       const tx = await result.wait();
       console.log('tx', tx);
+      getListOrder();
       toast.success('unlist successfully!');
       setLoading({ [index]: false });
     } catch (error) {
@@ -155,12 +152,14 @@ function MarketPlace() {
     // console.log('listTeams', listTeams);
     setTeamDropdown(teams);
   };
-  const init = async () => {
+  const checkApprove = async () => {
     const allowance = await USDT.allowance(
       account,
       FwarMarketDelegateJson.networks[97].address // address FwarMarketDelegate
     );
     if (allowance > 0) setIsApprove(true);
+  };
+  const getListOrder = async () => {
     const { data: orders } = await OrderApi.getAll({
       page: currentPage,
       rarity: rarityState,
@@ -176,23 +175,12 @@ function MarketPlace() {
   };
   React.useEffect(() => {
     if (account) {
-      init();
+      getListOrder();
+      checkApprove();
       getTeams();
     }
   }, [account, rarityState, elementState, teamIdState, typeCardState, sortState, currentPage]);
 
-  const baseStyles = {
-    w: 7,
-    fontSize: 'sm'
-  };
-
-  const activeStyles = {
-    ...baseStyles,
-    _hover: {
-      bg: 'green.300'
-    },
-    bg: 'green.300'
-  };
   return (
     <>
       <ScaleFadeCustom>
@@ -251,7 +239,6 @@ function MarketPlace() {
             </GridItem>
           </Grid>
         </Box>
-
         <Box display="flex" alignItems="start">
           <Box
             display={{
@@ -327,7 +314,8 @@ function MarketPlace() {
                                       FwarMarketDelegate,
                                       FwarChar.address,
                                       card.nfts.map((i) => i.nftId),
-                                      index
+                                      index,
+                                      card.orderId
                                     )
                                   : handleBuy(FwarMarketDelegate, card.orderId, index);
                               } else {
@@ -352,6 +340,21 @@ function MarketPlace() {
             </Box>
           </Box>
         </Box>
+
+        {isLoading && (
+          <Stack
+            direction="row"
+            justify="center"
+            align="center"
+            pos="absolute"
+            zIndex="docked"
+            bg="#f6f6f6"
+            opacity="0.85"
+            inset="0"
+          >
+            <Loader size="lg" />
+          </Stack>
+        )}
       </ScaleFadeCustom>
     </>
   );

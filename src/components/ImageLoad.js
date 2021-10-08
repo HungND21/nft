@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const ImageLoad = React.memo(({ src, placeholder, alt = '' }) => {
+const ImageLoad = React.memo(({ src, placeholder, alt = '', ...props }) => {
   const [loading, setLoading] = useState(true);
   const [currentSrc, updateSrc] = useState(placeholder);
 
@@ -23,6 +23,7 @@ const ImageLoad = React.memo(({ src, placeholder, alt = '' }) => {
         transition: 'opacity .15s linear'
       }}
       alt={alt}
+      {...props}
     />
   );
 });

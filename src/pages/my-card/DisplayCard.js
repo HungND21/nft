@@ -2,7 +2,7 @@ import { Box, Image, Text, IconButton, Stack, HStack } from '@chakra-ui/react';
 import React from 'react';
 import { MinusIcon } from '@chakra-ui/icons';
 import { GiAlliedStar, GiCrossedSwords } from 'react-icons/gi';
-
+import ImageLoad from 'components/ImageLoad';
 function DisplayOpenedCards({ info, isCart = false, onremove }) {
   // console.log('info', info);
 
@@ -21,11 +21,20 @@ function DisplayOpenedCards({ info, isCart = false, onremove }) {
             )}
           </Stack>
           {info && (
-            <Image src={`/assets/card/rarity/${info['rarity']}.png`} width="100%" height="100%" />
+            <ImageLoad
+              src={`/assets/card/rarity/${info['rarity']}.png`}
+              placeholder="loading"
+              alt="rarity"
+              width="100%"
+              height="100%"
+            />
+            // <Image src={`/assets/card/rarity/${info['rarity']}.png`} width="100%" height="100%" />
           )}
           {info && (
-            <Image
+            <ImageLoad
               src={`/assets/card/element/${info['element']}.png`}
+              placeholder="loading"
+              alt="element"
               width="100%"
               height="100%"
               position="absolute"
@@ -33,10 +42,12 @@ function DisplayOpenedCards({ info, isCart = false, onremove }) {
             />
           )}
           {info && (
-            <Image
+            <ImageLoad
               src={`/assets/char/T_${
                 info['teamId'].teamId ? info['teamId'].teamId : info.teamId
               }.png`}
+              placeholder="loading"
+              alt="element"
               width="100%"
               height="100%"
               position="absolute"

@@ -1,5 +1,7 @@
 import { CgLockUnlock, CgShoppingBag, CgShoppingCart } from 'react-icons/cg';
-import { FiBarChart, FiBell, FiBox, FiList, FiTrendingUp } from 'react-icons/fi';
+import { FiBarChart, FiBell, FiBox, FiList, FiTrendingUp, FiCircle } from 'react-icons/fi';
+import { GiSwordsEmblem } from 'react-icons/gi';
+
 import ChestIcon from 'components/icon/ChestIcon';
 export const menuItems = [
   {
@@ -16,6 +18,42 @@ export const menuItems = [
     icon: ChestIcon,
     url: '/chest'
   },
+  {
+    id: 'pvp',
+    title: 'PVP',
+    type: 'item',
+    icon: GiSwordsEmblem,
+    url: '/pvp'
+  },
+  // {
+  //   id: 'zoo mall',
+  //   title: 'Zoo Mall',
+  //   type: 'group',
+  //   icon: GiSwordsEmblem,
+  //   children: [
+  //     {
+  //       id: 'pvp-pve',
+  //       title: 'PVP',
+  //       type: 'collapse',
+  //       icon: FiCircle,
+  //       children: [
+  //         {
+  //           id: 'pvp',
+  //           title: 'PVP',
+  //           type: 'item',
+  //           url: '/pvp'
+  //         }
+  //         // {
+  //         //     id: 'register',
+  //         //     title: 'Register',
+  //         //     type: 'item',
+  //         //     url: '/register',
+  //         //     target: true
+  //         // }
+  //       ]
+  //     }
+  //   ]
+  // },
   {
     id: 'market place',
     title: 'Market Place',
