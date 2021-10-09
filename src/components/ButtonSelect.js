@@ -1,11 +1,11 @@
-import { Box, useColorMode, useTheme } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import React from 'react';
-export default function ButtonSelect({ onClick, ...props }) {
+export default function ButtonSelect({ onClick, title, ...props }) {
   // const theme = useTheme();
   // const { colorMode } = useColorMode();
   return (
     <>
-      <Box
+      <Button
         bg="primary.base"
         px={12}
         py={1.5}
@@ -17,9 +17,10 @@ export default function ButtonSelect({ onClick, ...props }) {
         transition="color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,background 0s,border 0s"
         onClick={onClick}
         {...props}
+        align="center"
       >
-        Select
-      </Box>
+        {title}
+      </Button>
     </>
   );
 }
