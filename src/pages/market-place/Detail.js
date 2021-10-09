@@ -187,6 +187,7 @@ function Detail() {
           page: currentPage,
           element: infoNft.element
         });
+
         setListSelectCard(listCardSelect.docs);
         setPagesQuantity(listCardSelect.totalPages);
         // console.log('listCardSelect', listCardSelect);
@@ -412,7 +413,7 @@ function Detail() {
                 </Thead>
                 <Tbody>
                   {listSelectCard &&
-                    listSelectCard.map((card, index) => (
+                    listSelectCard.filter(i => i.nftId !== infoNft['nftId']).map((card, index) => (
                       <Tr
                         key={card._id}
                         _hover={{
@@ -429,7 +430,7 @@ function Detail() {
                         <Td>
                           {/* rgb(236 244 252) */}
                           <Link to={`/market-place/detail/${1}`}>
-                            <DisplayCardSelect info={card} text={true} />
+                            <DisplayCardSelect info={card}  />
                           </Link>
                         </Td>
                         <Td>{card.level}</Td>

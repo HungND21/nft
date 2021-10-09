@@ -25,13 +25,13 @@ export const menuItems = [
     icon: GiSwordsEmblem,
     url: '/pvp'
   },
-  {
-    id: 'game',
-    title: 'game play',
-    type: 'item',
-    icon: GiSwordsEmblem,
-    url: '/game'
-  },
+  // {
+  //   id: 'game',
+  //   title: 'game play',
+  //   type: 'item',
+  //   icon: GiSwordsEmblem,
+  //   url: '/game'
+  // },
   // {
   //   id: 'zoo mall',
   //   title: 'Zoo Mall',
