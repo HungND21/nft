@@ -66,12 +66,14 @@ function ChooseTeamComponent({ user, cardType }) {
   };
   const getTeamRegistration = async () => {
     const { data: teamReg } = await PlayerApi.getTeam(user._id);
-    if (cardType === 'attacker') {
-      setSelected(teamReg.attackTeam);
-      setTeamChoose(teamReg.attackTeam);
-    } else {
-      setSelected(teamReg.defenseTeam);
-      setTeamChoose(teamReg.defenseTeam);
+    if (teamReg) {
+      if (cardType === 'attacker') {
+        setSelected(teamReg.attackTeam);
+        setTeamChoose(teamReg.attackTeam);
+      } else {
+        setSelected(teamReg.defenseTeam);
+        setTeamChoose(teamReg.defenseTeam);
+      }
     }
     // console.log('teamReg', teamReg);
   };
@@ -197,6 +199,7 @@ function ChooseTeamComponent({ user, cardType }) {
                       }}
                       onClick={(e) => handleClick(e, card)}
                       bg={
+                        selected &&
                         selected.length &&
                         selected.map((i) => i.nftId).includes(card.nftId) &&
                         (colorMode === 'dark' ? theme.colors.dark.bg : theme.colors.light.base)

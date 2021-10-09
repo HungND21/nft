@@ -8,6 +8,7 @@ import MainLayout from 'layouts/Mainlayout';
 const Farm = Loadable(lazy(() => import('pages/farm')));
 const Chest = Loadable(lazy(() => import('pages/chest')));
 const Pvp = Loadable(lazy(() => import('pages/pvp')));
+const GamePlay = Loadable(lazy(() => import('pages/game-play')));
 const MarketPlace = Loadable(lazy(() => import('pages/market-place')));
 const MarketPlaceDetail = Loadable(lazy(() => import('pages/market-place/Detail')));
 const ZooMall = Loadable(lazy(() => import('pages/zoo-mall')));
@@ -33,7 +34,8 @@ const MainRoutes = (props) => {
         '/leaderboard',
         '/buyback',
         '/notification',
-        '/pvp'
+        '/pvp',
+        '/game'
       ]}
     >
       {/* <Suspense fallback={<div>Loading ...</div>}> */}
@@ -46,6 +48,7 @@ const MainRoutes = (props) => {
           <Route path="/farm" component={Farm} />
           <Route path="/chest" component={Chest} />
           <Route path="/pvp" component={Pvp} />
+          <Route path="/game" component={GamePlay} />
           <Route path="/market-place/detail/:id" component={MarketPlaceDetail} />
           <Route exact path="/market-place" component={MarketPlace} />
           <Route path="/zoo-market" component={ZooMall} />
