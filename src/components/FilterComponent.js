@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import { useColorMode, useTheme } from '@chakra-ui/react';
 
-function FilterComponent({ placeholder, handleChange, valueState, optionDropdown }) {
+function FilterComponent({ placeholder, handleChange, valueState, optionDropdown, ...props }) {
   const { colorMode } = useColorMode();
   const Theme = useTheme();
 
@@ -60,6 +60,7 @@ function FilterComponent({ placeholder, handleChange, valueState, optionDropdown
         placeholder={placeholder}
         theme={themeSelectConfig}
         styles={customStyles}
+        {...props}
       />
     </>
   );

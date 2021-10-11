@@ -25,10 +25,11 @@ import {
   Image
 } from '@chakra-ui/react';
 import Select from 'react-select';
+import FilterComponent from 'components/FilterComponent';
 
 import { useDispatch } from 'react-redux';
 import { openDrawer } from 'store/customizationSlice';
-
+import { regionDropdown } from './regionDropdown';
 import MetaMaskOnboarding from '@metamask/onboarding';
 
 import { FiSettings } from 'react-icons/fi';
@@ -119,27 +120,22 @@ function NavBar() {
           <ModalCloseButton />
           <ModalBody>
             <Stack direction="row" align="center">
-              <Box>
-                <Image src="https://zoogame.app/country/17.png" h="50px" />
+              <Image src="https://zoogame.app/country/17.png" h="50px" />
+              <Box w="100%">
+                <FilterComponent placeholder="Select Region" optionDropdown={regionDropdown} />
+                {/* <Text>You can choose your region now</Text> */}
               </Box>
-              <Select
-                options={['']}
-                isClearable
-                theme={(theme) => ({
-                  ...theme,
-                  borderRadius: '4px',
-                  colors: {
-                    ...theme.colors,
-                    primary25: '#d6d3ff'
-                    // primary: Theme.colors.primary.base
-                  }
-                })}
-              />
             </Stack>
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost">Secondary Action</Button>
+            <Button
+              variant="ghost"
+              w="100%"
+              bg={colorMode === 'dark' ? theme.colors.dark.light : '#FEBE43'}
+            >
+              Save
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

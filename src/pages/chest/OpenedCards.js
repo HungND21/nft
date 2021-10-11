@@ -1,37 +1,18 @@
 import { Box, Image, Text } from '@chakra-ui/react';
 import React from 'react';
 
-function DisplayOpenedCards({ info, text = true }) {
+function DisplayOpened({ info }) {
+  console.log('info', info);
   return (
     <>
       <Box>
         <Box position="relative">
           {info && (
-            <Image
-              src={`/assets/card/${
-                Number(info['rarity']) === 1
-                  ? 'trang-xanh.png'
-                  : Number(info['rarity']) === 2
-                  ? 'xanh-la.png'
-                  : Number(info['rarity']) === 3
-                  ? 'xanh-duong.png'
-                  : Number(info['rarity']) === 4 && 'tim.png'
-              }`}
-              width="100%"
-              height="100%"
-            />
+            <Image src={`/assets/card/rarity/${info['rarity']}.png`} width="100%" height="100%" />
           )}
           {info && (
             <Image
-              src={`/assets/card/${
-                Number(info['rarity']) === 1
-                  ? 'kim.png'
-                  : Number(info['rarity']) === 2
-                  ? 'moc.png'
-                  : Number(info['rarity']) === 3
-                  ? 'thuy.png'
-                  : Number(info['rarity']) === 4 && 'hoa.png'
-              }`}
+              src={`/assets/card/element/${info['element']}.png`}
               width="100%"
               height="100%"
               position="absolute"
@@ -40,36 +21,39 @@ function DisplayOpenedCards({ info, text = true }) {
           )}
           {info && (
             <Image
-              src={`/assets/char/K_1_sep.png`}
-              width="65%"
-              height="65%"
+              src={`/assets/char/T_${
+                info['teamId'].teamId ? info['teamId'].teamId : info.teamId
+              }.png`}
+              width="100%"
+              height="100%"
               position="absolute"
-              top="13.5%"
-              left="22.5%"
+              top="0"
+              left="11.5%"
               transform="translateX(-11.25%)"
             />
           )}
-          {text && (
-            <Box
-              // bgImage="https://zoogame.app/nfts/name.png"
-              bgRepeat="no-repeat"
-              bgSize="100% 100%"
-              position="absolute"
-              width="80%"
-              bottom="2%"
-              left="10%"
-              p="14% 8% 3%"
-              color="white"
-              align="center"
-            >
-              <Text>NFT {info['tokenId']}</Text>
-              <Text>{info && info['rarity']}</Text>
-            </Box>
-          )}
+
+          <Box
+            // bgRepeat="no-repeat"
+            // bgSize="100% 100%"
+            position="absolute"
+            width="100%"
+            bottom="14%"
+            left="0%"
+            p="0"
+            // color="white"
+            align="center"
+            color="#283046"
+            fontSize={24}
+            fontWeight="bold"
+          >
+            {/* <Text>NFT {info['tokenId']}</Text> */}
+            <Text fontSize="13">NFT {info && info.nftId}</Text>
+          </Box>
         </Box>
       </Box>
     </>
   );
 }
 
-export default DisplayOpenedCards;
+export default DisplayOpened;

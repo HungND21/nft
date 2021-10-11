@@ -11,7 +11,8 @@ import {
   Stack,
   Text,
   Link,
-  Flex
+  Flex,
+  useClipboard
 } from '@chakra-ui/react';
 import { ExternalLinkIcon, CopyIcon } from '@chakra-ui/icons';
 
@@ -49,6 +50,7 @@ function ModalWalletConnect({ onClose }) {
   const { isOpenModalWallet } = useSelector((state) => state.metamask);
 
   const { activateBrowserWallet, error, deactivate, account } = useEthers();
+  const { hasCopied, onCopy } = useClipboard(account);
 
   function handleConnectWallet() {
     if (error) {
@@ -89,9 +91,10 @@ function ModalWalletConnect({ onClose }) {
                       textDecoration: 'none',
                       color: 'primary.base'
                     }}
+                    onClick={onCopy}
                   >
                     <CopyIcon mr={1} />
-                    Copy Address
+                    {hasCopied ? 'Copied' : 'Copy Address'}
                   </Button>
                   <Link
                     fontSize="sm"

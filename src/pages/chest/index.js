@@ -27,6 +27,7 @@ import { useEthers } from '@usedapp/core';
 import OpenChestHistoryApi from 'apis/OpenChestHistoryApi';
 import { usePaginator } from 'chakra-paginator';
 import DisplayOpenedCards from 'components/DisplayCard';
+import DisplayOpened from './OpenedCards';
 import PaginatorCustom from 'components/PaginatorCustom';
 import ScaleFadeCustom from 'components/ScaleFadeCustom';
 import FwarCharDelegate from 'contracts/FwarChar/FwarCharDelegate.json';
@@ -167,7 +168,7 @@ const ChestInit = () => {
         <Grid templateColumns="repeat(10 , 1fr)">
           {item.nfts.map((c) => (
             <Link to={`/market-place/detail/${c.tokenId}`} key={c.tokenId}>
-              <DisplayOpenedCards info={c} text={false} />
+              <DisplayOpenedCards info={c} />
             </Link>
           ))}
         </Grid>
@@ -238,7 +239,7 @@ const ChestInit = () => {
               <Grid templateColumns="repeat(5 , 1fr)" gap={1} w="68%">
                 {openedCard.map((cardInfo) => (
                   <Box key={cardInfo.nftId}>
-                    <DisplayOpenedCards info={cardInfo} />
+                    <DisplayOpened info={cardInfo} />
                   </Box>
                 ))}
               </Grid>

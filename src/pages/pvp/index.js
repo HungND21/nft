@@ -1,8 +1,10 @@
-import { Box, Grid, Image, Stack, useColorMode, useTheme, VStack } from '@chakra-ui/react';
+import { Box, Grid, Image, Stack, useColorMode, useTheme, VStack, Button } from '@chakra-ui/react';
 import Loadable from 'components/Loadable';
 import ScaleFadeCustom from 'components/ScaleFadeCustom';
 import React, { lazy } from 'react';
 import { useSelector } from 'react-redux';
+import * as Colyseus from 'colyseus.js';
+
 // import ChooseTeamComponent from './ChooseTeamComponent';
 import Header from './Header';
 const ChooseTeamComponent = Loadable(lazy(() => import('./ChooseTeamComponent')));
@@ -12,11 +14,34 @@ function Pvp() {
 
   const theme = useTheme();
   const { colorMode } = useColorMode();
+  console.log('colyseus', Colyseus);
+  console.log(user);
+  const joinRoom = async () => {
+    let client = new Colyseus.Client('ws://fwar-match-maker.herokuapp.com/');
 
+    const availableRooms = await client.getAvailableRooms('Fwar_Room');
+    console.log(availableRooms);
+    if (availableRooms.length === 0) {
+      const newroom = await client.joinOrCreate('Fwar_Room', { userid: user._id });
+      console.log(newroom);
+      // SetIsWaiting(true);
+    } else {
+      for (var i = 0; i < availableRooms.length; i++) {
+        console.log(availableRooms[i].metadata);
+        if (availableRooms[i]) {
+          var room = client.joinById(availableRooms[i].roomId, { userid: user._id });
+          return;
+        } else {
+          console.log('cannot join room');
+        }
+      }
+    }
+  };
   return (
     <>
       <ScaleFadeCustom>
         <Header />
+        <Button onClick={joinRoom}>join room</Button>
         <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }} gap={5}>
           <VStack spacing="8">
             <ChooseTeamComponent user={user} cardType="attacker" />

@@ -62,7 +62,8 @@ const color = {
   },
   light: {
     base: '#f6f6f6',
-    bg: '#F2F2F2'
+    hover: '#eaeaea',
+    bg: '#e3e3e3'
   },
   dark: {
     base: '#151c31',

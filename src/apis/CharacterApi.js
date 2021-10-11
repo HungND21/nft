@@ -7,7 +7,7 @@ const UserApi = {
   },
   getMyList({ userId, page, rarity, element, teamId, typeCard, level, isListed, limit }) {
     // character?_userId=6154b18b08495c9b6ccaa330&_page=1&_rarity=4&_element=1
-    // console.log('isListed', isListed);
+    console.log('rarity', rarity);
     page = page ? page : '';
     isListed = isListed !== undefined ? isListed : '';
 

@@ -40,7 +40,7 @@ const theme = extendTheme({
   //       // 4. We can override existing variants
   //       solid: (props) => ({
   //         bg: props.colorMode === 'dark' ? color.primary.base : color.primary.base,
-  //         color: 'white',
+  //         color: 'white'
   //       })
   //     }
   //   }
