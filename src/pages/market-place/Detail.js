@@ -154,9 +154,10 @@ function Detail() {
   };
 
   async function getBurnInfo() {
-    const nft = getNftDetail();
+    const nft = await getNftDetail();
 
     if (nft) {
+      console.log('nft', nft);
       const burnInfo = await FwarCharDelegate.getBurnInfo(nft.rarity, nft.level);
       const baseAmount = burnInfo['baseAmount'];
       const junkAmount = burnInfo['junkAmount'];
@@ -174,7 +175,7 @@ function Detail() {
   React.useEffect(() => {
     getNftDetail();
     if (account) {
-      getNftDetail();
+      getBurnInfo();
       return () => {
         setInfoNft(null); // This worked for me
       };

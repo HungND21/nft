@@ -254,7 +254,7 @@ const ChestInit = () => {
             fontSize="1.5rem"
             fontWeight="bold"
           >
-            {/* {Intl.NumberFormat().format(allMyKey)} Key */}
+            {Intl.NumberFormat().format(allMyKey)} Key
           </Box>
           <Stack
             direction="column"
