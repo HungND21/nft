@@ -44,13 +44,13 @@ function NavBar() {
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { ethereum } = window;
-  if (ethereum) {
-    // ethereum.request({ method: 'eth_requestAccounts' });
-  } else {
-    // const onboarding = new MetaMaskOnboarding({ forwarderOrigin: 'http://localhost:3000' });
-    // onboarding.startOnboardizng();
-  }
+  // const { ethereum } = window;
+  // if (ethereum) {
+  //   // ethereum.request({ method: 'eth_requestAccounts' });
+  // } else {
+  //   // const onboarding = new MetaMaskOnboarding({ forwarderOrigin: 'http://localhost:3000' });
+  //   // onboarding.startOnboardizng();
+  // }
   return (
     <>
       <Box

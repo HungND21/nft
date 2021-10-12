@@ -6,7 +6,7 @@ import { openModalWalletConnect } from 'store/metamaskSlice';
 
 export function Account() {
   const { account } = useEthers();
-
+  console.log('account', account);
   const dispatch = useDispatch();
 
   return (

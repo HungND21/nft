@@ -1,5 +1,5 @@
 const BACKEND_URL_LOCAL = 'http://localhost:4000/api';
-const BACKEND_URL_HOSTING = 'https://api-fwar.herokuapp.com/api';
+const BACKEND_URL_HOSTING = 'http://51.89.233.106:4000/api';
 
 const BSCTESTNET_TRANSACTION_URL = 'https://testnet.bscscan.com/tx/'
 const BSC_TRANSACTION_URL = ''

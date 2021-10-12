@@ -41,6 +41,7 @@ import toast from 'react-hot-toast';
 import { FiEye, FiKey, FiUnlock } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getEthersContract, networkChainId } from 'dapp/getEthersContract';
 
 const ChestInit = () => {
   useTitle('FWAR - OPEN CHEST');
@@ -61,99 +62,110 @@ const ChestInit = () => {
   const { colorMode } = useColorMode();
 
   const { account } = useEthers();
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const fwarCharDelegate = new ethers.Contract(
-    FwarCharDelegate.networks[97].address,
-    FwarCharDelegate.abi,
-    signer
+  // const provider = new ethers.providers.Web3Provider(window.ethereum);
+  // const signer = provider.getSigner();
+
+  // const fwarCharDelegate = new ethers.Contract(
+  //   FwarCharDelegate.networks[97].address,
+  //   FwarCharDelegate.abi,
+  //   signer
+  // );
+
+  const fwarCharDelegate = getEthersContract(
+    networkChainId(FwarCharDelegate, 97),
+    FwarCharDelegate.abi
   );
-  const fwarKey = new ethers.Contract(FwarKey.networks[97].address, FwarKey.abi, signer);
-  const FWK = new ethers.Contract(
-    FwarKeyContract.networks[97].address,
-    FwarKeyContract.abi,
-    signer
+  const FWK = getEthersContract(
+    networkChainId(FwarKeyContract, 97),
+    FwarKeyContract.abi
   );
-  const allMyKey = useAllMyKey(FWK);
+  console.log('fwarCharDelegate', fwarCharDelegate);
+  // const fwarKey = new ethers.Contract(FwarKey.networks[97].address, FwarKey.abi, signer);
+  // const FWK = new ethers.Contract(
+  //   FwarKeyContract.networks[97].address,
+  //   FwarKeyContract.abi,
+  //   signer
+  // );
+  // const allMyKey = useAllMyKey(FWK);
 
-  React.useEffect(() => {
-    if (account && user) {
-      init();
-    }
-    return () => setIsApprove();
-    // console.log(FwarCharDelegate);
-  }, [account, openedCard, user, currentPage]);
+  // React.useEffect(() => {
+  //   if (account && user) {
+  //     // init();
+  //   }
+  //   return () => setIsApprove();
+  //   // console.log(FwarCharDelegate);
+  // }, [account, openedCard, user, currentPage]);
 
-  const init = async () => {
-    const allowance = await fwarKey.allowance(account, fwarCharDelegate.address);
-    console.log('allowance', allowance);
-    if (allowance > 0) setIsApprove(true);
+  // const init = async () => {
+  //   const allowance = await fwarKey.allowance(account, fwarCharDelegate.address);
+  //   console.log('allowance', allowance);
+  //   if (allowance > 0) setIsApprove(true);
 
-    const { data } = await OpenChestHistoryApi.getAll(user._id, currentPage);
-    setListOpenedChestHistory(data.docs);
-    setPagesQuantity(data.totalPages);
-    console.log('data', data);
-  };
+  //   const { data } = await OpenChestHistoryApi.getAll(user._id, currentPage);
+  //   setListOpenedChestHistory(data.docs);
+  //   setPagesQuantity(data.totalPages);
+  //   console.log('data', data);
+  // };
 
-  const handleOpenChest = async (amount) => {
-    // let gas = 0;
-    if (amount < 1 || amount > 10) {
-      toast.error('enter key 1 to 10');
-    } else {
-      if (account) {
-        try {
-          setIsLoadingOpen(true);
-          const gaslimitOpenItem = await fwarCharDelegate.estimateGas.OpenItems(account, amount);
-          const gasLimit = ethers.utils.hexlify(Number(gaslimitOpenItem) * 2);
-          const transactionOptions = {
-            gasLimit
-          };
-          const tx = await fwarCharDelegate.OpenItems(account, amount, transactionOptions);
-          const resultWaitTransaction = await tx.wait();
-          console.log('resultWaitTransaction', resultWaitTransaction);
-          const eventOpenChest = resultWaitTransaction.events.filter(
-            (e) => e.event && e.event === 'OpenChest'
-          );
+  // const handleOpenChest = async (amount) => {
+  //   // let gas = 0;
+  //   if (amount < 1 || amount > 10) {
+  //     toast.error('enter key 1 to 10');
+  //   } else {
+  //     if (account) {
+  //       try {
+  //         setIsLoadingOpen(true);
+  //         const gaslimitOpenItem = await fwarCharDelegate.estimateGas.OpenItems(account, amount);
+  //         const gasLimit = ethers.utils.hexlify(Number(gaslimitOpenItem) * 2);
+  //         const transactionOptions = {
+  //           gasLimit
+  //         };
+  //         const tx = await fwarCharDelegate.OpenItems(account, amount, transactionOptions);
+  //         const resultWaitTransaction = await tx.wait();
+  //         console.log('resultWaitTransaction', resultWaitTransaction);
+  //         const eventOpenChest = resultWaitTransaction.events.filter(
+  //           (e) => e.event && e.event === 'OpenChest'
+  //         );
 
-          // infoChar = [nftId, rarity, elementType, teamId]
-          const openChestInfos = eventOpenChest.map((nft) => nft.args._openChestInfo);
-          const transformInfoChar = openChestInfos[0].map((cardInfo) => ({
-            nftId: Number(cardInfo[0]),
-            rarity: Number(cardInfo[1]),
-            element: Number(cardInfo[2]),
-            teamId: Number(cardInfo[3])
-          }));
-          console.log('eventOpenChest', eventOpenChest);
-          console.log('openChestInfos', openChestInfos);
-          console.log('transformInfoChar', transformInfoChar);
-          setOpenedCards(transformInfoChar);
-          setIsLoadingOpen(false);
-          // console.log('eventMintNDT', eventMintNDT);
-          toast.success('open  successfully!');
-        } catch (error) {
-          // console.log(error);
-          if (error.data) {
-            toast.error(error.data.message);
-          } else {
-            toast.error(error.message);
-          }
-          setIsLoadingOpen(false);
-        }
-      }
-    }
-  };
+  //         // infoChar = [nftId, rarity, elementType, teamId]
+  //         const openChestInfos = eventOpenChest.map((nft) => nft.args._openChestInfo);
+  //         const transformInfoChar = openChestInfos[0].map((cardInfo) => ({
+  //           nftId: Number(cardInfo[0]),
+  //           rarity: Number(cardInfo[1]),
+  //           element: Number(cardInfo[2]),
+  //           teamId: Number(cardInfo[3])
+  //         }));
+  //         console.log('eventOpenChest', eventOpenChest);
+  //         console.log('openChestInfos', openChestInfos);
+  //         console.log('transformInfoChar', transformInfoChar);
+  //         setOpenedCards(transformInfoChar);
+  //         setIsLoadingOpen(false);
+  //         // console.log('eventMintNDT', eventMintNDT);
+  //         toast.success('open  successfully!');
+  //       } catch (error) {
+  //         // console.log(error);
+  //         if (error.data) {
+  //           toast.error(error.data.message);
+  //         } else {
+  //           toast.error(error.message);
+  //         }
+  //         setIsLoadingOpen(false);
+  //       }
+  //     }
+  //   }
+  // };
   // console.log('openedCard', openedCard);
-  const handleApprove = async () => {
-    setIsLoadingOpen(true);
-    const result = await fwarKey.approve(
-      fwarCharDelegate.address,
-      ethers.BigNumber.from(1e6).pow(3).mul(1000000)
-    );
-    const tx = await result.wait();
-    console.log('tx approve', tx);
-    setIsApprove(true);
-    setIsLoadingOpen(false);
-  };
+  // const handleApprove = async () => {
+  //   setIsLoadingOpen(true);
+  //   const result = await fwarKey.approve(
+  //     fwarCharDelegate.address,
+  //     ethers.BigNumber.from(1e6).pow(3).mul(1000000)
+  //   );
+  //   const tx = await result.wait();
+  //   console.log('tx approve', tx);
+  //   setIsApprove(true);
+  //   setIsLoadingOpen(false);
+  // };
 
   const listOpenedChest = listOpenedChestHistory?.map((item, index) => (
     <Tr key={item._id}>
@@ -254,7 +266,7 @@ const ChestInit = () => {
             fontSize="1.5rem"
             fontWeight="bold"
           >
-            {Intl.NumberFormat().format(allMyKey)} Key
+            {/* {Intl.NumberFormat().format(allMyKey)} Key */}
           </Box>
           <Stack
             direction="column"
@@ -287,7 +299,7 @@ const ChestInit = () => {
                     <InputRightElement pointerEvents="none" children="Key" />
                   </InputGroup>
                 )}
-                <Button
+                {/* <Button
                   leftIcon={<FiUnlock />}
                   size="sm"
                   color={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
@@ -297,7 +309,7 @@ const ChestInit = () => {
                   }}
                 >
                   {isApprove ? `Open` : `Approve`}
-                </Button>
+                </Button> */}
               </>
             )}
           </Stack>

@@ -1,7 +1,7 @@
-import { Box, Image, Text, IconButton, Stack ,HStack} from '@chakra-ui/react';
+import { Box, Image, Text, IconButton, Stack, HStack } from '@chakra-ui/react';
 import React from 'react';
 import { MinusIcon } from '@chakra-ui/icons';
-import {GiAlliedStar, GiCrossedSwords, GiSwordBreak} from 'react-icons/gi';
+import { GiAlliedStar, GiCrossedSwords, GiSwordBreak } from 'react-icons/gi';
 
 function DisplayOpenedCards({ info, text = false, isCart = false, onremove, isDetail = false }) {
   // console.log('info', info);
@@ -62,16 +62,16 @@ function DisplayOpenedCards({ info, text = false, isCart = false, onremove, isDe
               fontWeight="bold"
             >
               {/* <Text>NFT {info['tokenId']}</Text> */}
-              <Text fontSize={isDetail ? 25 :13}>NFT {info && info.nftId}</Text>
-              <HStack justify="center" spacing="24px" >
-                <HStack fontSize={isDetail ? 23 :13} spacing="5px">
-                  <GiAlliedStar/>  
+              <Text fontSize={isDetail ? 25 : 13}>NFT {info && info.nftId}</Text>
+              <HStack justify="center" spacing="24px">
+                <HStack fontSize={isDetail ? 23 : 13} spacing="5px">
+                  <GiAlliedStar />
                   <Text>{info && info.level}</Text>
-                  </HStack>
-                  <HStack fontSize={isDetail ? 23 :13} spacing="5px">
-                  <GiCrossedSwords/>  
-                  <Text>{info && info.attack}</Text>
-                  </HStack>
+                </HStack>
+                <HStack fontSize={isDetail ? 23 : 13} spacing="5px">
+                  <GiCrossedSwords />
+                  <Text>{info && Math.floor(info.attack)}</Text>
+                </HStack>
               </HStack>
             </Box>
           )}

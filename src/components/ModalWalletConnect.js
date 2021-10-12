@@ -15,6 +15,7 @@ import {
   useClipboard
 } from '@chakra-ui/react';
 import { ExternalLinkIcon, CopyIcon } from '@chakra-ui/icons';
+import MetaMaskOnboarding from '@metamask/onboarding';
 
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
 import {
@@ -46,28 +47,35 @@ function getErrorMessage(error) {
 const forwarderOrigin = 'http://localhost:3000';
 
 function ModalWalletConnect({ onClose }) {
+  const onboarding = React.useRef();
+
   // const { active, error, account, library, connector, activate, deactivate } = useWeb3React();
   const { isOpenModalWallet } = useSelector((state) => state.metamask);
 
   const { activateBrowserWallet, error, deactivate, account } = useEthers();
   const { hasCopied, onCopy } = useClipboard(account);
 
-  function handleConnectWallet() {
-    if (error) {
-      console.log(error);
-      toast.error(getErrorMessage(error), { duration: 3000 });
-    } else {
-      activateBrowserWallet();
-      // activate();
-      // onClose();
-    }
-  }
-
   function handleDeactivateAccount() {
     deactivate();
     // onClose();
   }
-
+  React.useEffect(() => {
+    if (!onboarding.current) {
+      onboarding.current = new MetaMaskOnboarding();
+    } else {
+    }
+  }, []);
+  const onClick = () => {
+    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+      window.ethereum.request({ method: 'eth_requestAccounts' }).then((newAccounts) => {
+        console.log('newAccounts', newAccounts);
+        activateBrowserWallet();
+      });
+    } else {
+      toast.error(getErrorMessage(error), { duration: 3000 });
+      onboarding.current.startOnboarding();
+    }
+  };
   return (
     <>
       <Modal isOpen={isOpenModalWallet} onClose={onClose}>
@@ -131,7 +139,7 @@ function ModalWalletConnect({ onClose }) {
                     bg: '#f8f8f8'
                   }}
                   // onClick={connect}
-                  onClick={handleConnectWallet}
+                  onClick={onClick}
                 >
                   <Image src="https://zoogame.app/img/metamask.7258559d.7258559d.svg" />
                   <Text>Metamask</Text>

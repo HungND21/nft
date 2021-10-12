@@ -33,8 +33,12 @@ import {
   Tr,
   useColorMode,
   useDisclosure,
-  useTheme
+  useTheme,
+  ListItem,
+  ListIcon
 } from '@chakra-ui/react';
+import { FiDisc } from 'react-icons/fi';
+
 import { useEthers } from '@usedapp/core';
 import CharacterApi from 'apis/CharacterApi';
 import { usePaginator } from 'chakra-paginator';
@@ -50,8 +54,7 @@ import { FiArrowUp, FiPlus } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { elementDropdown, rarityDropdown } from 'utils/dataFilter';
-import ItemListComponent from './ItemListComponent';
-
+import Canvas from './Canvas';
 const DisplayCardSelect = Loadable(lazy(() => import('./DisplayCardForUpgrade')));
 // const DisplayCardSelect = Loadable(lazy(() => import('./DisplayCardSelect')));
 
@@ -160,7 +163,7 @@ function Detail() {
   async function getNftDetail() {
     const { data: nft } = await CharacterApi.getOne(id);
     setInfoNft(nft);
-    // console.log('nft', nft);
+    console.log('nft', nft);
     if (nft) {
       const burnInfo = await FwarCharDelegate.getBurnInfo(nft.rarity, nft.level);
       const baseAmount = burnInfo['baseAmount'];
@@ -168,7 +171,7 @@ function Detail() {
       const normalAmount = burnInfo['normalAmount'];
       const rareAmount = burnInfo['rareAmount'];
       setNeedUpgrade({ baseAmount, junkAmount, normalAmount, rareAmount });
-      console.log('burnInfo', burnInfo);
+      // console.log('burnInfo', burnInfo);
     }
   }
 
@@ -183,7 +186,7 @@ function Detail() {
 
   React.useEffect(() => {
     (async function () {
-      if (user && infoNft) {
+      if (user && infoNft && isMyNft && infoNft['rarity'] > 3) {
         const rarity = [];
         const burnArray = Object.entries(needUpgrade).filter((i) => i[1] > 0);
         burnArray.forEach((i) => {
@@ -236,6 +239,13 @@ function Detail() {
     }
     // console.log(FwarChar);
   }, [account, isMyNft, isApprove]);
+  const draw = (ctx, frameCount) => {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    ctx.arc(50, 100, 20 * Math.sin(frameCount * 0.05) ** 2, 0, 2 * Math.PI);
+    ctx.fill();
+  };
   return (
     <>
       <ScaleFade initialScale={0.9} in>
@@ -298,43 +308,68 @@ function Detail() {
                   boxShadow="content"
                   borderRadius="6px"
                 >
-                  <Box>{infoNft && infoNft['teamId'].cardName}</Box>
+                  <Box>{infoNft && infoNft['teamId'].name}</Box>
                   <Grid templateColumns="repeat(12, 1fr)" gap={4} mt={10}>
                     <GridItem colSpan={{ base: 12, lg: 5 }}>
                       <List spacing={3} paddingBottom={5}>
-                        <ItemListComponent name="NFT Token ID" value={id} />
+                        <ListItem>
+                          <ListIcon as={FiDisc} />
+                          NFT Token ID = {id}
+                        </ListItem>
                         {infoNft && (
                           <>
-                            <ItemListComponent
-                              name="Attack"
-                              value={Number(infoNft['baseAttack'])}
-                            />
-                            <ItemListComponent
-                              name="Defend"
-                              value={Number(infoNft['baseDefense'])}
-                            />
-                            <ItemListComponent name="Health" value={Number(infoNft['baseHeath'])} />
-                            <ItemListComponent
-                              name="Element Type"
-                              value={
-                                elementDropdown.find((i) => i.value === infoNft['element']).label
-                              }
-                            />
-                            <ItemListComponent name="Level" value={infoNft['level']} />
-                            <ItemListComponent
-                              name="Rarity"
-                              value={
-                                rarityDropdown.find((i) => i.value === infoNft['rarity']).label
-                              }
-                            />
-                            <ItemListComponent name="Team" value={infoNft['teamId'].name} />
+                            <ListItem>
+                              <ListIcon as={FiDisc} />
+                              Attack = {Number(infoNft['baseAttack'])}
+                              {infoNft.attack > 0 && (
+                                <Text color="green" display="inline">
+                                  (+{Math.floor(infoNft.attack)})
+                                </Text>
+                              )}
+                            </ListItem>
+                            <ListItem>
+                              <ListIcon as={FiDisc} />
+                              Defend = {Number(infoNft['baseDefense'])}
+                              {infoNft.defense > 0 && (
+                                <Text color="green" display="inline">
+                                  (+{Math.floor(infoNft.defense)})
+                                </Text>
+                              )}
+                            </ListItem>
+                            <ListItem>
+                              <ListIcon as={FiDisc} />
+                              Health = {Number(infoNft['baseHeath'])}
+                              {infoNft.heath > 0 && (
+                                <Text color="green" display="inline">
+                                  (+{Math.floor(infoNft.heath)})
+                                </Text>
+                              )}
+                            </ListItem>
+                            <ListItem>
+                              <ListIcon as={FiDisc} />
+                              Element Type ={' '}
+                              {elementDropdown.find((i) => i.value === infoNft['element']).label}
+                            </ListItem>
+                            <ListItem>
+                              <ListIcon as={FiDisc} />
+                              Level = {Number(infoNft['level'])}
+                            </ListItem>
+                            <ListItem>
+                              <ListIcon as={FiDisc} />
+                              Rarity ={' '}
+                              {rarityDropdown.find((i) => i.value === infoNft['rarity']).label}
+                            </ListItem>
+                            <ListItem>
+                              <ListIcon as={FiDisc} />
+                              Team = {infoNft['teamId'].name}
+                            </ListItem>
                           </>
                         )}
-                        {/* <ItemListComponent name="Level" value={id} /> */}
-                        {/* <ItemListComponent name="HashPower" value={id} /> */}
                       </List>
                     </GridItem>
-                    <GridItem colSpan={{ base: 12, lg: 7 }}>canvas </GridItem>
+                    <GridItem colSpan={{ base: 12, lg: 7 }}>
+                      <Canvas draw={draw} />
+                    </GridItem>
                   </Grid>
                 </TabPanel>
                 <TabPanel

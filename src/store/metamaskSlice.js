@@ -1,18 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+// import MetaMaskOnboarding from '@metamask/onboarding';
 
-const isMetaMaskInstalled = () => {
-  const { ethereum } = window;
-  return Boolean(ethereum && ethereum.isMetaMask);
-};
-export const existMetamask = createAsyncThunk(
-  'metamask/existMetamask',
-  async (userId, thunkAPI) => {
-    return isMetaMaskInstalled();
-  }
-);
+// export const existMetamask = createAsyncThunk(
+//   'metamask/existMetamask',
+//   async (userId, thunkAPI) => {
+//     return MetaMaskOnboarding.isMetaMaskInstalled();
+//   }
+// );
 
 const initialState = {
-  isMetaMaskInstalled: false,
   isOpenModalWallet: false
 };
 const customizationReducer = createSlice({
@@ -25,11 +21,6 @@ const customizationReducer = createSlice({
     closeModalWalletConnect: (state, action) => {
       state.isOpenModalWallet = false;
     }
-  },
-  extraReducers: (builder) => {
-    builder.addCase(existMetamask.fulfilled, (state, action) => {
-      state.isMetaMaskInstalled = action.payload;
-    });
   }
 });
 const { reducer, actions } = customizationReducer;

@@ -5,6 +5,7 @@ import ScrollButton from 'components/ScrollButton';
 import { Toaster } from 'react-hot-toast';
 
 import { useEthers, useEtherBalance, useTransactions } from '@usedapp/core';
+import MetaMaskOnboarding from '@metamask/onboarding';
 
 // import Loadable from 'components/Loadable';
 // const DrawerMain = Loadable(lazy(() => import('./Drawer')));
@@ -26,66 +27,87 @@ export default function MainLayout({ children }) {
   const { user, isLogin } = useSelector((state) => state.user);
   const { colorMode } = useColorMode();
   const theme = useTheme();
-  const { activateBrowserWallet, account } = useEthers();
+  const { account } = useEthers();
 
   const bg = useColorModeValue('white', theme.colors.dark.light);
   const color = useColorModeValue('#6e6b7b', 'white');
+  // ----------------------
+  // const onboarding = React.useRef();
+
+  // React.useEffect(() => {
+  //   if (!onboarding.current) {
+  //     onboarding.current = new MetaMaskOnboarding();
+  //   }
+  // }, []);
+
+  // React.useEffect(() => {
+  //   function handleNewAccounts(newAccounts) {
+  //     setAccounts(newAccounts);
+  //   }
+  //   if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+  //     window.ethereum.request({ method: 'eth_requestAccounts' }).then(handleNewAccounts);
+  //     window.ethereum.on('accountsChanged', handleNewAccounts);
+  //     return () => {
+  //       window.ethereum.off('accountsChanged', handleNewAccounts);
+  //     };
+  //   }
+  // }, []);
+
+  // ----------------------
   // const userState = useSelector((state) => state.user);
   // console.log('userState layout ', userState);
 
   //
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  // const provider = new ethers.providers.Web3Provider(window.ethereum);
+  // const signer = provider.getSigner();
 
-  const handleAuthenticate = async ({ address, signature }) => {
-    try {
-      return await UserApi.login({
-        address,
-        signature
-      });
-    } catch (error) {
-      return;
-    }
-  };
-  const handleSignMessage = async (address) => {
-    try {
-      const signature = await signer.signMessage('Login');
-      return { address, signature };
-    } catch (err) {
-      throw new Error('You need to sign the message to be able to log in.');
-    }
-  };
-  const handleSignup = async (address) => await UserApi.signup(address);
+  // const handleAuthenticate = async ({ address, signature }) => {
+  //   try {
+  //     return await UserApi.login({
+  //       address,
+  //       signature
+  //     });
+  //   } catch (error) {
+  //     return;
+  //   }
+  // };
+  // const handleSignMessage = async (address) => {
+  //   try {
+  //     const signature = await signer.signMessage('Login');
+  //     return { address, signature };
+  //   } catch (err) {
+  //     throw new Error('You need to sign the message to be able to log in.');
+  //   }
+  // };
+  // const handleSignup = async (address) => await UserApi.signup(address);
   React.useEffect(() => {
-    activateBrowserWallet();
-    const init = async () => {
-      try {
-        const accessToken = getItem('accessToken');
-        if (account) {
-          if (!accessToken) {
-            const { data } = await UserApi.find(account);
-            // console.log(data);
-            if (!data) await handleSignup(account);
-            const { address, signature } = await handleSignMessage(account);
-            const {
-              data: { accessToken }
-            } = await handleAuthenticate({ address, signature });
-            setItem('accessToken', accessToken);
-          } else {
-            toast.success('login success');
-
-            // console.log('login');
-            // const newUser = await UserApi.signup(account)
-          }
-        }
-      } catch (error) {
-        toast.error(error);
-      }
-    };
+    // const init = async () => {
+    //   try {
+    //     const accessToken = getItem('accessToken');
+    //     if (account) {
+    //       if (!accessToken) {
+    //         const { data } = await UserApi.find(account);
+    //         // console.log(data);
+    //         if (!data) await handleSignup(account);
+    //         const { address, signature } = await handleSignMessage(account);
+    //         const {
+    //           data: { accessToken }
+    //         } = await handleAuthenticate({ address, signature });
+    //         setItem('accessToken', accessToken);
+    //       } else {
+    //         toast.success('login success');
+    //         // console.log('login');
+    //         // const newUser = await UserApi.signup(account)
+    //       }
+    //     }
+    //   } catch (error) {
+    //     toast.error(error);
+    //   }
+    // };
     // init();
     if (account) {
       const getUser = async () => {
-        const user = await dispatch(existUser(account));
+        await dispatch(existUser(account));
       };
       getUser();
     }
@@ -95,6 +117,7 @@ export default function MainLayout({ children }) {
   const closeModalWallet = () => {
     dispatch(closeModalWalletConnect());
   };
+
   return (
     <React.Fragment>
       <Box bg={colorMode === 'dark' ? theme.colors.dark.base : 'white'} color={color} h="100%">
