@@ -62,9 +62,9 @@ export default function DrawerMain() {
         </Box>
 
         <Box p={(2, 3)}>
-          <Text m="0.8rem" textTransform="uppercase" fontWeight="medium" fontSize="0.9rem">
+          {/* <Text m="0.8rem" textTransform="uppercase" fontWeight="medium" fontSize="0.9rem">
             menu
-          </Text>
+          </Text> */}
           <MenuList />
         </Box>
 
@@ -82,24 +82,32 @@ export default function DrawerMain() {
               </Stack>
               <IconButton
                 variant="ghost"
+                // color={colorMode === 'dark' ? 'white.base' : 'primary.base'}
+                color="primary.base"
+                aria-label="color mode"
+                onClick={toggleColorMode}
+                icon={colorMode === 'dark' ? <FiMoon /> : <FiSun />}
+              />
+              {/* <IconButton
+                variant="ghost"
                 color={colorMode === 'dark' ? 'white.base' : 'primary.dark'}
                 aria-label="color mode"
                 onClick={handleCloseDrawer}
                 icon={<CloseIcon />}
-              />
+              /> */}
             </Flex>
           </DrawerHeader>
 
           <DrawerBody>
-            <Text
-              m="0.8rem"
-              textTransform="uppercase"
-              fontWeight="medium"
-              fontSize="0.9rem"
-              color="secondary.base"
-            >
-              menu
-            </Text>
+            {/* <Text
+                m="0.8rem"
+                textTransform="uppercase"
+                fontWeight="medium"
+                fontSize="0.9rem"
+                color="secondary.base"
+              >
+                menu
+              </Text> */}
             <MenuList handleCloseDrawer={handleCloseDrawer} />
           </DrawerBody>
 

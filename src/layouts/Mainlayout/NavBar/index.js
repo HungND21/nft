@@ -81,7 +81,7 @@ function NavBar() {
                 xl: 'none'
               }}
             />
-            <Text>English</Text>
+            {/* <Text>English</Text> */}
             {/* <IconButton
               variant="ghost"
               color={colorMode === 'dark' ? 'white.base' : 'primary.base'}

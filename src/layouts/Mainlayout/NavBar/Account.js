@@ -22,12 +22,17 @@ export function Account() {
         _hover={{ boxShadow: '0 8px 25px -8px #FEBE43;' }}
         transition="color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,background 0s,border 0s"
         onClick={() => dispatch(openModalWalletConnect())}
+        fontSize={{
+          base: '11px',
+          sm: '13px',
+          md: '15px'
+        }}
       >
         {account === null
           ? '-'
           : account
           ? `${account.slice(0, 6)}...${account.slice(account.length - 4, account.length)}`
-          : 'Connect To Wallet'}
+          : 'Connect Wallet'}
       </Box>
     </>
   );

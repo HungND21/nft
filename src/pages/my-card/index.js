@@ -304,8 +304,15 @@ function Card() {
         >
           <Grid templateColumns="repeat(6, 1fr)" gap={4}>
             <GridItem colSpan={{ base: 6, md: 5 }}>
-              <Grid templateColumns="repeat(5, 1fr)" gap={4}>
-                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+              <Grid
+                templateColumns={{
+                  base: 'repeat(1, 1fr)',
+                  md: 'repeat(2, 1fr)',
+                  lg: 'repeat(5, 1fr)'
+                }}
+                gap={4}
+              >
+                <GridItem>
                   <FilterComponent
                     placeholder="CardType"
                     handleChange={handleChangeCardType}
@@ -313,7 +320,7 @@ function Card() {
                     optionDropdown={cardTypeDropdown}
                   />
                 </GridItem>
-                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <GridItem>
                   <FilterComponent
                     placeholder="Rarity"
                     handleChange={handleChangeRarity}
@@ -321,7 +328,7 @@ function Card() {
                     optionDropdown={rarityDropdown}
                   />
                 </GridItem>
-                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <GridItem>
                   <FilterComponent
                     placeholder="Element"
                     handleChange={handleChangeElement}
@@ -329,7 +336,7 @@ function Card() {
                     optionDropdown={elementDropdown}
                   />
                 </GridItem>
-                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <GridItem>
                   <FilterComponent
                     placeholder="Team"
                     handleChange={handleChangeTeamId}
@@ -337,9 +344,9 @@ function Card() {
                     optionDropdown={teamDropdown}
                   />
                 </GridItem>
-                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+                <GridItem>
                   <FilterComponent
-                    placeholder="ListedOrNot"
+                    placeholder="Listed"
                     handleChange={handleChangeIsListed}
                     valueState={isListedState}
                     optionDropdown={ListedOrNotDropdown}

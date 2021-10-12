@@ -184,50 +184,54 @@ function MarketPlace() {
           borderRadius={8}
           position="relative"
         >
-          <Grid templateColumns="repeat(5, 1fr)" gap={4}>
-            <GridItem colSpan={{ base: 6, md: 5 }}>
-              <Grid templateColumns="repeat(5, 1fr)" alignItems="center" gap={4}>
-                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-                  <FilterComponent
-                    placeholder="CardType"
-                    handleChange={handleChangeCardType}
-                    valueState={typeCardState}
-                    optionDropdown={cardTypeDropdown}
-                  />
-                </GridItem>
-                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-                  <FilterComponent
-                    placeholder="Rarity"
-                    handleChange={handleChangeRarity}
-                    valueState={rarityState}
-                    optionDropdown={rarityDropdown}
-                  />
-                </GridItem>
-                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-                  <FilterComponent
-                    placeholder="Element"
-                    handleChange={handleChangeElement}
-                    valueState={elementState}
-                    optionDropdown={elementDropdown}
-                  />
-                </GridItem>
-                <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-                  <FilterComponent
-                    placeholder="Team"
-                    handleChange={handleChangeTeamId}
-                    valueState={teamIdState}
-                    optionDropdown={teamDropdown}
-                  />
-                </GridItem>
-                <GridItem>
-                  <FilterComponent
-                    placeholder="Sort"
-                    handleChange={handleChangeSort}
-                    valueState={sortState}
-                    optionDropdown={sortDropdown}
-                  />
-                </GridItem>
-              </Grid>
+          <Grid
+            templateColumns={{
+              base: 'repeat(1, 1fr)',
+              md: 'repeat(2, 1fr)',
+              lg: 'repeat(5, 1fr)'
+            }}
+            alignItems="center"
+            gap={4}
+          >
+            <GridItem>
+              <FilterComponent
+                placeholder="CardType"
+                handleChange={handleChangeCardType}
+                valueState={typeCardState}
+                optionDropdown={cardTypeDropdown}
+              />
+            </GridItem>
+            <GridItem>
+              <FilterComponent
+                placeholder="Rarity"
+                handleChange={handleChangeRarity}
+                valueState={rarityState}
+                optionDropdown={rarityDropdown}
+              />
+            </GridItem>
+            <GridItem>
+              <FilterComponent
+                placeholder="Element"
+                handleChange={handleChangeElement}
+                valueState={elementState}
+                optionDropdown={elementDropdown}
+              />
+            </GridItem>
+            <GridItem>
+              <FilterComponent
+                placeholder="Team"
+                handleChange={handleChangeTeamId}
+                valueState={teamIdState}
+                optionDropdown={teamDropdown}
+              />
+            </GridItem>
+            <GridItem>
+              <FilterComponent
+                placeholder="Sort"
+                handleChange={handleChangeSort}
+                valueState={sortState}
+                optionDropdown={sortDropdown}
+              />
             </GridItem>
           </Grid>
         </Box>

@@ -26,6 +26,6 @@ export const sortDropdown = [
 ];
 
 export const ListedOrNotDropdown = [
-  { value: 'true', label: 'Listed NFT' },
-  { value: 'false', label: 'Unlisted NFT' }
+  { value: 'true', label: 'yes' },
+  { value: 'false', label: 'no' }
 ];

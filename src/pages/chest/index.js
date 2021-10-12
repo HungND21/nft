@@ -76,24 +76,24 @@ const ChestInit = () => {
 
   const allMyKey = useAllMyKey(FWK);
 
-  // React.useEffect(() => {
-  //   if (account && user) {
-  //     // init();
-  //   }
-  //   return () => setIsApprove();
-  //   // console.log(FwarCharDelegate);
-  // }, [account, openedCard, user, currentPage]);
+  React.useEffect(() => {
+    if (account && user) {
+      init();
+    }
+    return () => setIsApprove();
+    // console.log(FwarCharDelegate);
+  }, [account, openedCard, user, currentPage]);
 
-  // const init = async () => {
-  //   const allowance = await fwarKey.allowance(account, fwarCharDelegate.address);
-  //   console.log('allowance', allowance);
-  //   if (allowance > 0) setIsApprove(true);
+  const init = async () => {
+    const allowance = await fwarKey.allowance(account, fwarCharDelegate.address);
+    console.log('allowance', allowance);
+    if (allowance > 0) setIsApprove(true);
 
-  //   const { data } = await OpenChestHistoryApi.getAll(user._id, currentPage);
-  //   setListOpenedChestHistory(data.docs);
-  //   setPagesQuantity(data.totalPages);
-  //   console.log('data', data);
-  // };
+    const { data } = await OpenChestHistoryApi.getAll(user._id, currentPage);
+    setListOpenedChestHistory(data.docs);
+    setPagesQuantity(data.totalPages);
+    console.log('data', data);
+  };
 
   const handleOpenChest = async (amount) => {
     // let gas = 0;
