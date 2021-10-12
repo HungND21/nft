@@ -39,12 +39,15 @@ import moment from 'moment';
 import React from 'react';
 import toast from 'react-hot-toast';
 import { FiEye, FiKey, FiUnlock } from 'react-icons/fi';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getEthersContract, networkChainId } from 'dapp/getEthersContract';
+import { openModalWalletConnect } from 'store/metamaskSlice';
+import { isMetaMaskInstalled } from 'dapp/metamask';
 
 const ChestInit = () => {
   useTitle('FWAR - OPEN CHEST');
+  const dispatch = useDispatch();
 
   const [amount, setAmount] = React.useState('');
   const [isApprove, setIsApprove] = React.useState(false);
@@ -62,31 +65,16 @@ const ChestInit = () => {
   const { colorMode } = useColorMode();
 
   const { account } = useEthers();
-  // const provider = new ethers.providers.Web3Provider(window.ethereum);
-  // const signer = provider.getSigner();
-
-  // const fwarCharDelegate = new ethers.Contract(
-  //   FwarCharDelegate.networks[97].address,
-  //   FwarCharDelegate.abi,
-  //   signer
-  // );
 
   const fwarCharDelegate = getEthersContract(
     networkChainId(FwarCharDelegate, 97),
     FwarCharDelegate.abi
   );
-  const FWK = getEthersContract(
-    networkChainId(FwarKeyContract, 97),
-    FwarKeyContract.abi
-  );
+  const FWK = getEthersContract(networkChainId(FwarKeyContract, 97), FwarKeyContract.abi);
+  const fwarKey = getEthersContract(networkChainId(FwarKey, 97), FwarKey.abi);
   console.log('fwarCharDelegate', fwarCharDelegate);
-  // const fwarKey = new ethers.Contract(FwarKey.networks[97].address, FwarKey.abi, signer);
-  // const FWK = new ethers.Contract(
-  //   FwarKeyContract.networks[97].address,
-  //   FwarKeyContract.abi,
-  //   signer
-  // );
-  // const allMyKey = useAllMyKey(FWK);
+
+  const allMyKey = useAllMyKey(FWK);
 
   // React.useEffect(() => {
   //   if (account && user) {
@@ -107,65 +95,65 @@ const ChestInit = () => {
   //   console.log('data', data);
   // };
 
-  // const handleOpenChest = async (amount) => {
-  //   // let gas = 0;
-  //   if (amount < 1 || amount > 10) {
-  //     toast.error('enter key 1 to 10');
-  //   } else {
-  //     if (account) {
-  //       try {
-  //         setIsLoadingOpen(true);
-  //         const gaslimitOpenItem = await fwarCharDelegate.estimateGas.OpenItems(account, amount);
-  //         const gasLimit = ethers.utils.hexlify(Number(gaslimitOpenItem) * 2);
-  //         const transactionOptions = {
-  //           gasLimit
-  //         };
-  //         const tx = await fwarCharDelegate.OpenItems(account, amount, transactionOptions);
-  //         const resultWaitTransaction = await tx.wait();
-  //         console.log('resultWaitTransaction', resultWaitTransaction);
-  //         const eventOpenChest = resultWaitTransaction.events.filter(
-  //           (e) => e.event && e.event === 'OpenChest'
-  //         );
+  const handleOpenChest = async (amount) => {
+    // let gas = 0;
+    if (amount < 1 || amount > 10) {
+      toast.error('enter key 1 to 10');
+    } else {
+      if (account) {
+        try {
+          setIsLoadingOpen(true);
+          const gaslimitOpenItem = await fwarCharDelegate.estimateGas.OpenItems(account, amount);
+          const gasLimit = ethers.utils.hexlify(Number(gaslimitOpenItem) * 2);
+          const transactionOptions = {
+            gasLimit
+          };
+          const tx = await fwarCharDelegate.OpenItems(account, amount, transactionOptions);
+          const resultWaitTransaction = await tx.wait();
+          console.log('resultWaitTransaction', resultWaitTransaction);
+          const eventOpenChest = resultWaitTransaction.events.filter(
+            (e) => e.event && e.event === 'OpenChest'
+          );
 
-  //         // infoChar = [nftId, rarity, elementType, teamId]
-  //         const openChestInfos = eventOpenChest.map((nft) => nft.args._openChestInfo);
-  //         const transformInfoChar = openChestInfos[0].map((cardInfo) => ({
-  //           nftId: Number(cardInfo[0]),
-  //           rarity: Number(cardInfo[1]),
-  //           element: Number(cardInfo[2]),
-  //           teamId: Number(cardInfo[3])
-  //         }));
-  //         console.log('eventOpenChest', eventOpenChest);
-  //         console.log('openChestInfos', openChestInfos);
-  //         console.log('transformInfoChar', transformInfoChar);
-  //         setOpenedCards(transformInfoChar);
-  //         setIsLoadingOpen(false);
-  //         // console.log('eventMintNDT', eventMintNDT);
-  //         toast.success('open  successfully!');
-  //       } catch (error) {
-  //         // console.log(error);
-  //         if (error.data) {
-  //           toast.error(error.data.message);
-  //         } else {
-  //           toast.error(error.message);
-  //         }
-  //         setIsLoadingOpen(false);
-  //       }
-  //     }
-  //   }
-  // };
-  // console.log('openedCard', openedCard);
-  // const handleApprove = async () => {
-  //   setIsLoadingOpen(true);
-  //   const result = await fwarKey.approve(
-  //     fwarCharDelegate.address,
-  //     ethers.BigNumber.from(1e6).pow(3).mul(1000000)
-  //   );
-  //   const tx = await result.wait();
-  //   console.log('tx approve', tx);
-  //   setIsApprove(true);
-  //   setIsLoadingOpen(false);
-  // };
+          // infoChar = [nftId, rarity, elementType, teamId]
+          const openChestInfos = eventOpenChest.map((nft) => nft.args._openChestInfo);
+          const transformInfoChar = openChestInfos[0].map((cardInfo) => ({
+            nftId: Number(cardInfo[0]),
+            rarity: Number(cardInfo[1]),
+            element: Number(cardInfo[2]),
+            teamId: Number(cardInfo[3])
+          }));
+          console.log('eventOpenChest', eventOpenChest);
+          console.log('openChestInfos', openChestInfos);
+          console.log('transformInfoChar', transformInfoChar);
+          setOpenedCards(transformInfoChar);
+          setIsLoadingOpen(false);
+          // console.log('eventMintNDT', eventMintNDT);
+          toast.success('open  successfully!');
+        } catch (error) {
+          // console.log(error);
+          if (error.data) {
+            toast.error(error.data.message);
+          } else {
+            toast.error(error.message);
+          }
+          setIsLoadingOpen(false);
+        }
+      }
+    }
+  };
+  console.log('openedCard', openedCard);
+  const handleApprove = async () => {
+    setIsLoadingOpen(true);
+    const result = await fwarKey.approve(
+      fwarCharDelegate.address,
+      ethers.BigNumber.from(1e6).pow(3).mul(1000000)
+    );
+    const tx = await result.wait();
+    console.log('tx approve', tx);
+    setIsApprove(true);
+    setIsLoadingOpen(false);
+  };
 
   const listOpenedChest = listOpenedChestHistory?.map((item, index) => (
     <Tr key={item._id}>
@@ -299,17 +287,21 @@ const ChestInit = () => {
                     <InputRightElement pointerEvents="none" children="Key" />
                   </InputGroup>
                 )}
-                {/* <Button
+                <Button
                   leftIcon={<FiUnlock />}
                   size="sm"
                   color={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
                   bg={theme.colors.primary.base}
                   onClick={() => {
-                    isApprove ? handleOpenChest(amount) : handleApprove();
+                    isApprove
+                      ? handleOpenChest(amount)
+                      : isMetaMaskInstalled()
+                      ? handleApprove()
+                      : dispatch(openModalWalletConnect());
                   }}
                 >
                   {isApprove ? `Open` : `Approve`}
-                </Button> */}
+                </Button>
               </>
             )}
           </Stack>

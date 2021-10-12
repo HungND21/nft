@@ -33,7 +33,6 @@ function Transaction() {
     }
   };
   const setPageAll = (page) => {
-    console.log('page', page);
     setCurrentPageAll(page);
   };
   const setPageMine = (page) => {
@@ -52,9 +51,10 @@ function Transaction() {
 
   React.useEffect(() => {
     document.title = 'FWAR - TRANSACTIONS';
+    getAllTransaction(currentPageAll);
+    // console.log('1', currentPageAll);
     if (account) {
       getMyTransaction(currentPageMine);
-      getAllTransaction(currentPageAll);
     }
   }, [account, currentPageMine, user, currentPageAll]);
 

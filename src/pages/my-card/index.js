@@ -32,7 +32,6 @@ import FilterComponent from 'components/FilterComponent';
 import Loader from 'components/Loader';
 import PaginatorCustom from 'components/PaginatorCustom';
 import ScaleFadeCustom from 'components/ScaleFadeCustom';
-import FwarCharJson from 'contracts/FwarChar/FWarChar.json';
 import FwarMarketDelegateJson from 'contracts/FwarMarket/FwarMarketDelegate.json';
 import UsdtJson from 'contracts/Usdt.json';
 import { useTitle } from 'dapp/hook';
@@ -51,6 +50,11 @@ import {
   ListedOrNotDropdown
 } from 'utils/dataFilter';
 import { getItem } from 'utils/LocalStorage';
+// import { getEthersContract, networkChainId } from 'dapp/getEthersContract';
+import { isMetaMaskInstalled } from 'dapp/metamask';
+import { openModalWalletConnect } from 'store/metamaskSlice';
+import { FwarChar, FwarCharDelegate, FwarMarketDelegate } from 'dapp/getEthersContract';
+
 function Card() {
   useTitle('FWAR - MY CARDS');
 
@@ -83,17 +87,6 @@ function Card() {
 
   const [pagesQuantity, setPagesQuantity] = React.useState(1);
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-
-  const FwarChar = new ethers.Contract(FwarCharJson.networks[97].address, FwarCharJson.abi, signer);
-  const FwarMarketDelegate = new ethers.Contract(
-    FwarMarketDelegateJson.networks[97].address,
-    FwarMarketDelegateJson.abi,
-    signer
-  );
-
-  //
   const handleSell = (card) => {
     const listCartLocalStorage = localStorage.getItem('cardItem');
     let listCartArray = [];

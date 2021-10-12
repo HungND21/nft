@@ -14,10 +14,7 @@ import { Container, Next, PageGroup, Paginator, Previous, usePaginator } from 'c
 import toast from 'react-hot-toast';
 import { ethers } from 'ethers';
 import { useEthers } from '@usedapp/core';
-import FwarCharJson from 'contracts/FwarChar/FWarChar.json';
-import FwarMarketDelegateJson from 'contracts/FwarMarket/FwarMarketDelegate.json';
 
-import Usdt from 'contracts/Usdt.json';
 import { elementDropdown, rarityDropdown, cardTypeDropdown, sortDropdown } from 'utils/dataFilter';
 // import marketDelegate from 'utils/dataFilter';
 
@@ -26,7 +23,7 @@ import DisplayOrderCards from './DisplayOrderCards';
 
 import OrderApi from 'apis/OrderApi';
 import TeamApi from 'apis/TeamApi';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTitle } from 'dapp/hook';
 
 import FilterComponent from 'components/FilterComponent';
@@ -34,8 +31,13 @@ import PaginatorCustom from 'components/PaginatorCustom';
 import Loader from 'components/Loader';
 import ScaleFadeCustom from 'components/ScaleFadeCustom';
 
+import { isMetaMaskInstalled } from 'dapp/metamask';
+import { openModalWalletConnect } from 'store/metamaskSlice';
+import { FwarChar, FwarCharDelegate, USDT, FwarMarketDelegate } from 'dapp/getEthersContract';
+
 function MarketPlace() {
   useTitle('FWAR - MARTKET PLACE');
+  const dispatch = useDispatch();
 
   const [isApprove, setIsApprove] = React.useState(false);
   const [listOrder, setListOrder] = React.useState([]);
@@ -57,16 +59,6 @@ function MarketPlace() {
     initialState: { currentPage: 1, pageSize: 5 }
   });
   const [pagesQuantity, setPagesQuantity] = React.useState(1);
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const FwarChar = new ethers.Contract(FwarCharJson.networks[97].address, FwarCharJson.abi, signer);
-  const FwarMarketDelegate = new ethers.Contract(
-    FwarMarketDelegateJson.networks[97].address,
-    FwarMarketDelegateJson.abi,
-    signer
-  );
-  const USDT = new ethers.Contract(Usdt.networks[97].address, Usdt.abi, signer);
 
   const handleApprove = async (USDT, FwarMarketDelegate) => {
     try {
@@ -155,7 +147,7 @@ function MarketPlace() {
   const checkApprove = async () => {
     const allowance = await USDT.allowance(
       account,
-      FwarMarketDelegateJson.networks[97].address // address FwarMarketDelegate
+      FwarMarketDelegate.address // address FwarMarketDelegate
     );
     if (allowance > 0) setIsApprove(true);
   };
@@ -174,10 +166,10 @@ function MarketPlace() {
     console.log('orders.docs', orders.docs);
   };
   React.useEffect(() => {
+    getListOrder();
+    getTeams();
     if (account) {
-      getListOrder();
       checkApprove();
-      getTeams();
     }
   }, [account, rarityState, elementState, teamIdState, typeCardState, sortState, currentPage]);
 
@@ -319,7 +311,9 @@ function MarketPlace() {
                                     )
                                   : handleBuy(FwarMarketDelegate, card.orderId, index);
                               } else {
-                                handleApprove(USDT, FwarMarketDelegate.address);
+                                isMetaMaskInstalled()
+                                  ? handleApprove(USDT, FwarMarketDelegate.address)
+                                  : dispatch(openModalWalletConnect());
                               }
                             }}
                           >

@@ -31,6 +31,7 @@ import { openModalWalletConnect } from 'store/metamaskSlice';
 import ItemPool from './ItemPool';
 // -------------
 // import FBNBUSD from './FBNB-Usdt';
+import { getEthersContract, networkChainId } from 'dapp/getEthersContract';
 
 async function requestAccount() {
   if (window.ethereum?.request) return window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -38,7 +39,7 @@ async function requestAccount() {
     'Missing install Metamask. Please access https://metamask.io/ to install extension on your browser'
   );
 }
-function PoolContract({ theme, colorMode, account, signer, FwarPool, pool, fwarPoolAddress }) {
+function PoolContract({ theme, colorMode, account, FwarPool, pool, fwarPoolAddress }) {
   // balance số dư cặp trong ví của ng dùng
   // mystake số cặp ng dùng gửi vào
   const [isLoading, setIsLoading] = React.useState(false);
@@ -49,8 +50,7 @@ function PoolContract({ theme, colorMode, account, signer, FwarPool, pool, fwarP
   const [balance, setBalance] = React.useState(0);
   const [key, setKey] = React.useState(0);
   // const { isOpenDraw, onOpenDraw, onCloseDraw } = useDisclosure();
-  const Contract = new ethers.Contract(pool.address, pool.abi, signer);
-  
+  const Contract = getEthersContract(pool.address, pool.abi);
 
   const dispatch = useDispatch();
   const [isAllowance, setIsAllowance] = React.useState(false);

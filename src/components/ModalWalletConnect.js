@@ -29,6 +29,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { existMetamask } from 'store/metamaskSlice';
 import { injected } from 'dapp/connectors';
 import { useEthers, useEtherBalance } from '@usedapp/core';
+import { isMetaMaskInstalled } from 'dapp/metamask';
 
 function getErrorMessage(error) {
   if (error instanceof NoEthereumProviderError) {
@@ -54,7 +55,6 @@ function ModalWalletConnect({ onClose }) {
 
   const { activateBrowserWallet, error, deactivate, account } = useEthers();
   const { hasCopied, onCopy } = useClipboard(account);
-
   function handleDeactivateAccount() {
     deactivate();
     // onClose();
@@ -62,8 +62,10 @@ function ModalWalletConnect({ onClose }) {
   React.useEffect(() => {
     if (!onboarding.current) {
       onboarding.current = new MetaMaskOnboarding();
-    } else {
     }
+  }, []);
+  React.useEffect(() => {
+    if (isMetaMaskInstalled()) activateBrowserWallet();
   }, []);
   const onClick = () => {
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
@@ -72,7 +74,7 @@ function ModalWalletConnect({ onClose }) {
         activateBrowserWallet();
       });
     } else {
-      toast.error(getErrorMessage(error), { duration: 3000 });
+      // toast.error(getErrorMessage(error), { duration: 3000 });
       onboarding.current.startOnboarding();
     }
   };

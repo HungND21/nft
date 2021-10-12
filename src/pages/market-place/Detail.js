@@ -45,8 +45,6 @@ import { usePaginator } from 'chakra-paginator';
 import DisplayOpenedCards from 'components/DisplayCard';
 import Loadable from 'components/Loadable';
 import PaginatorCustom from 'components/PaginatorCustom';
-import FwarCharJson from 'contracts/FwarChar/FWarChar.json';
-import FwarCharDelegateJson from 'contracts/FwarChar/FwarCharDelegate.json';
 import { ethers } from 'ethers';
 import React, { lazy } from 'react';
 import toast from 'react-hot-toast';
@@ -55,6 +53,9 @@ import { useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { elementDropdown, rarityDropdown } from 'utils/dataFilter';
 import Canvas from './Canvas';
+import { FwarChar, FwarCharDelegate } from 'dapp/getEthersContract';
+import { isMetaMaskInstalled } from 'dapp/metamask';
+import { openModalWalletConnect } from 'store/metamaskSlice';
 const DisplayCardSelect = Loadable(lazy(() => import('./DisplayCardForUpgrade')));
 // const DisplayCardSelect = Loadable(lazy(() => import('./DisplayCardSelect')));
 
@@ -85,14 +86,6 @@ function Detail() {
   const theme = useTheme();
   const { colorMode } = useColorMode();
   let history = useHistory();
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const FwarChar = new ethers.Contract(FwarCharJson.networks[97].address, FwarCharJson.abi, signer);
-  const FwarCharDelegate = new ethers.Contract(
-    FwarCharDelegateJson.networks[97].address,
-    FwarCharDelegateJson.abi,
-    signer
-  );
 
   const handleUpgrade = async () => {
     try {
@@ -160,10 +153,9 @@ function Detail() {
     setSelected(newSelected);
   };
 
-  async function getNftDetail() {
-    const { data: nft } = await CharacterApi.getOne(id);
-    setInfoNft(nft);
-    console.log('nft', nft);
+  async function getBurnInfo() {
+    const nft = getNftDetail();
+
     if (nft) {
       const burnInfo = await FwarCharDelegate.getBurnInfo(nft.rarity, nft.level);
       const baseAmount = burnInfo['baseAmount'];
@@ -174,8 +166,13 @@ function Detail() {
       // console.log('burnInfo', burnInfo);
     }
   }
-
+  async function getNftDetail() {
+    const { data: nft } = await CharacterApi.getOne(id);
+    setInfoNft(nft);
+    return nft;
+  }
   React.useEffect(() => {
+    getNftDetail();
     if (account) {
       getNftDetail();
       return () => {
