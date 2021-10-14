@@ -7,9 +7,9 @@ import theme from './theme';
 import NavigationScroll from './layouts/NavigationScroll';
 import Routes from './routes';
 import Loader from 'components/Loader';
-import withClearCache from './ClearCache';
+// import withClearCache from './ClearCache';
 
-const ClearCacheComponent = withClearCache(MainApp);
+// const ClearCacheComponent = withClearCache(MainApp);
 
 const config = {
   readOnlyChainId: 97,
@@ -22,7 +22,7 @@ const config = {
   supportedChains: [97]
 };
 
-function MainApp() {
+function App() {
   return (
     <React.Suspense fallback={<Loader />}>
       {/* <Web3ReactProvider getLibrary={getLibrary}> */}
@@ -37,7 +37,7 @@ function MainApp() {
     </React.Suspense>
   );
 }
-function App() {
-  return <ClearCacheComponent />;
-}
+// function App() {
+//   return <ClearCacheComponent />;
+// }
 export default App;

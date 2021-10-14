@@ -83,12 +83,14 @@ function ChooseTeamComponent({ user, cardType }) {
     if (user) {
       (async () => {
         const teamReg = await getTeam();
-        if (cardType === 'attacker') {
-          setSelected(teamReg.attackTeam);
-          // setTeamChoose(teamReg.attackTeam);
-        } else {
-          setSelected(teamReg.defenseTeam);
-          // setTeamChoose(teamReg.defenseTeam);
+        if (teamReg) {
+          if (cardType === 'attacker') {
+            setSelected(teamReg.attackTeam);
+            // setTeamChoose(teamReg.attackTeam);
+          } else {
+            setSelected(teamReg.defenseTeam);
+            // setTeamChoose(teamReg.defenseTeam);
+          }
         }
       })();
     }
