@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 import { useEthers } from '@usedapp/core';
 
 const unityContext = new UnityContext({
-  loaderUrl: 'Build/phxmhxxn.github.io.loader.js',
-  dataUrl: 'Build/phxmhxxn.github.io.data',
-  frameworkUrl: 'Build/phxmhxxn.github.io.framework.js',
-  codeUrl: 'Build/phxmhxxn.github.io.wasm',
+  loaderUrl: 'Build/Build.loader.js',
+  dataUrl: 'Build/Build.data',
+  frameworkUrl: 'Build/Build.framework.js',
+  codeUrl: 'Build/Build.wasm',
   webGLContextAttributes: {
     preserveDrawingBuffer: true
   }
@@ -20,10 +20,12 @@ function ScreenGame() {
 
   const [find, setFind] = React.useState(false);
   function spawnEnemies() {
-    setFind(true);
-    unityContext.send('GameManager', 'SetNumberOfLane', '3');
+    // setFind(true);
+    console.log('user._id', user);
+
+    unityContext.send('GameManager', 'SetNumberOfLane', 1);
     unityContext.send('GameManager', 'SetPlayerId', user._id);
-    unityContext.send('GameManager', 'SetRole', true);
+    unityContext.send('GameManager', 'SetRole', 'attacker');
     unityContext.send('GameManager', 'StartGame');
     // setStart(true);
     // console.log(attacker, roomId);
@@ -34,6 +36,7 @@ function ScreenGame() {
   return (
     <>
       <Box pos="relative" my={10} pb={10} h="800px">
+        <button onClick={() => spawnEnemies()}>start</button>
         {!find && <Image src="/assets/bg-game.png" />}
         <Box
           pos="absolute"
@@ -43,21 +46,21 @@ function ScreenGame() {
           cursor="pointer"
           onClick={() => spawnEnemies()}
         >
-          {find ? (
-            <Box w="100%" h="100%">
-              <Unity
-                unityContext={unityContext}
-                style={{
-                  height: '100%',
-                  width: 1350,
-                  border: '2px solid black',
-                  background: 'grey'
-                }}
-              />
-            </Box>
+          <Box w="100%" h="100%">
+            <Unity
+              unityContext={unityContext}
+              style={{
+                height: '100%',
+                width: 900,
+                border: '2px solid black',
+                background: 'grey'
+              }}
+            />
+          </Box>
+          {/* {find ? (
           ) : (
             <Image src="/assets/icon-submit.png" />
-          )}
+          )} */}
         </Box>
       </Box>
     </>
