@@ -56,27 +56,44 @@ function ChooseTeamComponent({ user, cardType }) {
       isListed: false,
       page: currentPage,
       rarity: 4,
-      typeCard: cardType,
-      limit: 5
+      typeCard: cardType
     });
 
     setListSelectCard(listCardSelect.docs);
     setPagesQuantity(listCardSelect.totalPages);
-    // console.log('listCardSelect', listCardSelect);
+    console.log('listCardSelect', listCardSelect.docs);
+  };
+  const getTeam = async () => {
+    const { data } = await PlayerApi.getTeam(user._id);
+    return data;
   };
   const getTeamRegistration = async () => {
-    const { data: teamReg } = await PlayerApi.getTeam(user._id);
+    const teamReg = await getTeam();
     if (teamReg) {
       if (cardType === 'attacker') {
-        setSelected(teamReg.attackTeam);
+        // setSelected(teamReg.attackTeam);
         setTeamChoose(teamReg.attackTeam);
       } else {
-        setSelected(teamReg.defenseTeam);
+        // setSelected(teamReg.defenseTeam);
         setTeamChoose(teamReg.defenseTeam);
       }
     }
-    // console.log('teamReg', teamReg);
   };
+  React.useEffect(() => {
+    if (user) {
+      (async () => {
+        const teamReg = await getTeam();
+        if (cardType === 'attacker') {
+          setSelected(teamReg.attackTeam);
+          // setTeamChoose(teamReg.attackTeam);
+        } else {
+          setSelected(teamReg.defenseTeam);
+          // setTeamChoose(teamReg.defenseTeam);
+        }
+      })();
+    }
+  }, [user]);
+
   React.useEffect(() => {
     (async function () {
       if (user) {
@@ -103,10 +120,15 @@ function ChooseTeamComponent({ user, cardType }) {
         selected.slice(selectedIndex + 1)
       );
     }
-    setSelected(newSelected);
-    console.log('selectedIndex', selectedIndex);
-    console.log('newSelected', newSelected);
+    if (newSelected.length > 3) {
+      toast.error('Please select at most 3');
+    } else {
+      setSelected(newSelected);
+    }
+    // console.log('selectedIndex', selectedIndex);
   };
+  // console.log('selected', selected);
+
   const handleSubmitTeam = async (event) => {
     try {
       let newPlayer = {};
@@ -156,7 +178,7 @@ function ChooseTeamComponent({ user, cardType }) {
           {teamChoose && teamChoose.length && (
             <Grid templateColumns="repeat(3, 1fr)" gap={5} px={20} py={3}>
               {teamChoose.map((card) => (
-                <DisplayCard key={card._id} info={card} text={true} />
+                <DisplayCard key={card._id} info={card} text={true} mini={true} />
               ))}
             </Grid>
           )}
@@ -202,14 +224,12 @@ function ChooseTeamComponent({ user, cardType }) {
                         selected &&
                         selected.length &&
                         selected.map((i) => i.nftId).includes(card.nftId) &&
-                        (colorMode === 'dark' ? theme.colors.dark.bg : theme.colors.light.base)
+                        (colorMode === 'dark' ? theme.colors.dark.bg : theme.colors.light.bg)
                       }
                     >
                       <Td w="20%">
                         {/* rgb(236 244 252) */}
-                        <Link to={`/market-place/detail/${1}`}>
-                          <DisplayCardSelect info={card} text={true} />
-                        </Link>
+                        <DisplayCardSelect info={card} text={true} mini={true} />
                       </Td>
                       <Td>{card.level}</Td>
                       <Td>{card.teamId.name}</Td>
@@ -226,7 +246,7 @@ function ChooseTeamComponent({ user, cardType }) {
               <PaginatorCustom
                 pagesQuantity={pagesQuantity}
                 currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
+                onPageChange={setCurrentPage}
               />
             </Box>
           </ModalFooter>

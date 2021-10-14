@@ -23,16 +23,16 @@ const normalStyles = {
   }
   // bg: 'blue.300'
 };
-function PaginatorCustom({ pagesQuantity, currentPage, setCurrentPage }) {
+function PaginatorCustom({ pagesQuantity, currentPage, onPageChange }) {
   const { colorMode } = useColorMode();
   const theme = useTheme();
-
+  // console.log(pagesQuantity, currentPage, onPageChange);
   return (
     <>
       <Paginator
         pagesQuantity={pagesQuantity > 0 && pagesQuantity}
         currentPage={currentPage}
-        onPageChange={setCurrentPage}
+        onPageChange={onPageChange}
         activeStyles={activeStyles}
         normalStyles={normalStyles}
         outerLimit={3}

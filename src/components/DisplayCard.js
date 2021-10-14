@@ -2,6 +2,7 @@ import { Box, Image, Text, IconButton, Stack, HStack } from '@chakra-ui/react';
 import React from 'react';
 import { MinusIcon } from '@chakra-ui/icons';
 import { GiAlliedStar, GiCrossedSwords, GiSwordBreak } from 'react-icons/gi';
+import ImageLoad from 'components/ImageLoad';
 
 function DisplayOpenedCards({ info, text = false, isCart = false, onremove, isDetail = false }) {
   // console.log('info', info);
@@ -21,10 +22,14 @@ function DisplayOpenedCards({ info, text = false, isCart = false, onremove, isDe
             )}
           </Stack>
           {info && (
-            <Image src={`/assets/card/rarity/${info['rarity']}.png`} width="100%" height="100%" />
+            <ImageLoad
+              src={`/assets/card/rarity/${info['rarity']}.png`}
+              width="100%"
+              height="100%"
+            />
           )}
           {info && (
-            <Image
+            <ImageLoad
               src={`/assets/card/element/${info['element']}.png`}
               width="100%"
               height="100%"
@@ -33,7 +38,7 @@ function DisplayOpenedCards({ info, text = false, isCart = false, onremove, isDe
             />
           )}
           {info && (
-            <Image
+            <ImageLoad
               src={`/assets/char/T_${
                 info['teamId'].teamId ? info['teamId'].teamId : info.teamId
               }.png`}

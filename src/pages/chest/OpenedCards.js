@@ -1,4 +1,5 @@
 import { Box, Image, Text } from '@chakra-ui/react';
+import ImageLoad from 'components/ImageLoad';
 import React from 'react';
 
 function DisplayOpened({ info }) {
@@ -8,10 +9,14 @@ function DisplayOpened({ info }) {
       <Box>
         <Box position="relative">
           {info && (
-            <Image src={`/assets/card/rarity/${info['rarity']}.png`} width="100%" height="100%" />
+            <ImageLoad
+              src={`/assets/card/rarity/${info['rarity']}.png`}
+              width="100%"
+              height="100%"
+            />
           )}
           {info && (
-            <Image
+            <ImageLoad
               src={`/assets/card/element/${info['element']}.png`}
               width="100%"
               height="100%"
@@ -20,7 +25,7 @@ function DisplayOpened({ info }) {
             />
           )}
           {info && (
-            <Image
+            <ImageLoad
               src={`/assets/char/T_${
                 info['teamId'].teamId ? info['teamId'].teamId : info.teamId
               }.png`}

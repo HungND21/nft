@@ -45,6 +45,7 @@ import { getEthersContract, networkChainId } from 'dapp/getEthersContract';
 import { openModalWalletConnect } from 'store/metamaskSlice';
 import { isMetaMaskInstalled } from 'dapp/metamask';
 
+import ImageLoad from 'components/ImageLoad';
 const ChestInit = () => {
   useTitle('FWAR - OPEN CHEST');
   const dispatch = useDispatch();
@@ -72,27 +73,27 @@ const ChestInit = () => {
   );
   const FWK = getEthersContract(networkChainId(FwarKeyContract, 97), FwarKeyContract.abi);
   const fwarKey = getEthersContract(networkChainId(FwarKey, 97), FwarKey.abi);
-  console.log('fwarCharDelegate', fwarCharDelegate);
+  // console.log('fwarCharDelegate', fwarCharDelegate);
 
   const allMyKey = useAllMyKey(FWK);
 
+  // console.log('currentPage', currentPage);
   React.useEffect(() => {
     if (account && user) {
       init();
     }
     return () => setIsApprove();
-    // console.log(FwarCharDelegate);
   }, [account, openedCard, user, currentPage]);
 
   const init = async () => {
     const allowance = await fwarKey.allowance(account, fwarCharDelegate.address);
-    console.log('allowance', allowance);
+    // console.log('allowance', allowance);
     if (allowance > 0) setIsApprove(true);
 
     const { data } = await OpenChestHistoryApi.getAll(user._id, currentPage);
     setListOpenedChestHistory(data.docs);
     setPagesQuantity(data.totalPages);
-    console.log('data', data);
+    // console.log('data', data);
   };
 
   const handleOpenChest = async (amount) => {
@@ -110,7 +111,7 @@ const ChestInit = () => {
           };
           const tx = await fwarCharDelegate.OpenItems(account, amount, transactionOptions);
           const resultWaitTransaction = await tx.wait();
-          console.log('resultWaitTransaction', resultWaitTransaction);
+          // console.log('resultWaitTransaction', resultWaitTransaction);
           const eventOpenChest = resultWaitTransaction.events.filter(
             (e) => e.event && e.event === 'OpenChest'
           );
@@ -123,9 +124,9 @@ const ChestInit = () => {
             element: Number(cardInfo[2]),
             teamId: Number(cardInfo[3])
           }));
-          console.log('eventOpenChest', eventOpenChest);
-          console.log('openChestInfos', openChestInfos);
-          console.log('transformInfoChar', transformInfoChar);
+          // console.log('eventOpenChest', eventOpenChest);
+          // console.log('openChestInfos', openChestInfos);
+          // console.log('transformInfoChar', transformInfoChar);
           setOpenedCards(transformInfoChar);
           setIsLoadingOpen(false);
           // console.log('eventMintNDT', eventMintNDT);
@@ -142,7 +143,7 @@ const ChestInit = () => {
       }
     }
   };
-  console.log('openedCard', openedCard);
+  // console.log('openedCard', openedCard);
   const handleApprove = async () => {
     setIsLoadingOpen(true);
     const result = await fwarKey.approve(
@@ -150,7 +151,7 @@ const ChestInit = () => {
       ethers.BigNumber.from(1e6).pow(3).mul(1000000)
     );
     const tx = await result.wait();
-    console.log('tx approve', tx);
+    // console.log('tx approve', tx);
     setIsApprove(true);
     setIsLoadingOpen(false);
   };
@@ -196,8 +197,10 @@ const ChestInit = () => {
           {/* <Header /> */}
         </Box>
         <Box marginBottom="26px" position="relative">
-          <Image src="/assets/chest-bg.png" top="0" h="100%" w="100%" />
-          <Image src="/assets/chest.png" position="absolute" width="52%" top="3px" left="25%" />
+          <ImageLoad src="/assets/chest-bg.png" top="0" h="100%" w="100%" />
+          <ImageLoad src="/assets/chest.png" position="absolute" width="52%" top="3px" left="25%" />
+          {/* <Image src="/assets/chest-bg.png" top="0" h="100%" w="100%" /> */}
+          {/* <Image src="/assets/chest.png" position="absolute" width="52%" top="3px" left="25%" /> */}
 
           {isLoadingOpen && (
             <Stack

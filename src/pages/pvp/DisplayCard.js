@@ -1,8 +1,9 @@
-import { Box, Image, Text, IconButton, Stack } from '@chakra-ui/react';
+import { Box, Image, Text, IconButton, Stack, HStack } from '@chakra-ui/react';
 import React from 'react';
 import { MinusIcon } from '@chakra-ui/icons';
+import { GiAlliedStar, GiCrossedSwords, GiSwordBreak } from 'react-icons/gi';
 
-function DisplayCard({ info, text = false }) {
+function DisplayCard({ info, text = false, mini }) {
   // console.log('info', info);
 
   return (
@@ -51,8 +52,19 @@ function DisplayCard({ info, text = false }) {
             fontWeight="bold"
           >
             <Text>NFT {info['nftId']}</Text>
-            {/* {info && <Text>NFT {info['nftId']}</Text>} */}
-            {/* <Text> {info && info.teamId.name}</Text> */}
+            <HStack justify="center" spacing={mini ? '0' : '24px'}>
+              {/* <HStack fontSize={isDetail ? 23 : 13} spacing="5px"> */}
+              {!mini && (
+                <HStack fontSize={13} spacing="5px">
+                  <GiAlliedStar />
+                  <Text>{info && info.level}</Text>
+                </HStack>
+              )}
+              <HStack fontSize={13} spacing="5px">
+                <GiCrossedSwords />
+                <Text>{info && Math.floor(info.attack)}</Text>
+              </HStack>
+            </HStack>
           </Box>
         )}
       </Box>

@@ -153,32 +153,27 @@ function Detail() {
     setSelected(newSelected);
   };
 
-  async function getBurnInfo() {
-    const nft = await getNftDetail();
-
+  async function getNftDetail() {
+    // const nft = await getNftDetail();
+    const { data: nft } = await CharacterApi.getOne(id);
+    setInfoNft(nft);
     if (nft) {
-      console.log('nft', nft);
+      // console.log('nft', nft);
       const burnInfo = await FwarCharDelegate.getBurnInfo(nft.rarity, nft.level);
       const baseAmount = burnInfo['baseAmount'];
       const junkAmount = burnInfo['junkAmount'];
       const normalAmount = burnInfo['normalAmount'];
       const rareAmount = burnInfo['rareAmount'];
       setNeedUpgrade({ baseAmount, junkAmount, normalAmount, rareAmount });
+
       // console.log('burnInfo', burnInfo);
     }
   }
-  async function getNftDetail() {
-    const { data: nft } = await CharacterApi.getOne(id);
-    setInfoNft(nft);
-    return nft;
-  }
+
   React.useEffect(() => {
-    getNftDetail();
+    // getNftDetail();
     if (account) {
-      getBurnInfo();
-      return () => {
-        setInfoNft(null); // This worked for me
-      };
+      getNftDetail();
     }
   }, [account]);
 
@@ -193,7 +188,7 @@ function Detail() {
           if (i[0] === 'rareAmount') rarity.push(3);
           if (i[0] === 'baseAmount') rarity.push(4);
         });
-        console.log('rarity', rarity);
+        // console.log('rarity', rarity);
         let { data: listCardSelect } = await CharacterApi.getMyList({
           userId: user._id,
           isListed: false,
@@ -205,7 +200,7 @@ function Detail() {
 
         setListSelectCard(listCardSelect.docs);
         setPagesQuantity(listCardSelect.totalPages);
-        console.log('listCardSelect', listCardSelect);
+        // console.log('listCardSelect', listCardSelect);
       }
       return () => {
         setListSelectCard([]); // This worked for me
@@ -318,34 +313,27 @@ function Detail() {
                           <>
                             <ListItem>
                               <ListIcon as={FiDisc} />
-                              Attack = {Number(infoNft['baseAttack'])}
-                              {infoNft.attack > 0 && (
-                                <Text color="green" display="inline">
-                                  (+{Math.floor(infoNft.attack)})
-                                </Text>
-                              )}
+                              {/* Attack = {Number(infoNft['baseAttack'])} */}
+                              Attack = {Math.floor(infoNft.attack)}
                             </ListItem>
                             <ListItem>
                               <ListIcon as={FiDisc} />
-                              Defend = {Number(infoNft['baseDefense'])}
-                              {infoNft.defense > 0 && (
-                                <Text color="green" display="inline">
-                                  (+{Math.floor(infoNft.defense)})
-                                </Text>
-                              )}
+                              {/* Defend = {Number(infoNft['baseDefense'])} */}
+                              Defend = {Math.floor(infoNft.defense)}
                             </ListItem>
                             <ListItem>
                               <ListIcon as={FiDisc} />
-                              Health = {Number(infoNft['baseHeath'])}
-                              {infoNft.heath > 0 && (
+                              {/* Health = {Number(infoNft['baseHeath'])} */}
+                              Health = {Math.floor(infoNft.heath)}
+                              {/* {infoNft.heath > 0 && (
                                 <Text color="green" display="inline">
                                   (+{Math.floor(infoNft.heath)})
                                 </Text>
-                              )}
+                              )} */}
                             </ListItem>
                             <ListItem>
                               <ListIcon as={FiDisc} />
-                              Element Type ={' '}
+                              Element Type =
                               {elementDropdown.find((i) => i.value === infoNft['element']).label}
                             </ListItem>
                             <ListItem>
@@ -366,7 +354,7 @@ function Detail() {
                       </List>
                     </GridItem>
                     <GridItem colSpan={{ base: 12, lg: 7 }}>
-                      <Canvas draw={draw} />
+                      {/* <Canvas draw={draw} /> */}
                     </GridItem>
                   </Grid>
                 </TabPanel>
@@ -388,18 +376,38 @@ function Detail() {
                             .map((i, index) => (
                               // { i[1] > 0 &&
                               <Stack key={index} direction="row" align="center">
-                                <Image
-                                  src={`/assets/card/rarity/${
-                                    i[0] === 'baseAmount'
-                                      ? 4
-                                      : i[0] === 'junkAmount'
-                                      ? 1
-                                      : i[0] === 'normalAmount'
-                                      ? 2
-                                      : i[0] === 'rareAmount' && 3
-                                  }.png`}
-                                  w="50px"
-                                />
+                                {selected && selected.length ? (
+                                  selected.map((item) => (
+                                    <>
+                                      {i[0] === 'baseAmount' && item.rarity === '4' && (
+                                        <DisplayCardSelect info={item} w="10%" />
+                                      )}
+                                      {i[0] === 'junkAmount' && item.rarity === '1' && (
+                                        <DisplayCardSelect info={item} w="10%" />
+                                      )}
+                                      {i[0] === 'normalAmount' && item.rarity === '2' && (
+                                        <DisplayCardSelect info={item} w="10%" />
+                                      )}
+                                      {i[0] === 'rareAmount' && item.rarity === '3' && (
+                                        <DisplayCardSelect info={item} w="10%" />
+                                      )}
+                                    </>
+                                  ))
+                                ) : (
+                                  ////////////////////////////////
+                                  <Image
+                                    src={`/assets/card/rarity/${
+                                      i[0] === 'baseAmount'
+                                        ? 4
+                                        : i[0] === 'junkAmount'
+                                        ? 1
+                                        : i[0] === 'normalAmount'
+                                        ? 2
+                                        : i[0] === 'rareAmount' && 3
+                                    }.png`}
+                                    w="50px"
+                                  />
+                                )}
                                 <Box>x {i[1]}</Box>
                               </Stack>
                               // }
@@ -407,7 +415,12 @@ function Detail() {
                         </>
                       )}
                     </Box>
-                    <Button leftIcon={<FiPlus />} onClick={onOpen}>
+
+                    <Button
+                      leftIcon={<FiPlus />}
+                      onClick={onOpen}
+                      fontSize={{ base: '12px', md: '14px', lg: '16px' }}
+                    >
                       Select
                     </Button>
                   </Stack>
@@ -514,9 +527,9 @@ function Detail() {
                         >
                           <Td>
                             {/* rgb(236 244 252) */}
-                            <Link to={`/market-place/detail/${1}`}>
-                              <DisplayCardSelect info={card} />
-                            </Link>
+                            {/* <Link to={`/market-place/detail/${1}`}> */}
+                            <DisplayCardSelect info={card} />
+                            {/* </Link> */}
                           </Td>
                           <Td>{card.level}</Td>
                           <Td>{card.teamId.name}</Td>

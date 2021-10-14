@@ -20,7 +20,6 @@ import {
   useDisclosure,
   Spinner
 } from '@chakra-ui/react';
-import Web3 from 'web3';
 import { ethers } from 'ethers';
 import React from 'react';
 import toast from 'react-hot-toast';
@@ -142,19 +141,19 @@ function PoolContract({ theme, colorMode, account, FwarPool, pool, fwarPoolAddre
         allowance && allowance > 0 ? setIsAllowance(true) : setIsAllowance(false);
 
         const totalSupplyValue = await FwarPool.poolInfo('0');
-        const numberTotalSupply = Web3.utils.fromWei(totalSupplyValue['lpSupply']._hex, 'ether');
+        const numberTotalSupply = ethers.utils.formatEther(totalSupplyValue['lpSupply']._hex);
 
         setTotalSupply(numberTotalSupply);
 
         const myStakeInfo = await FwarPool.userInfo(pool.id, account);
-        const numberMyStake = Web3.utils.fromWei(myStakeInfo.amount._hex, 'ether');
+        const numberMyStake = ethers.utils.formatEther(myStakeInfo.amount._hex);
         setMyStake(numberMyStake);
 
         const balanceOf = await Contract.balanceOf(account);
-        const numberBalanceOf = Web3.utils.fromWei(balanceOf._hex, 'ether');
+        const numberBalanceOf = ethers.utils.formatEther(balanceOf._hex);
         setBalance(numberBalanceOf);
         const reward = await FwarPool.pendingKey(pool.id, account);
-        const numberKey = Web3.utils.fromWei(reward._hex, 'ether');
+        const numberKey = ethers.utils.formatEther(reward._hex);
         setKey(numberKey);
         // console.log(reward);
       }

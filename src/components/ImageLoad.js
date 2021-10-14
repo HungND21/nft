@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-
+import { Image as Img } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 const ImageLoad = React.memo(({ src, placeholder, alt = '', ...props }) => {
   const [loading, setLoading] = useState(true);
   const [currentSrc, updateSrc] = useState(placeholder);
@@ -16,7 +16,7 @@ const ImageLoad = React.memo(({ src, placeholder, alt = '', ...props }) => {
   }, [src]);
 
   return (
-    <img
+    <Img
       src={currentSrc}
       style={{
         opacity: loading ? 0.5 : 1,

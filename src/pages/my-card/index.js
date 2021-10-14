@@ -520,7 +520,7 @@ function Card() {
           <PaginatorCustom
             pagesQuantity={pagesQuantity > 0 && pagesQuantity}
             currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
+            onPageChange={setCurrentPage}
           />
         </Box>
         {/* loading*/}
