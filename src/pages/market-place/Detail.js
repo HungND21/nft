@@ -324,7 +324,7 @@ function Detail() {
                             <ListItem>
                               <ListIcon as={FiDisc} />
                               {/* Health = {Number(infoNft['baseHeath'])} */}
-                              Health = {Math.floor(infoNft.heath)}
+                              Health = {Math.floor(infoNft.health)}
                               {/* {infoNft.heath > 0 && (
                                 <Text color="green" display="inline">
                                   (+{Math.floor(infoNft.heath)})

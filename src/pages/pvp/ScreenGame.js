@@ -9,7 +9,10 @@ const unityContext = new UnityContext({
   dataUrl: 'Build/phxmhxxn.github.io.data',
   frameworkUrl: 'Build/phxmhxxn.github.io.framework.js',
   codeUrl: 'Build/phxmhxxn.github.io.wasm',
-
+  streamingAssetsUrl: 'StreamingAssets',
+  companyName: 'DefaultCompany',
+  productName: 'Fwar',
+  productVersion: '1.0',
   webGLContextAttributes: {
     preserveDrawingBuffer: true
   }
@@ -25,7 +28,8 @@ function ScreenGame() {
   function Start() {
     // setFind(true);
     setIsJoin(true);
-    console.log('user._id', user);
+
+    // console.log('user._id', user);
     unityContext.send('GameManager', 'SetNumberOfLane', 1);
     unityContext.send('GameManager', 'SetPlayerId', user._id);
     // unityContext.send('GameManager', 'SetRole', 'attacker');
@@ -41,65 +45,51 @@ function ScreenGame() {
     function () {
       if (user) {
         unityContext.on('loaded', function () {
-          console.log('1');
           setIsLoaded(true);
-          console.log('2');
-          Start();
-          console.log('3');
+          setIsJoin(true);
         });
       }
     },
     [user]
   );
-  // React.useEffect(function () {
-  //   unityContext.on('canvas', function (canvas) {
-  //     canvas.getContext('webgl');
-  //   });
-  // }, []);
-  // Start()
+  function handleOnClickFullscreen() {
+    unityContext.setFullscreen(true);
+  }
   return (
     <>
-      <Box pos="relative" my={10} pb={10} h="800px">
-        <button onClick={() => setFind(true)}>start</button>
-        {/* {!find && <Image src="/assets/bg-game.png" />} */}
-        {/* <input type="text" autofocus="true" /> */}
-        {!find && <Image src="/assets/bg-game.png" />}
-        <Box
+      <Box pos="relative" my={10} overflow="hidden">
+        <Button onClick={handleOnClickFullscreen}>Fullscreen</Button>
+        {!isJoin && <Image src="/assets/bg-game.png" w="100%" />}
+        <Box onClick={() => Start()} zIndex="docked" bgImage="src('/assets/bg-game.png')">
+          <Box w="100%" h="100%">
+            {/* {isJoin && ( */}
+            <Unity
+              unityContext={unityContext}
+              style={{
+                height: '100%',
+                width: '100%',
+                border: '2px solid black',
+                background: 'grey',
+                visibility: isLoaded ? 'visible' : 'hidden'
+              }}
+            />
+            {/* )} */}
+          </Box>
+        </Box>
+        <Image
+          src="/assets/icon-join.png"
           pos="absolute"
           top="50%"
           left="50%"
-          transform="translate(-50%, -62%)"
+          transform="translate(-50%, -50%)"
+          zIndex="dropdown"
+          visibility={isJoin ? 'hidden' : 'visible'}
           cursor="pointer"
-          onClick={() => Start()}
-
-          // onFocus=
-        >
-          <Box w="100%" h="100%">
-            {find && (
-              <Unity
-                unityContext={unityContext}
-                style={{
-                  height: '100%',
-                  width: 900,
-                  border: '2px solid black',
-                  background: 'grey',
-                  visibility: isLoaded ? 'visible' : 'hidden'
-                }}
-              />
-            )}
-          </Box>
-          {/* {find ? (
-          ) : (
-          )} */}
-          <Image
-            src="/assets/icon-submit.png"
-            // pos="absolute"
-            // top="0"
-            style={{
-              visibility: find ? 'hidden' : 'visible'
-            }}
-          />
-        </Box>
+          onClick={() => {
+            setFind(true);
+            Start();
+          }}
+        />
       </Box>
     </>
   );

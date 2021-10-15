@@ -7,7 +7,6 @@ import theme from './theme';
 import NavigationScroll from './layouts/NavigationScroll';
 import Routes from './routes';
 import Loader from 'components/Loader';
-// import withClearCache from './ClearCache';
 
 // const ClearCacheComponent = withClearCache(MainApp);
 
