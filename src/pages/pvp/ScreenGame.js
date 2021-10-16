@@ -5,16 +5,17 @@ import { useSelector } from 'react-redux';
 import { useEthers } from '@usedapp/core';
 
 const buildUrl = 'Build';
-const loaderUrl = buildUrl + '/129978d678383f70d301118a7945cf44.js';
+const loaderUrl = buildUrl + '/8031bb89cbdcee2a35fdb30bf72a5641.js';
 const config = {
-  dataUrl: buildUrl + '/e39c17ab8a2584192c51a8dddc5e7760.data',
-  frameworkUrl: buildUrl + '/403ef1535c59e4c0693c87b1cc2739a9.js',
-  codeUrl: buildUrl + '/2494cc9f174be1f4ad074a4cc65c9f78.wasm',
+  dataUrl: buildUrl + '/f60b7fcf0663d5071c5e56b8572ded02.data',
+  frameworkUrl: buildUrl + '/cab6beec8dfc11ce73770d89de0ff733.js',
+  codeUrl: buildUrl + '/401d05ef5c557ce291f264e4c86dc5a1.wasm',
   streamingAssetsUrl: 'StreamingAssets',
   companyName: 'Fusion',
   productName: 'Fwar',
   productVersion: '1.1',
 };
+
 const unityContext = new UnityContext({
   loaderUrl,
   ...config,

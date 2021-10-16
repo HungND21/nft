@@ -304,7 +304,7 @@ function MarketPlace() {
                             fontWeight="bold"
                             borderRadius="0"
                             onClick={() => {
-                              if (isApprove) {
+                              if (isApprove && user) {
                                 card.userId === user._id
                                   ? handleUnList(
                                       FwarMarketDelegate,
@@ -321,7 +321,11 @@ function MarketPlace() {
                               }
                             }}
                           >
-                            {isApprove ? (card.userId === user._id ? `UnList` : `Buy`) : `Approve`}
+                            {isApprove && user
+                              ? card.userId === user._id
+                                ? `UnList`
+                                : `Buy`
+                              : `Approve`}
                           </Button>
                         </Grid>
                       </Box>
