@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src"
+  },
+  "include": [
+    "src",
+    "public/Build",
+    "public/assets/phxmhxxn.github.io.loader.js",
+    "build/phxmhxxn.github.io.framework.js"
+  ],
+  "exclude": ["node_modules", "**/node_modules/*"]
+}
