@@ -175,7 +175,7 @@ function PoolContract({ theme, colorMode, account, FwarPool, pool, fwarPoolAddre
         {/* card header */}
         <Box display="flex" justifyContent="space-between">
           <Stack direction="row" spacing={-4}>
-            <Tooltip label="hove label" hasArrow placement="top">
+            <Tooltip label="USDT" hasArrow placement="top">
               <Box
                 boxSize="50px"
                 borderRadius="50%"
@@ -184,10 +184,10 @@ function PoolContract({ theme, colorMode, account, FwarPool, pool, fwarPoolAddre
                 transition="transform .25s ease"
                 _hover={{ transform: 'scale(1.1)' }}
               >
-                <Image src="https://zoogame.app/tokens/zoo.png" />
+                <Image src="/assets/token/usdt.png" />
               </Box>
             </Tooltip>
-            <Tooltip label="hove label" hasArrow placement="top">
+            <Tooltip label="BNB" hasArrow placement="top">
               <Box
                 boxSize="50px"
                 borderRadius="50%"
@@ -196,7 +196,7 @@ function PoolContract({ theme, colorMode, account, FwarPool, pool, fwarPoolAddre
                 transition="transform .25s ease"
                 _hover={{ transform: 'scale(1.1)' }}
               >
-                <Image src="https://zoogame.app/tokens/zoo.png" />
+                <Image src="/assets/token/bnb.png" />
               </Box>
             </Tooltip>
           </Stack>
@@ -206,7 +206,7 @@ function PoolContract({ theme, colorMode, account, FwarPool, pool, fwarPoolAddre
               <Image
                 boxSize="20px"
                 borderRadius="50%"
-                src="https://zoogame.app/tokens/pancake.png"
+                src="/assets/token/pancake.png"
               />
             </Stack>
             <Badge

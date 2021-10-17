@@ -17,18 +17,15 @@ import {
 import { ExternalLinkIcon, CopyIcon } from '@chakra-ui/icons';
 import MetaMaskOnboarding from '@metamask/onboarding';
 
-import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
+import { UnsupportedChainIdError } from '@web3-react/core';
 import {
   NoEthereumProviderError,
   UserRejectedRequestError as UserRejectedRequestErrorInjected
 } from '@web3-react/injected-connector';
 import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from '@web3-react/walletconnect-connector';
 import React from 'react';
-import toast from 'react-hot-toast';
-import { useDispatch, useSelector } from 'react-redux';
-import { existMetamask } from 'store/metamaskSlice';
-import { injected } from 'dapp/connectors';
-import { useEthers, useEtherBalance } from '@usedapp/core';
+import { useSelector } from 'react-redux';
+import { useEthers } from '@usedapp/core';
 import { isMetaMaskInstalled } from 'dapp/metamask';
 
 function getErrorMessage(error) {
@@ -143,7 +140,7 @@ function ModalWalletConnect({ onClose }) {
                   // onClick={connect}
                   onClick={onClick}
                 >
-                  <Image src="https://zoogame.app/img/metamask.7258559d.7258559d.svg" />
+                  <Image src="/assets/metamaskicon.svg" />
                   <Text>Metamask</Text>
                 </Stack>
                 <Stack
@@ -158,7 +155,7 @@ function ModalWalletConnect({ onClose }) {
                     bg: '#f8f8f8'
                   }}
                 >
-                  <Image src="https://zoogame.app/img/binanceWallet.fecd180a.fecd180a.svg" />
+                  <Image src="/assets/binanceWallet.svg" />
                   <Text>Binance Chain Wallet</Text>
                 </Stack>
               </Box>

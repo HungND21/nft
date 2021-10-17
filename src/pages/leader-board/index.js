@@ -15,79 +15,56 @@ import {
   Tr,
   useColorMode,
   useTheme,
-  ScaleFade
+  ScaleFade,
+  Tooltip
 } from '@chakra-ui/react';
 import React from 'react';
 import RankPlayerImage from './RankPlayerImage';
-import { dataRankPlayer } from './dataRankPlayer';
+import { useSelector } from 'react-redux';
+import RankApi from 'apis/RankApi';
+
 function LeaderBoard() {
-  const [data, setData] = React.useState([]);
   const theme = useTheme();
   const { colorMode } = useColorMode();
-  React.useEffect(() => {
-    setData(dataRankPlayer);
-  }, []);
-  const rankPlayerTop3 = data?.slice(0, 3);
+  const { user } = useSelector((state) => state.user);
+  const [listUsersRank, setListUsersRank] = React.useState([]); // list user
+  const getRanks = async () => {
+    if (user) {
+      const { data: listUsers } = await RankApi.getAllRanks();
+      setListUsersRank(listUsers.docs);
+      console.log('listUsers', listUsers.docs);
+      // setPagesQuantity(listCard.totalPages);
+    }
+  };
 
-  const listRankPlayer = data?.map((item, index) => (
+  React.useEffect(() => {
+    getRanks();
+  }, [user]);
+  const rankPlayerTop3 = listUsersRank?.slice(0, 3);
+
+  const listRankPlayer = listUsersRank?.map((item, index) => (
     <Tr key={item.id}>
       <Td>{index + 1}</Td>
       <Td>
         <Image src={item.imageRegion} w="84px" />
       </Td>
-      <Td>{item.name}</Td>
+
       <Td>
-        <Box display="flex">
-          {/* image item */}
-          <Box w="3rem" position="relative">
-            <Image src="https://zoogame.app/nfts/bg/5/bg.png" w="100%" />
-            <Image src={item.imageItem} w="90%" position="absolute" top="20%" left="5%" />
-            <Image
-              src="https://zoogame.app/nfts/bg/5/border.png"
-              w="100%"
-              position="absolute"
-              top="0"
-            />
-          </Box>
-          <Box w="3rem" position="relative">
-            <Image src="https://zoogame.app/nfts/bg/5/bg.png" w="100%" />
-            <Image
-              src="https://zoogame.app/nfts/normal/20.png"
-              w="90%"
-              position="absolute"
-              top="20%"
-              left="5%"
-            />
-            <Image
-              src="https://zoogame.app/nfts/bg/5/border.png"
-              w="100%"
-              position="absolute"
-              top="0"
-            />
-          </Box>
-          <Box w="3rem" position="relative">
-            <Image src="https://zoogame.app/nfts/bg/5/bg.png" w="100%" />
-            <Image
-              src="https://zoogame.app/nfts/normal/20.png"
-              w="90%"
-              position="absolute"
-              top="20%"
-              left="5%"
-            />
-            <Image
-              src="https://zoogame.app/nfts/bg/5/border.png"
-              w="100%"
-              position="absolute"
-              top="0"
-            />
-          </Box>
-        </Box>
+      <Tooltip label={item.userId.address} aria-label="A tooltip">
+        <Text>
+        {item.userId.address.substr(1, 4)}...
+        {item.userId.address.substr(item.userId.address.length - 4, 4)}
+        </Text>
+      </Tooltip>
+       </Td>
+      <Td>
+        <Text>{item.win}</Text>
       </Td>
       <Td>
-        <Text as="span">
-          <Image src="https://zoogame.app/chest/airdrop.png" w="20px" display="inline" />
-          {item.hashPower}
-        </Text>
+        <Text>{item.lose}</Text>
+      </Td>
+      <Td>
+        <Text>{item.score}</Text>
       </Td>
     </Tr>
   ));
@@ -95,21 +72,6 @@ function LeaderBoard() {
   return (
     <>
       <ScaleFade initialScale={1.15} in>
-        <Tabs variant="unstyled">
-          <TabList display="flex" justifyContent="center" mb={6}>
-            <Tab _selected={{ color: 'white', bg: 'primary.base' }} borderRadius="6px">
-              Player Hash Power
-            </Tab>
-            <Tab _selected={{ color: 'white', bg: 'primary.base' }} borderRadius="6px">
-              NFTs Hash Power
-            </Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel
-              bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-              boxShadow="content"
-              p="0"
-            >
               {rankPlayerTop3.length && <RankPlayerImage data={rankPlayerTop3} />}
               <Box p={5}>
                 <Box overflowY="scroll">
@@ -120,23 +82,15 @@ function LeaderBoard() {
                         <Th>Ranking</Th>
                         <Th>region</Th>
                         <Th>Player</Th>
-                        <Th>strongest hero</Th>
-                        <Th>Hash Power</Th>
+                        <Th>Win</Th>
+                        <Th>Lose</Th>
+                        <Th>Score</Th>
                       </Tr>
                     </Thead>
-                    <Tbody>{data && listRankPlayer}</Tbody>
+                    <Tbody>{listRankPlayer}</Tbody>
                   </Table>
                 </Box>
               </Box>
-            </TabPanel>
-            <TabPanel
-              bg={colorMode === 'dark' ? theme.colors.dark.light : 'white'}
-              boxShadow="content"
-            >
-              <p>two!</p>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
       </ScaleFade>
     </>
   );

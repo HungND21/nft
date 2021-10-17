@@ -1,9 +1,6 @@
 import React from 'react';
-import { Box, Text, Flex, Icon, Stack } from '@chakra-ui/react';
-import { FiTrendingUp, FiActivity, FiAward } from 'react-icons/fi';
-
-import GroupLeftIcon from './../farm/GroupLeftIcon';
-import GroupRightIcon from './../farm/GroupRightIcon';
+import { Box, Text, Flex, Icon } from '@chakra-ui/react';
+import { FiAward } from 'react-icons/fi';
 
 function Header() {
   return (

@@ -199,7 +199,7 @@ function ChooseTeamComponent({ user, cardType }) {
       <Modal isOpen={isOpen} onClose={onClose} size="2xl">
         <ModalOverlay />
         <ModalContent w="1000px">
-          <ModalHeader>Package for sale</ModalHeader>
+          <ModalHeader>Select Team</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Table variant="simple">
